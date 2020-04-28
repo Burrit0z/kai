@@ -90,7 +90,6 @@ CGRect originalBattery;
 		setFrame = YES;
 		batteryWidget = self;
 	}
-	[self KaiUpdate];
 }
 
 %new 
@@ -124,8 +123,9 @@ CGRect originalBattery;
 }
 
 -(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
-	NSLog(@"It works");
+	dispatch_async(dispatch_get_main_queue(), ^{
 	[[NSNotificationCenter defaultCenter] postNotificationName:@"KaiInfoChanged" object:nil userInfo:nil];
+	});
 	
 }
 %end
