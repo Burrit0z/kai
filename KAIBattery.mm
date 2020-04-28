@@ -22,6 +22,7 @@ long long batteryPercentage;
 long long lastPercentage;
 
 -(void)updateBattery {
+    dispatch_async(dispatch_get_main_queue(), ^{
     if(!self.isUpdating) {
     self.isUpdating = YES;
     self.number = 0;
@@ -110,6 +111,7 @@ long long lastPercentage;
     }
     self.isUpdating = NO;
     }
+    });
 }
 
 +(KAIBattery *)sharedInstance {
