@@ -71,7 +71,7 @@ CGRect original;
 
 	object.frame = CGRectMake(
 			original.origin.x,
-			original.origin.y - (self.battery.number * 90),
+			original.origin.y + (self.battery.number * 90),
 			original.size.width,
 			original.size.height + (self.battery.number * 90)
 		);
