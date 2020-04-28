@@ -70,7 +70,7 @@ CGRect original;
 		[self.battery updateBattery];
 	}
 
-	object.bounds = CGRectMake(
+	object.frame = CGRectMake(
 			original.origin.x,
 			original.origin.y + (self.battery.number * 90),
 			original.size.width,
