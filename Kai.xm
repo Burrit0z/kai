@@ -74,7 +74,7 @@ CGRect original;
 			original.origin.x,
 			original.origin.y + (self.battery.number * 90),
 			original.size.width,
-			original.size.height + (self.battery.number * 90)
+			original.size.height
 		);
 
 	//[self.battery updateBattery];
