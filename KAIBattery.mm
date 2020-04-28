@@ -50,7 +50,6 @@ long long lastPercentage;
                     blank.frame = CGRectMake(0, 0 + y, self.frame.size.width, 80);
                     blank.layer.masksToBounds = YES;
                     blank.layer.cornerRadius = 13;
-                    blank.alpha = 0;
                     //[blank setBackgroundColor:[UIColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:1]];
 
                 NSString *labelText = [NSString stringWithFormat:@"%@", deviceName];
@@ -60,14 +59,11 @@ long long lastPercentage;
                 [label setTextColor:[UIColor whiteColor]];
                 label.lineBreakMode = NSLineBreakByWordWrapping;
                 label.numberOfLines = 0;
-                label.alpha = 0;
                 [label setText:labelText];
 
                 _UIBatteryView *battery = [[_UIBatteryView alloc] init];
                 battery.chargePercent = (batteryPercentage*0.01);
                 UILabel *percentLabel = [[UILabel alloc] init];
-                percentLabel.alpha = 0;
-                battery.alpha = 0;
                     battery.showsPercentage = NO;
                         [percentLabel setFont:[UIFont systemFontOfSize:14]];
                         [percentLabel setTextColor:[UIColor whiteColor]];
@@ -85,7 +81,6 @@ long long lastPercentage;
 
                 UIImage *glyph = [device glyph];
                 UIImageView *glyphView = [[UIImageView alloc] init];
-                glyphView.alpha = 0;
                     glyphView.contentMode = UIViewContentModeScaleAspectFit;
                     [glyphView setImage:glyph];
 
@@ -103,10 +98,6 @@ long long lastPercentage;
             [self addSubview:battery];
             [self addSubview:glyphView];
             blank.alpha = 0.8;
-            percentLabel.alpha = 1;
-            battery.alpha = 1;
-            label.alpha = 1;
-            glyphView.alpha = 1;
         }
     }
     self.isUpdating = NO;
