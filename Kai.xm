@@ -48,7 +48,7 @@ CGRect originalBattery;
 }
 
 %end*/
-
+/*
 %hook SBCoverSheetPrimarySlidingViewController 
 
 -(void)viewWillAppear:(BOOL)arg1 {
@@ -63,7 +63,7 @@ CGRect originalBattery;
 	[batteryWidget.battery updateBattery];
 	[batteryWidget KaiUpdate];
 }*/
-%end
+//%end
 
 
 %hook CSMainPageView
@@ -79,7 +79,6 @@ CGRect originalBattery;
 		setFrame = YES;
 		batteryWidget = self;
 	}
-	[self.battery updateBattery];
 	[self KaiUpdate];
 
 }
@@ -99,5 +98,23 @@ CGRect originalBattery;
 		originalBattery.size.width,
 		originalBattery.size.height
 	);
+}
+%end
+
+%hook BCBatteryDevice
+
+- (id)initWithIdentifier:(id)arg1 vendor:(long long)arg2 productIdentifier:(long long)arg3 parts:(unsigned long long)arg4 matchIdentifier:(id)arg5 {
+
+	[self addObserver:self forKeyPath:@"name" options:NSKeyValueObservingOptionNew context:nil];
+	[self addObserver:self forKeyPath:@"charging" options:NSKeyValueObservingOptionNew context:nil];
+
+	//[self setValue:@"crash" forKeyPath:@"euhidehuud"];
+
+	return %orig;
+}
+
+-(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
+	NSLog(@"It works");
+	
 }
 %end

@@ -17,7 +17,7 @@
 +(id)sharedInstance;
 @end
 
-@interface BCBatteryDevice : BCBatteryDeviceController
+@interface BCBatteryDevice : NSObject
 -(id)glyph;
 @end
 
