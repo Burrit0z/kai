@@ -26,6 +26,7 @@ long long lastPercentage;
     if(!self.isUpdating) {
     self.isUpdating = YES;
     self.number = 0;
+    float y = 0;
     BCBatteryDeviceController *bcb = [BCBatteryDeviceController sharedInstance];
             NSArray *devices = MSHookIvar<NSArray *>(bcb, "_sortedDevices");
 
@@ -43,7 +44,6 @@ long long lastPercentage;
                 BOOL charging = MSHookIvar<long long>(device, "_charging");
                 BOOL LPM = MSHookIvar<BOOL>(device, "_batterySaverModeActive");
 
-                float y;
                 if(charging) {
 
                     UIVisualEffectView *blank = [[UIVisualEffectView alloc] initWithEffect:[UIBlurEffect effectWithStyle:UIBlurEffectStyleDark]];
