@@ -101,12 +101,12 @@ CGRect originalBattery;
 			original.size.height
 		);
 
-	self.battery.frame = CGRectMake(
+	/*self.battery.frame = CGRectMake(
 		originalBattery.origin.x,
 		originalBattery.origin.y - (self.battery.number * 85) + 85,
 		originalBattery.size.width,
 		originalBattery.size.height
-	);
+	);*/
 }
 %end
 
