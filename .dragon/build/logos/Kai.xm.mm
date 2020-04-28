@@ -66,7 +66,7 @@ CGRect original;
 #define _LOGOS_RETURN_RETAINED
 #endif
 
-@class SBCoverSheetPrimarySlidingViewController; @class CSMainPageView; 
+@class CSMainPageView; @class SBCoverSheetPrimarySlidingViewController; 
 static void (*_logos_orig$_ungrouped$SBCoverSheetPrimarySlidingViewController$viewWillAppear$)(_LOGOS_SELF_TYPE_NORMAL SBCoverSheetPrimarySlidingViewController* _LOGOS_SELF_CONST, SEL, BOOL); static void _logos_method$_ungrouped$SBCoverSheetPrimarySlidingViewController$viewWillAppear$(_LOGOS_SELF_TYPE_NORMAL SBCoverSheetPrimarySlidingViewController* _LOGOS_SELF_CONST, SEL, BOOL); static void (*_logos_orig$_ungrouped$CSMainPageView$updateForPresentation$)(_LOGOS_SELF_TYPE_NORMAL CSMainPageView* _LOGOS_SELF_CONST, SEL, id); static void _logos_method$_ungrouped$CSMainPageView$updateForPresentation$(_LOGOS_SELF_TYPE_NORMAL CSMainPageView* _LOGOS_SELF_CONST, SEL, id); 
 
 #line 47 "Kai.xm"
@@ -93,7 +93,7 @@ static void _logos_method$_ungrouped$CSMainPageView$updateForPresentation$(_LOGO
 		[self addSubview:self.battery];
 		setFrame = YES;
 		batteryWidget = self.battery;
-		[batteryWidget updateBattery];
+		[self.battery updateBattery];
 	}
 
 	object.bounds = CGRectMake(

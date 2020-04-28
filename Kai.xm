@@ -67,7 +67,7 @@ CGRect original;
 		[self addSubview:self.battery];
 		setFrame = YES;
 		batteryWidget = self.battery;
-		[batteryWidget updateBattery];
+		[self.battery updateBattery];
 	}
 
 	object.bounds = CGRectMake(
