@@ -1,0 +1,9 @@
+Package: com.burritoz.kai
+Name: Kai
+Version: 0.0.1
+Architecture: iphoneos-arm
+Description: An awesome MobileSubstrate tweak!
+Maintainer: burrit0z
+Author: burrit0z
+Section: Tweaks
+Depends: mobilesubstrate (>= 0.9.5000)

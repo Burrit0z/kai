@@ -1,0 +1,10 @@
+---
+package_name: kai
+install_command: sbreload
+
+kai:
+  type: tweak
+  logos_files:
+    - Kai.xm
+  frameworks:
+    - BatteryCenter
