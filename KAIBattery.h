@@ -24,6 +24,8 @@
 @interface KAIBattery : UIView
 @property (nonatomic, strong) NSArray *devices;
 @property (nonatomic, assign) NSInteger number;
+@property (nonatomic, assign) BOOL isUpdating;
++(KAIBattery *)sharedInstance;
 -(instancetype)initWithFrame:(CGRect)arg1;
 -(void)updateBattery;
 @end

@@ -1,9 +1,11 @@
 #import "KAIBattery.h"
 
+KAIBattery *instance;
 @implementation KAIBattery
 
 -(instancetype)initWithFrame:(CGRect)arg1 {
     self = [super initWithFrame:arg1];
+    instance = self;
     if (self) {
         /*self.batteryLabel = [[UILabel alloc]initWithFrame:CGRectMake(25,-10,220,120)];
         [self.batteryLabel setFont:[UIFont systemFontOfSize:13]];
@@ -20,16 +22,10 @@ long long batteryPercentage;
 long long lastPercentage;
 
 -(void)updateBattery {
+    if(!self.isUpdating) {
+    self.isUpdating = YES;
     self.number = 0;
-            NSArray* subViews = self.subviews;
-            for( UIView *view in subViews ) {
-                @try {
-                    [view removeFromSuperview];
-                } @catch (NSException *exception) {
-                    //Panik
-                }
-            }
-        BCBatteryDeviceController *bcb = [BCBatteryDeviceController sharedInstance];
+    BCBatteryDeviceController *bcb = [BCBatteryDeviceController sharedInstance];
             NSArray *devices = MSHookIvar<NSArray *>(bcb, "_sortedDevices");
 
             for (BCBatteryDevice *device in devices) {
@@ -44,7 +40,8 @@ long long lastPercentage;
                     UIVisualEffectView *blank = [[UIVisualEffectView alloc] initWithEffect:[UIBlurEffect effectWithStyle:UIBlurEffectStyleDark]];
                     blank.frame = CGRectMake(0, 0 + y, self.frame.size.width, 80);
                     blank.layer.masksToBounds = YES;
-                    blank.layer.cornerRadius = 18;
+                    blank.layer.cornerRadius = 13;
+                    blank.alpha = 0.8;
                     //[blank setBackgroundColor:[UIColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:1]];
                     [self addSubview:blank];
 
@@ -90,10 +87,16 @@ long long lastPercentage;
                 battery.frame = CGRectMake(310,35 + y,20,10);
                 percentLabel.frame = CGRectMake(265,35 + y,36,12);
 
-            y+=90;
+            y+=85;
             self.number +=1;
         }
     }
+    self.isUpdating = NO;
+    }
+}
+
++(KAIBattery *)sharedInstance {
+    return instance;
 }
 
 @end
