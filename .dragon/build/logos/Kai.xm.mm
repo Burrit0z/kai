@@ -66,7 +66,7 @@ CGRect original;
 #define _LOGOS_RETURN_RETAINED
 #endif
 
-@class CSMainPageView; @class SBCoverSheetPrimarySlidingViewController; 
+@class SBCoverSheetPrimarySlidingViewController; @class CSMainPageView; 
 static void (*_logos_orig$_ungrouped$SBCoverSheetPrimarySlidingViewController$viewWillAppear$)(_LOGOS_SELF_TYPE_NORMAL SBCoverSheetPrimarySlidingViewController* _LOGOS_SELF_CONST, SEL, BOOL); static void _logos_method$_ungrouped$SBCoverSheetPrimarySlidingViewController$viewWillAppear$(_LOGOS_SELF_TYPE_NORMAL SBCoverSheetPrimarySlidingViewController* _LOGOS_SELF_CONST, SEL, BOOL); static void (*_logos_orig$_ungrouped$CSMainPageView$updateForPresentation$)(_LOGOS_SELF_TYPE_NORMAL CSMainPageView* _LOGOS_SELF_CONST, SEL, id); static void _logos_method$_ungrouped$CSMainPageView$updateForPresentation$(_LOGOS_SELF_TYPE_NORMAL CSMainPageView* _LOGOS_SELF_CONST, SEL, id); 
 
 #line 47 "Kai.xm"
@@ -93,11 +93,12 @@ static void _logos_method$_ungrouped$CSMainPageView$updateForPresentation$(_LOGO
 		[self addSubview:self.battery];
 		setFrame = YES;
 		batteryWidget = self.battery;
+		[batteryWidget updateBattery];
 	}
 
-	object.frame = CGRectMake(
+	object.bounds = CGRectMake(
 			original.origin.x,
-			original.origin.y - (self.battery.number * 90),
+			original.origin.y + (self.battery.number * 90),
 			original.size.width,
 			original.size.height + (self.battery.number * 90)
 		);
@@ -176,4 +177,4 @@ static void _logos_method$_ungrouped$CSMainPageView$updateForPresentation$(_LOGO
 
 static __attribute__((constructor)) void _logosLocalInit() {
 {Class _logos_class$_ungrouped$SBCoverSheetPrimarySlidingViewController = objc_getClass("SBCoverSheetPrimarySlidingViewController"); MSHookMessageEx(_logos_class$_ungrouped$SBCoverSheetPrimarySlidingViewController, @selector(viewWillAppear:), (IMP)&_logos_method$_ungrouped$SBCoverSheetPrimarySlidingViewController$viewWillAppear$, (IMP*)&_logos_orig$_ungrouped$SBCoverSheetPrimarySlidingViewController$viewWillAppear$);Class _logos_class$_ungrouped$CSMainPageView = objc_getClass("CSMainPageView"); MSHookMessageEx(_logos_class$_ungrouped$CSMainPageView, @selector(updateForPresentation:), (IMP)&_logos_method$_ungrouped$CSMainPageView$updateForPresentation$, (IMP*)&_logos_orig$_ungrouped$CSMainPageView$updateForPresentation$);{ char _typeEncoding[1024]; sprintf(_typeEncoding, "%s@:", @encode(KAIBattery *)); class_addMethod(_logos_class$_ungrouped$CSMainPageView, @selector(battery), (IMP)&_logos_method$_ungrouped$CSMainPageView$battery, _typeEncoding); sprintf(_typeEncoding, "v@:%s", @encode(KAIBattery *)); class_addMethod(_logos_class$_ungrouped$CSMainPageView, @selector(setBattery:), (IMP)&_logos_method$_ungrouped$CSMainPageView$setBattery, _typeEncoding); } } }
-#line 151 "Kai.xm"
+#line 152 "Kai.xm"

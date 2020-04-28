@@ -1,12 +1,12 @@
 # ninja log v5
-0	489	1588095990336505228	.dragon/build/logos/Kai.xm.mm	2ff43d99226043a7
-490	3100	1588095992929677755	.dragon/build/arm64e/Kai.xm.mm.o	4598f389cc63d95c
-490	3103	1588095992933837787	.dragon/build/arm64/Kai.xm.mm.o	3d92451607ba4d79
-489	3122	1588095992949324464	.dragon/build/armv7/Kai.xm.mm.o	4fe1c0d4e01f824e
-3103	3581	1588095993423290676	.dragon/build/kai.arm64	4a5a6d812e458df
-3100	3584	1588095993427260606	.dragon/build/kai.arm64e	3f60e77356505eb3
-3122	3592	1588095993435835646	.dragon/build/kai.armv7	28dc0376c3d0fbcc
-3592	3623	1588095993471341918	.dragon/sign/.dragon/_/Library/MobileSubstrate/DynamicLibraries/kai.dylib.unsym	9605f646a2b06131
-3623	3818	1588095993666211343	.dragon/sign/.dragon/_/Library/MobileSubstrate/DynamicLibraries/kai.dylib.unsigned	30304c6c682e6c6d
-3818	3850	1588095993696183759	.dragon/_/Library/MobileSubstrate/DynamicLibraries/kai.dylib	d998911fb5a4bb3c
-3850	3867	0	.dragon/build/trash/stage	4e5b61207c82583b
+0	288	1588096266492672082	.dragon/build/logos/Kai.xm.mm	2ff43d99226043a7
+289	2910	1588096269099648957	.dragon/build/arm64e/Kai.xm.mm.o	4598f389cc63d95c
+288	2912	1588096269101751640	.dragon/build/arm64/Kai.xm.mm.o	3d92451607ba4d79
+288	2950	1588096269145145294	.dragon/build/armv7/Kai.xm.mm.o	4fe1c0d4e01f824e
+2912	3455	1588096269657213627	.dragon/build/kai.arm64	4a5a6d812e458df
+2910	3456	1588096269657154742	.dragon/build/kai.arm64e	3f60e77356505eb3
+2950	3468	1588096269671732081	.dragon/build/kai.armv7	28dc0376c3d0fbcc
+3468	3502	1588096269708948511	.dragon/sign/.dragon/_/Library/MobileSubstrate/DynamicLibraries/kai.dylib.unsym	9605f646a2b06131
+3502	3655	1588096269860925794	.dragon/sign/.dragon/_/Library/MobileSubstrate/DynamicLibraries/kai.dylib.unsigned	30304c6c682e6c6d
+3655	3709	1588096269915504618	.dragon/_/Library/MobileSubstrate/DynamicLibraries/kai.dylib	d998911fb5a4bb3c
+3709	3737	0	.dragon/build/trash/stage	4e5b61207c82583b
