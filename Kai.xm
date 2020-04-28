@@ -17,6 +17,9 @@
 -(void)KaiUpdate;
 @end
 
+@interface SBCoverSheetPrimarySlidingViewController
+-(void)KaiUpdate;
+@end
 
 BOOL setFrame = NO;
 CSMainPageView *batteryWidget;
@@ -48,14 +51,22 @@ CGRect originalBattery;
 }
 
 %end*/
-/*
+
 %hook SBCoverSheetPrimarySlidingViewController 
 
 -(void)viewWillAppear:(BOOL)arg1 {
 	%orig;
+	[[NSNotificationCenter defaultCenter] addObserver:self
+			selector:@selector(KaiUpdate)
+			name:@"KaiInfoChanged"
+			object:nil];
+
+}
+
+%new
+-(void)KaiUpdate {
 	[batteryWidget.battery updateBattery];
 	[batteryWidget KaiUpdate];
-
 }
 /*
 -(void)viewWillDisappear:(BOOL)arg1 {
@@ -63,7 +74,7 @@ CGRect originalBattery;
 	[batteryWidget.battery updateBattery];
 	[batteryWidget KaiUpdate];
 }*/
-//%end
+%end
 
 
 %hook CSMainPageView
@@ -80,7 +91,6 @@ CGRect originalBattery;
 		batteryWidget = self;
 	}
 	[self KaiUpdate];
-
 }
 
 %new 
@@ -115,6 +125,7 @@ CGRect originalBattery;
 
 -(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
 	NSLog(@"It works");
+	[[NSNotificationCenter defaultCenter] postNotificationName:@"KaiInfoChanged" object:nil userInfo:nil];
 	
 }
 %end
