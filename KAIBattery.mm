@@ -14,6 +14,7 @@ KAIBattery *instance;
         self.batteryLabel.numberOfLines = 0;*/
         [self updateBattery];
         [self darkLightMode];
+        self.userInteractionEnabled = NO;
         //[self addSubview:self.batteryLabel];
     }
     return self;

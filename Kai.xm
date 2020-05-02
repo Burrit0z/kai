@@ -22,6 +22,7 @@
 @end
 
 @interface CSMainPageView : UIView
+-(void)updateForPresentation:(id)arg1;
 @end
 
 @interface _CSSingleBatteryChargingView : UIView
@@ -69,6 +70,7 @@ CGRect originalBattery;
 			[base KaiInit];
 		}
 	}
+	[base KaiUpdate];
 }
 %end
 
@@ -81,6 +83,8 @@ CGRect originalBattery;
 			name:@"KaiInfoChanged"
 			object:nil];
 
+	[self KaiUpdate];
+
 }
 
 %new
@@ -88,12 +92,6 @@ CGRect originalBattery;
 	[batteryWidget updateBattery];
 	[base KaiUpdate];
 }
-/*
--(void)viewWillDisappear:(BOOL)arg1 {
-	%orig;
-	[batteryWidget.battery updateBattery];
-	[batteryWidget KaiUpdate];
-}*/
 %end
 
 
@@ -105,10 +103,14 @@ CGRect originalBattery;
 	[batteryWidget darkLightMode];
 }
 
+-(void)setNeedsLayout {
+	%orig;
+	[self KaiUpdate];
+}
+
 %new
 -(void)KaiInit {
 	if(!setFrame) {
-		original = self.frame;
 		UIView *scroller;
 		if([self.subviews count] > 1) {
 			UIView *temp = [self.subviews objectAtIndex:1];
@@ -117,6 +119,11 @@ CGRect originalBattery;
 			base = self;
 			}
 		}
+		/*UIView *notiView;
+		if([self.subviews count] > 0) {
+			notiView = [self.subviews objectAtIndex:0];
+		}*/
+		original = scroller.frame;
 		KAIBattery *battery = [[KAIBattery alloc] initWithFrame:CGRectMake(8, 0, self.frame.size.width - 16, self.frame.size.height)];
 		originalBattery = battery.frame;
 		[scroller addSubview:battery];
@@ -131,12 +138,17 @@ CGRect originalBattery;
 %new 
 -(void)KaiUpdate {
 	[UIView animateWithDuration:0.3 animations:^{
-	batteryWidgetController.frame = CGRectMake(
-			original.origin.x,
-			original.origin.y + (batteryWidget.number * 85),
-			original.size.width,
-			original.size.height
-		);
+		/*UIView *notiView;
+		if([self.subviews count] > 0) {
+			notiView = [self.subviews objectAtIndex:0];
+		}*/
+		
+		batteryWidgetController.frame = CGRectMake(
+				original.origin.x,
+				original.origin.y + (batteryWidget.number * 85),
+				original.size.width,
+				original.size.height
+			);
 
 	batteryWidget.frame = CGRectMake(
 		originalBattery.origin.x,
@@ -144,7 +156,6 @@ CGRect originalBattery;
 		originalBattery.size.width,
 		originalBattery.size.height
 	);
-	
 	}];
 	[batteryWidget darkLightMode];
 }
