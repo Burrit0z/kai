@@ -97,7 +97,7 @@ long long lastPercentage;
             [self addSubview:label];
             [self addSubview:battery];
             [self addSubview:glyphView];
-            blank.alpha = 0.8;
+            //blank.alpha = 0.8;
         }
     }
     self.isUpdating = NO;

@@ -13,12 +13,14 @@
 
 @interface CSMainPageView : UIView
 @property (nonatomic, strong) KAIBattery *battery;
--(void)updateForPresentation:(id)arg1;
 -(void)KaiUpdate;
 @end
 
 @interface SBCoverSheetPrimarySlidingViewController
 -(void)KaiUpdate;
+@end
+
+@interface _CSSingleBatteryChargingView : UIView
 @end
 
 BOOL setFrame = NO;
@@ -134,7 +136,19 @@ CGRect originalBattery;
 }
 %end
 
-%hook CSScrollView
+%hook _CSSingleBatteryChargingView
 
+-(void)initWithFrame:(CGRect)arg1 {
+	%orig;
+	[self removeFromSuperview];
+}
+
+-(CGFloat)desiredVisibilityDuration {
+	return 0;
+}
+
+-(void)setBatteryVisible:(BOOL)arg1 {
+	%orig(NO);
+}
 
 %end
