@@ -26,6 +26,7 @@
 @property (nonatomic, assign) NSInteger number;
 @property (nonatomic, assign) BOOL isUpdating;
 +(KAIBattery *)sharedInstance;
+-(void)darkLightMode;
 -(instancetype)initWithFrame:(CGRect)arg1;
 -(void)updateBattery;
 @end

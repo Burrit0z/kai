@@ -13,6 +13,7 @@ KAIBattery *instance;
         self.batteryLabel.lineBreakMode = NSLineBreakByWordWrapping;
         self.batteryLabel.numberOfLines = 0;*/
         [self updateBattery];
+        [self darkLightMode];
         //[self addSubview:self.batteryLabel];
     }
     return self;
@@ -46,7 +47,16 @@ long long lastPercentage;
 
                 if(charging) {
 
-                    UIVisualEffectView *blank = [[UIVisualEffectView alloc] initWithEffect:[UIBlurEffect effectWithStyle:UIBlurEffectStyleDark]];
+                    UIVisualEffectView *blank;
+                    if(@available(iOS 12.0, *)) {
+                        if(self.traitCollection.userInterfaceStyle == UIUserInterfaceStyleDark) {
+                            blank = [[UIVisualEffectView alloc] initWithEffect:[UIBlurEffect effectWithStyle:UIBlurEffectStyleDark]];
+                        } else {
+                            blank = [[UIVisualEffectView alloc] initWithEffect:[UIBlurEffect effectWithStyle:UIBlurEffectStyleLight]];
+                        }
+                    } else {
+                        blank = [[UIVisualEffectView alloc] initWithEffect:[UIBlurEffect effectWithStyle:UIBlurEffectStyleLight]];
+                    }
                     blank.frame = CGRectMake(0, 0 + y, self.frame.size.width, 80);
                     blank.layer.masksToBounds = YES;
                     blank.layer.cornerRadius = 13;
@@ -101,12 +111,26 @@ long long lastPercentage;
         }
     }
     self.isUpdating = NO;
+    [self darkLightMode];
     }
     });
 }
 
 +(KAIBattery *)sharedInstance {
     return instance;
+}
+
+-(void)darkLightMode {
+    for(UIVisualEffectView *view in self.subviews) {
+        if(@available(iOS 12.0, *)) {
+		if(self.traitCollection.userInterfaceStyle == UIUserInterfaceStyleDark) {
+			if([view respondsToSelector:@selector(setEffect:)]) view.effect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleDark];
+		}
+		else {
+			if([view respondsToSelector:@selector(setEffect:)]) view.effect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleLight];
+		}
+		}
+    }
 }
 
 @end

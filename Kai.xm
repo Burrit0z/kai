@@ -11,20 +11,26 @@
 -(BOOL)launchApplicationWithIdentifier:(id)arg1 suspended:(BOOL)arg2;
 @end
 
-@interface CSMainPageView : UIView
+@interface CSCoverSheetViewBase : UIView
 @property (nonatomic, strong) KAIBattery *battery;
 -(void)KaiUpdate;
+-(void)KaiInit;
 @end
 
 @interface SBCoverSheetPrimarySlidingViewController
 -(void)KaiUpdate;
 @end
 
+@interface CSMainPageView : UIView
+@end
+
 @interface _CSSingleBatteryChargingView : UIView
 @end
 
 BOOL setFrame = NO;
-CSMainPageView *batteryWidget;
+UIView *batteryWidgetController;
+KAIBattery *batteryWidget;
+CSCoverSheetViewBase *base;
 CGRect original;
 CGRect originalBattery;
 
@@ -54,6 +60,18 @@ CGRect originalBattery;
 
 %end*/
 
+%hook CSMainPageView
+
+-(void)updateForPresentation:(id)arg1 {
+	if(!setFrame) {
+		if([self.subviews count] > 0) {
+			CSCoverSheetViewBase *base = [self.subviews objectAtIndex:0];
+			[base KaiInit];
+		}
+	}
+}
+%end
+
 %hook SBCoverSheetPrimarySlidingViewController 
 
 -(void)viewWillAppear:(BOOL)arg1 {
@@ -67,8 +85,8 @@ CGRect originalBattery;
 
 %new
 -(void)KaiUpdate {
-	[batteryWidget.battery updateBattery];
-	[batteryWidget KaiUpdate];
+	[batteryWidget updateBattery];
+	[base KaiUpdate];
 }
 /*
 -(void)viewWillDisappear:(BOOL)arg1 {
@@ -79,40 +97,56 @@ CGRect originalBattery;
 %end
 
 
-%hook CSMainPageView
+%hook CSCoverSheetViewBase
 %property (nonatomic, strong) KAIBattery *battery;
 
--(void)updateForPresentation:(id)arg1 {
+-(void)traitCollectionDidChange:(id)arg1 {
 	%orig;
+	[batteryWidget darkLightMode];
+}
+
+%new
+-(void)KaiInit {
 	if(!setFrame) {
 		original = self.frame;
-		self.battery = [[KAIBattery alloc] initWithFrame:CGRectMake(8, self.frame.origin.y + 150, self.frame.size.width - 16, self.frame.size.height)];
-		originalBattery = self.battery.frame;
-		[self addSubview:self.battery];
+		UIView *scroller;
+		if([self.subviews count] > 1) {
+			UIView *temp = [self.subviews objectAtIndex:1];
+			if([temp.subviews count] > 0) {
+			scroller = [temp.subviews objectAtIndex:0];
+			base = self;
+			}
+		}
+		KAIBattery *battery = [[KAIBattery alloc] initWithFrame:CGRectMake(8, 0, self.frame.size.width - 16, self.frame.size.height)];
+		originalBattery = battery.frame;
+		[scroller addSubview:battery];
 		setFrame = YES;
-		batteryWidget = self;
+		batteryWidgetController = scroller;
+		batteryWidget = battery;
 	}
 	[self KaiUpdate];
+	[batteryWidget darkLightMode];
 }
 
 %new 
 -(void)KaiUpdate {
 	[UIView animateWithDuration:0.3 animations:^{
-	self.frame = CGRectMake(
+	batteryWidgetController.frame = CGRectMake(
 			original.origin.x,
-			original.origin.y + (self.battery.number * 85),
+			original.origin.y + (batteryWidget.number * 85),
 			original.size.width,
 			original.size.height
 		);
 
-	self.battery.frame = CGRectMake(
+	batteryWidget.frame = CGRectMake(
 		originalBattery.origin.x,
-		originalBattery.origin.y - (self.battery.number * 85) + 85,
+		originalBattery.origin.y - (batteryWidget.number * 85),
 		originalBattery.size.width,
 		originalBattery.size.height
 	);
 	
 	}];
+	[batteryWidget darkLightMode];
 }
 %end
 
