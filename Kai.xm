@@ -28,8 +28,13 @@
 @interface _CSSingleBatteryChargingView : UIView
 @end
 
+@interface NCNotificationListView : UIView
+@property (nonatomic, assign) BOOL hasKai;
+@property (nonatomic, assign) NSInteger previousKaiCount;
+@end
+
 BOOL setFrame = NO;
-UIView *batteryWidgetController;
+NCNotificationListView *batteryWidgetController;
 KAIBattery *batteryWidget;
 CSCoverSheetViewBase *base;
 CGRect original;
@@ -70,7 +75,7 @@ CGRect originalBattery;
 			[base KaiInit];
 		}
 	}
-	[base KaiUpdate];
+	//[base KaiUpdate];
 }
 %end
 
@@ -83,7 +88,7 @@ CGRect originalBattery;
 			name:@"KaiInfoChanged"
 			object:nil];
 
-	[self KaiUpdate];
+	//[self KaiUpdate];
 
 }
 
@@ -105,17 +110,17 @@ CGRect originalBattery;
 
 -(void)setNeedsLayout {
 	%orig;
-	[self KaiUpdate];
+	//[self KaiUpdate];
 }
 
 %new
 -(void)KaiInit {
 	if(!setFrame) {
-		UIView *scroller;
+		NCNotificationListView *scroller;
 		if([self.subviews count] > 1) {
 			UIView *temp = [self.subviews objectAtIndex:1];
 			if([temp.subviews count] > 0) {
-			scroller = [temp.subviews objectAtIndex:0];
+			scroller = [[temp.subviews objectAtIndex:0].subviews objectAtIndex:0];
 			base = self;
 			}
 		}
@@ -130,6 +135,7 @@ CGRect originalBattery;
 		setFrame = YES;
 		batteryWidgetController = scroller;
 		batteryWidget = battery;
+		batteryWidgetController.previousKaiCount = 0;
 	}
 	[self KaiUpdate];
 	[batteryWidget darkLightMode];
@@ -137,18 +143,27 @@ CGRect originalBattery;
 
 %new 
 -(void)KaiUpdate {
+	dispatch_async(dispatch_get_main_queue(), ^{
+
 	[UIView animateWithDuration:0.3 animations:^{
 		/*UIView *notiView;
 		if([self.subviews count] > 0) {
 			notiView = [self.subviews objectAtIndex:0];
 		}*/
-		
-		batteryWidgetController.frame = CGRectMake(
-				original.origin.x,
-				original.origin.y + (batteryWidget.number * 85),
-				original.size.width,
-				original.size.height
+
+		batteryWidgetController.translatesAutoresizingMaskIntoConstraints = NO;
+
+		for(UIView *view in batteryWidgetController.subviews) {
+		view.bounds = CGRectMake(
+				view.bounds.origin.x,
+				view.bounds.origin.y - (batteryWidget.number * 85) + (batteryWidgetController.previousKaiCount * 85),
+				view.bounds.size.width,
+				view.bounds.size.height
 			);
+		}
+		batteryWidgetController.previousKaiCount = batteryWidget.number;
+	/*[batteryWidgetController.topAnchor constraintEqualToAnchor:batteryWidgetController.superview.topAnchor constant:(batteryWidget.number * 85)].active = YES;
+	batteryWidgetController.translatesAutoresizingMaskIntoConstraints = NO;*/
 
 	batteryWidget.frame = CGRectMake(
 		originalBattery.origin.x,
@@ -158,7 +173,37 @@ CGRect originalBattery;
 	);
 	}];
 	[batteryWidget darkLightMode];
+	});
 }
+%end
+
+
+%hook NCNotificationListView
+%property (nonatomic, assign) BOOL hasKai;
+%property (nonatomic, assign) NSInteger previousKaiCount;
+
+//-(void)setBounds:(CGRect)arg1 {
+	/*if(batteryWidgetController==self) {
+		arg1 = (CGRectMake(
+					original.origin.x,
+					original.origin.y - (batteryWidget.number * 85),
+					original.size.width,
+					original.size.height
+				));
+
+				batteryWidget.frame = CGRectMake(
+					originalBattery.origin.x,
+					originalBattery.origin.y - (batteryWidget.number * 85),
+					originalBattery.size.width,
+					originalBattery.size.height
+				);
+
+				[batteryWidget darkLightMode];
+	}*/
+
+//	%orig;
+//}
+
 %end
 
 %hook BCBatteryDevice
@@ -167,6 +212,9 @@ CGRect originalBattery;
 
 	[self addObserver:self forKeyPath:@"name" options:NSKeyValueObservingOptionNew context:nil];
 	[self addObserver:self forKeyPath:@"charging" options:NSKeyValueObservingOptionNew context:nil];
+	[self addObserver:self forKeyPath:@"powerSourceState" options:NSKeyValueObservingOptionNew context:nil];
+	[self addObserver:self forKeyPath:@"batterySaverModeActive" options:NSKeyValueObservingOptionNew context:nil];
+	[self addObserver:self forKeyPath:@"percentCharge" options:NSKeyValueObservingOptionNew context:nil];
 
 	//[self setValue:@"crash" forKeyPath:@"euhidehuud"];
 
