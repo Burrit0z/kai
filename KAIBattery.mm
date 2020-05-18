@@ -7,11 +7,11 @@ KAIBattery *instance;
     self = [super initWithFrame:arg1];
     instance = self;
     if (self) {
-        /*self.batteryLabel = [[UILabel alloc]initWithFrame:CGRectMake(25,-10,220,120)];
-        [self.batteryLabel setFont:[UIFont systemFontOfSize:13]];
-        [self.batteryLabel setTextColor:[UIColor whiteColor]];
-        self.batteryLabel.lineBreakMode = NSLineBreakByWordWrapping;
-        self.batteryLabel.numberOfLines = 0;*/
+        /*self.translatesAutoresizingMaskIntoConstraints = NO;
+        [self.leftAnchor constraintEqualToAnchor:self.leftAnchor constant:8].active = YES;
+        [self.topAnchor constraintEqualToAnchor:self.topAnchor constant:arg1.origin.y].active = YES;
+        [self.widthAnchor constraintEqualToConstant:UIScreen.mainScreen.bounds.size.width - 16].active = YES;
+        [self.heightAnchor constraintEqualToConstant:(self.number * 85)].active = YES;*/
         [self updateBattery];
         [self darkLightMode];
         self.userInteractionEnabled = NO;
@@ -46,7 +46,7 @@ long long lastPercentage;
                 BOOL charging = MSHookIvar<long long>(device, "_charging");
                 BOOL LPM = MSHookIvar<BOOL>(device, "_batterySaverModeActive");
 
-                if(charging) {
+                if(charging || !charging) {
 
                     UIVisualEffectView *blank;
                     if(@available(iOS 12.0, *)) {
@@ -58,7 +58,7 @@ long long lastPercentage;
                     } else {
                         blank = [[UIVisualEffectView alloc] initWithEffect:[UIBlurEffect effectWithStyle:UIBlurEffectStyleLight]];
                     }
-                    blank.frame = CGRectMake(0, 0 + y, self.frame.size.width, 80);
+                    blank.frame = CGRectMake(0, 0 + y, UIScreen.mainScreen.bounds.size.width - 16, 80);
                     blank.layer.masksToBounds = YES;
                     blank.layer.cornerRadius = 13;
                     //[blank setBackgroundColor:[UIColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:1]];
@@ -95,8 +95,8 @@ long long lastPercentage;
                     glyphView.contentMode = UIViewContentModeScaleAspectFit;
                     [glyphView setImage:glyph];
 
-                label.frame = CGRectMake(57.5,27.5 + y,275,25);
-                glyphView.frame = CGRectMake(12.5,18.5 + y,40,40);
+                label.frame = CGRectMake(65.5,27.5 + y,275,25);
+                glyphView.frame = CGRectMake(20.5,18.5 + y,40,40);
                 battery.frame = CGRectMake(310,35 + y,20,10);
                 percentLabel.frame = CGRectMake(265,35 + y,36,12);
 
@@ -111,6 +111,7 @@ long long lastPercentage;
             //blank.alpha = 0.8;
         }
     }
+    [self.heightAnchor constraintEqualToConstant:(self.number * 85)].active = YES;
     self.isUpdating = NO;
     [self darkLightMode];
     }

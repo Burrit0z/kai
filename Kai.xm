@@ -12,9 +12,11 @@
 @end
 
 @interface CSAdjunctListView : UIView
-@property (nonatomic, strong) KAIBattery *battery;
+@property (nonatomic, strong) KAIBattery *batteryView;
 @property (nonatomic, assign) BOOL hasKai;
 @property (nonatomic, assign) NSInteger previousKaiCount;
+-(UIView *)stackView;
+-(void)setStackView:(UIStackView *)arg1;
 -(void)KaiUpdate;
 @end
 
@@ -25,76 +27,98 @@
 @interface _CSSingleBatteryChargingView : UIView
 @end
 
-/*
 @interface NCNotificationListView : UIView
-@property (nonatomic, assign) BOOL hasKai;
-@property (nonatomic, assign) NSInteger previousKaiCount;
-@end*/
+@end
 
 BOOL setFrame = NO;
-CGRect original;
+CGRect original = CGRectMake(0,0,0,0);
 CGRect originalBattery;
 
 
 %hook CSAdjunctListView
-%property (nonatomic, strong) KAIBattery *battery;
+%property (nonatomic, strong) KAIBattery *batteryView;
 %property (nonatomic, assign) BOOL hasKai;
 %property (nonatomic, assign) NSInteger previousKaiCount;
 
--(void)layoutSubviews {
+-(void)_layoutStackView {
+	NSLog(@"Kai: Laying out stack view");
 	//%orig;
 
 	if(!self.hasKai) {
-	original = self.superview.superview.frame;
-		self.battery = [[KAIBattery alloc] initWithFrame:CGRectMake(8, 0, self.frame.size.width - 16, UIScreen.mainScreen.bounds.size.width)];
-		originalBattery = self.battery.frame;
-		[self addSubview:self.battery];
+	//original = self.superview.superview.frame;
+		self.batteryView = [[KAIBattery alloc] initWithFrame:CGRectMake(UIScreen.mainScreen.bounds.origin.x, 0, UIScreen.mainScreen.bounds.size.width, UIScreen.mainScreen.bounds.size.height)];
+		originalBattery = self.batteryView.frame;
+		//[[self stackView] addSubview:self.batteryView];
 		setFrame = YES;
 		self.previousKaiCount = 0;
 		self.hasKai = YES;
 		[[NSNotificationCenter defaultCenter] addObserver:self
-			selector:@selector(KaiUpdate)
+			selector:@selector(KaiInfo)
 			name:@"KaiInfoChanged"
 			object:nil];
-	[self.battery darkLightMode];
+	[self.batteryView darkLightMode];
+	//[self setStackView:self.batteryView];
 	}
-	
+
 	[self KaiUpdate];
 
-	return %orig;
+	%orig;
+}
+
+-(void)setStackView:(UIStackView *)arg1 {
+	NSLog(@"Kai: Updating setting stack view");
+
+	if(!self.hasKai) {
+	//original = self.superview.superview.frame;
+		self.batteryView = [[KAIBattery alloc] initWithFrame:CGRectMake(0, 0, UIScreen.mainScreen.bounds.size.width, UIScreen.mainScreen.bounds.size.height)];
+		originalBattery = self.batteryView.frame;
+		//[[self stackView] addSubview:self.batteryView];
+		setFrame = YES;
+		self.previousKaiCount = 0;
+		self.hasKai = YES;
+		[[NSNotificationCenter defaultCenter] addObserver:self
+			selector:@selector(KaiInfo)
+			name:@"KaiInfoChanged"
+			object:nil];
+	[self.batteryView darkLightMode];
+	//[self setStackView:self.batteryView];
+	}
+
+	UIStackView *newView = arg1;
+
+	if(![arg1.subviews containsObject:self.batteryView]) {
+		//[newView addSubview:self.batteryView];
+		[newView addArrangedSubview:self.batteryView];
+	}
+	newView.frame = CGRectMake(newView.frame.origin.x, newView.frame.origin.y, newView.frame.size.width, newView.frame.size.height + self.batteryView.frame.size.height);
+	original = newView.frame;
+	%orig(newView);
 }
 
 %new
 -(void)KaiUpdate {
-	if(self.battery) {
+	NSLog(@"Kai: Updating Pos.");
 
-		[self.battery updateBattery];
+	dispatch_async(dispatch_get_main_queue(), ^{
 
-		dispatch_async(dispatch_get_main_queue(), ^{
+	[UIView animateWithDuration:0.3 animations:^{
 
-		[UIView animateWithDuration:0.3 animations:^{
+	self.batteryView.frame = CGRectMake(UIScreen.mainScreen.bounds.origin.x, 0, UIScreen.mainScreen.bounds.size.width, (self.batteryView.number * 85));
+	self.batteryView.hidden = YES;
+	self.batteryView.hidden = NO;
+	//self.batteryView.superview.frame = CGRectMake(original.origin.x, original.origin.y, original.size.width, original.size.height + (self.batteryView.number * 85));
 
-		//self.translatesAutoresizingMaskIntoConstraints = NO;
-//		[self.topAnchor constraintEqualToAnchor:self.superview.topAnchor constant:(self.battery.number * 85)].active = YES;
+	}];
+	[self.batteryView darkLightMode];
+	});
 
-		self.superview.superview.frame = CGRectMake(
-			original.origin.x,
-			original.origin.y + (self.battery.number * 85),
-			original.size.width,
-			original.size.height
-		);
+}
 
-		/*self.battery.frame = CGRectMake(
-			originalBattery.origin.x,
-			originalBattery.origin.y - (self.battery.number * 85),
-			originalBattery.size.width,
-			originalBattery.size.height
-		);*/
-		}];
-		[self.battery darkLightMode];
-		});
-
-	}
+%new
+-(void)KaiInfo {
+	NSLog(@"Kai: Updating Info");
+	[self.batteryView updateBattery];
+	[self KaiUpdate];
 }
 %end
 
