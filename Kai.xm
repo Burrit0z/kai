@@ -41,20 +41,25 @@ CGRect originalBattery;
 %property (nonatomic, assign) BOOL hasKai;
 %property (nonatomic, assign) NSInteger previousKaiCount;
 
--(id)initWithFrame:(CGRect)arg1 {
-	original = self.frame;
+-(void)layoutSubviews {
+	//%orig;
+
+	if(!self.hasKai) {
+	original = self.superview.superview.frame;
 		self.battery = [[KAIBattery alloc] initWithFrame:CGRectMake(8, 0, self.frame.size.width - 16, UIScreen.mainScreen.bounds.size.width)];
 		originalBattery = self.battery.frame;
 		[self addSubview:self.battery];
 		setFrame = YES;
 		self.previousKaiCount = 0;
+		self.hasKai = YES;
 		[[NSNotificationCenter defaultCenter] addObserver:self
 			selector:@selector(KaiUpdate)
 			name:@"KaiInfoChanged"
 			object:nil];
-
-	//[self KaiUpdate];
 	[self.battery darkLightMode];
+	}
+	
+	[self KaiUpdate];
 
 	return %orig;
 }
@@ -63,24 +68,31 @@ CGRect originalBattery;
 -(void)KaiUpdate {
 	if(self.battery) {
 
-			[self.battery updateBattery];
+		[self.battery updateBattery];
 
-			dispatch_async(dispatch_get_main_queue(), ^{
+		dispatch_async(dispatch_get_main_queue(), ^{
 
-			[UIView animateWithDuration:0.3 animations:^{
+		[UIView animateWithDuration:0.3 animations:^{
 
-			self.translatesAutoresizingMaskIntoConstraints = NO;
-			[self.topAnchor constraintEqualToAnchor:self.superview.topAnchor constant:(self.battery.number * 85)].active = YES;
+		//self.translatesAutoresizingMaskIntoConstraints = NO;
+//		[self.topAnchor constraintEqualToAnchor:self.superview.topAnchor constant:(self.battery.number * 85)].active = YES;
 
-			self.battery.frame = CGRectMake(
-				originalBattery.origin.x,
-				originalBattery.origin.y - (self.battery.number * 85),
-				originalBattery.size.width,
-				originalBattery.size.height
-			);
-			}];
-			[self.battery darkLightMode];
-			});
+		self.superview.superview.frame = CGRectMake(
+			original.origin.x,
+			original.origin.y + (self.battery.number * 85),
+			original.size.width,
+			original.size.height
+		);
+
+		/*self.battery.frame = CGRectMake(
+			originalBattery.origin.x,
+			originalBattery.origin.y - (self.battery.number * 85),
+			originalBattery.size.width,
+			originalBattery.size.height
+		);*/
+		}];
+		[self.battery darkLightMode];
+		});
 
 	}
 }
