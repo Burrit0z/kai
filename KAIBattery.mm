@@ -3,8 +3,8 @@
 KAIBattery *instance;
 @implementation KAIBattery
 
--(instancetype)initWithFrame:(CGRect)arg1 {
-    self = [super initWithFrame:arg1];
+-(instancetype)init {
+    self = [super init];
     instance = self;
     if (self) {
         /*self.translatesAutoresizingMaskIntoConstraints = NO;

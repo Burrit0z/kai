@@ -27,6 +27,6 @@
 @property (nonatomic, assign) BOOL isUpdating;
 +(KAIBattery *)sharedInstance;
 -(void)darkLightMode;
--(instancetype)initWithFrame:(CGRect)arg1;
+-(instancetype)init;
 -(void)updateBattery;
 @end
