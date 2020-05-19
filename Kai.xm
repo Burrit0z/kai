@@ -12,10 +12,9 @@
 @end
 
 @interface CSAdjunctListView : UIView
-@property (nonatomic, strong) KAIBattery *batteryView;
 @property (nonatomic, assign) BOOL hasKai;
 @property (nonatomic, assign) NSInteger previousKaiCount;
--(UIView *)stackView;
+-(UIStackView *)stackView;
 -(void)setStackView:(UIStackView *)arg1;
 -(void)KaiUpdate;
 @end
@@ -36,7 +35,6 @@ CGRect originalBattery;
 
 
 %hook CSAdjunctListView
-%property (nonatomic, strong) KAIBattery *batteryView;
 %property (nonatomic, assign) BOOL hasKai;
 %property (nonatomic, assign) NSInteger previousKaiCount;
 
@@ -46,9 +44,14 @@ CGRect originalBattery;
 
 	if(!self.hasKai) {
 	//original = self.superview.superview.frame;
-		self.batteryView = [[KAIBattery alloc] initWithFrame:CGRectMake(UIScreen.mainScreen.bounds.origin.x, 0, UIScreen.mainScreen.bounds.size.width, UIScreen.mainScreen.bounds.size.height)];
-		originalBattery = self.batteryView.frame;
-		//[[self stackView] addSubview:self.batteryView];
+		KAIBattery *battery = [[KAIBattery alloc] initWithFrame:CGRectMake(0, 0, UIScreen.mainScreen.bounds.size.width, UIScreen.mainScreen.bounds.size.height)];
+		battery.translatesAutoresizingMaskIntoConstraints = NO;
+        [battery.leftAnchor constraintEqualToAnchor:battery.leftAnchor].active = YES;
+        [battery.topAnchor constraintEqualToAnchor:battery.topAnchor].active = YES;
+        [battery.widthAnchor constraintEqualToConstant:UIScreen.mainScreen.bounds.size.width].active = YES;
+        [battery.heightAnchor constraintEqualToConstant:(battery.number * 85)].active = YES;
+		originalBattery = battery.frame;
+		original = self.frame;
 		setFrame = YES;
 		self.previousKaiCount = 0;
 		self.hasKai = YES;
@@ -56,9 +59,14 @@ CGRect originalBattery;
 			selector:@selector(KaiInfo)
 			name:@"KaiInfoChanged"
 			object:nil];
-	[self.batteryView darkLightMode];
-	//[self setStackView:self.batteryView];
+	[[KAIBattery sharedInstance] darkLightMode];
+	//CGRect frame = [self stackView].frame;
+	//[[self stackView] setFrame:CGRectMake(frame.origin.x, frame.origin.y, frame.size.width, frame.size.height + ([KAIBattery sharedInstance].number * 85))];
+	//[self setStackView:[KAIBattery sharedInstance]];
 	}
+
+	//[[self stackView].heightAnchor constraintEqualToAnchor:[self stackView].heightAnchor constant:([KAIBattery sharedInstance].number * 85)].active = YES;
+	//self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, self.frame.size.width, original.size.height + ([KAIBattery sharedInstance].number * 85));
 
 	[self KaiUpdate];
 
@@ -70,9 +78,14 @@ CGRect originalBattery;
 
 	if(!self.hasKai) {
 	//original = self.superview.superview.frame;
-		self.batteryView = [[KAIBattery alloc] initWithFrame:CGRectMake(0, 0, UIScreen.mainScreen.bounds.size.width, UIScreen.mainScreen.bounds.size.height)];
-		originalBattery = self.batteryView.frame;
-		//[[self stackView] addSubview:self.batteryView];
+		KAIBattery *battery = [[KAIBattery alloc] initWithFrame:CGRectMake(0, 0, UIScreen.mainScreen.bounds.size.width, UIScreen.mainScreen.bounds.size.height)];
+		battery.translatesAutoresizingMaskIntoConstraints = NO;
+        [battery.leftAnchor constraintEqualToAnchor:battery.leftAnchor].active = YES;
+        [battery.topAnchor constraintEqualToAnchor:battery.topAnchor].active = YES;
+        [battery.widthAnchor constraintEqualToConstant:UIScreen.mainScreen.bounds.size.width].active = YES;
+        [battery.heightAnchor constraintEqualToConstant:(battery.number * 85)].active = YES;
+		originalBattery = battery.frame;
+		original = self.frame;
 		setFrame = YES;
 		self.previousKaiCount = 0;
 		self.hasKai = YES;
@@ -80,44 +93,44 @@ CGRect originalBattery;
 			selector:@selector(KaiInfo)
 			name:@"KaiInfoChanged"
 			object:nil];
-	[self.batteryView darkLightMode];
-	//[self setStackView:self.batteryView];
+	[[KAIBattery sharedInstance] darkLightMode];
+	//CGRect frame = [self stackView].frame;
+	/*[[self stackView] setFrame:CGRectMake(frame.origin.x, frame.origin.y, frame.size.width, frame.size.height + ([KAIBattery sharedInstance].number * 85))];*/
+	//[self setStackView:[KAIBattery sharedInstance]];
 	}
 
 	UIStackView *newView = arg1;
 
-	if(![arg1.subviews containsObject:self.batteryView]) {
-		//[newView addSubview:self.batteryView];
-		[newView addArrangedSubview:self.batteryView];
+	if(![arg1.subviews containsObject:[KAIBattery sharedInstance]]) {
+		//[newView addSubview:[KAIBattery sharedInstance]];
+		[newView addArrangedSubview:[KAIBattery sharedInstance]];
 	}
-	newView.frame = CGRectMake(newView.frame.origin.x, newView.frame.origin.y, newView.frame.size.width, newView.frame.size.height + self.batteryView.frame.size.height);
-	original = newView.frame;
+	//newView.frame = CGRectMake(newView.frame.origin.x, newView.frame.origin.y, newView.frame.size.width, newView.frame.size.height + [KAIBattery sharedInstance].frame.size.height);
+	//original = newView.frame;
 	%orig(newView);
 }
 
 %new
 -(void)KaiUpdate {
-	NSLog(@"Kai: Updating Pos.");
+	/*NSLog(@"Kai: Updating Pos.");
 
 	dispatch_async(dispatch_get_main_queue(), ^{
 
 	[UIView animateWithDuration:0.3 animations:^{
 
-	self.batteryView.frame = CGRectMake(UIScreen.mainScreen.bounds.origin.x, 0, UIScreen.mainScreen.bounds.size.width, (self.batteryView.number * 85));
-	self.batteryView.hidden = YES;
-	self.batteryView.hidden = NO;
-	//self.batteryView.superview.frame = CGRectMake(original.origin.x, original.origin.y, original.size.width, original.size.height + (self.batteryView.number * 85));
+	//[KAIBattery sharedInstance].frame = CGRectMake(UIScreen.mainScreen.bounds.origin.x, 0, UIScreen.mainScreen.bounds.size.width, ([KAIBattery sharedInstance].number * 85));
+	//[KAIBattery sharedInstance].superview.frame = CGRectMake(original.origin.x, original.origin.y, original.size.width, original.size.height + ([KAIBattery sharedInstance].number * 85));
 
 	}];
-	[self.batteryView darkLightMode];
-	});
+	[[KAIBattery sharedInstance] darkLightMode];
+	});*/
 
 }
 
 %new
 -(void)KaiInfo {
 	NSLog(@"Kai: Updating Info");
-	[self.batteryView updateBattery];
+	[[KAIBattery sharedInstance] updateBattery];
 	[self KaiUpdate];
 }
 %end
