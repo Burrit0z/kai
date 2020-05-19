@@ -58,7 +58,7 @@ long long lastPercentage;
                     } else {
                         blank = [[UIVisualEffectView alloc] initWithEffect:[UIBlurEffect effectWithStyle:UIBlurEffectStyleLight]];
                     }
-                    blank.frame = CGRectMake(0, 0 + y, UIScreen.mainScreen.bounds.size.width - 16, 80);
+                    blank.frame = CGRectMake(0, 0 + y, self.superview.bounds.size.width - 16, 80);
                     blank.layer.masksToBounds = YES;
                     blank.layer.cornerRadius = 13;
                     //[blank setBackgroundColor:[UIColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:1]];
@@ -111,7 +111,7 @@ long long lastPercentage;
             //blank.alpha = 0.8;
         }
     }
-    [self.heightAnchor constraintEqualToConstant:(self.number * 85)].active = YES;
+    //[self.heightAnchor constraintEqualToConstant:(self.number * 85)].active = YES;
     self.isUpdating = NO;
     [self darkLightMode];
     }
