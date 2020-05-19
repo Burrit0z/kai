@@ -25,8 +25,11 @@
 @interface _CSSingleBatteryChargingView : UIView
 @end
 
-@interface NCNotificationListView : UIView
+@interface NSLayoutConstraint (Kai)
++(id)constraintWithAnchor:(id)arg1 relatedBy:(long long)arg2 toAnchor:(id)arg3 multiplier:(double)arg4 constant:(double)arg5 ;
 @end
+
+//NSLayoutConstraint *globalC;
 
 CGRect original = CGRectMake(0,0,0,0);
 CGRect originalBattery;
@@ -48,7 +51,7 @@ CGRect originalBattery;
 
 	if(!self.hasKai) {
 		KAIBattery *battery = [[KAIBattery alloc] init];
-		battery.translatesAutoresizingMaskIntoConstraints = NO;
+		//battery.translatesAutoresizingMaskIntoConstraints = NO;
         //[battery.widthAnchor constraintEqualToAnchor:[self stackView].widthAnchor].active = YES;
 		//[battery.heightAnchor constraintEqualToConstant:(battery.number * 85)].active = YES;
 		//[battery.heightAnchor constraintEqualToConstant:100].active = YES;
@@ -80,25 +83,50 @@ CGRect originalBattery;
 	[[KAIBattery sharedInstance] darkLightMode];
 	KAIBattery *battery = [KAIBattery sharedInstance];
 	//battery.translatesAutoresizingMaskIntoConstraints = YES;
-	/*battery.frame = CGRectMake(
-		originalBattery.origin.x,
-		originalBattery.origin.y,
-		originalBattery.size.width,
-		(battery.number * 85)
-	);*/
 
 	battery.translatesAutoresizingMaskIntoConstraints = NO;
         //[battery.widthAnchor constraintEqualToAnchor:[self stackView].widthAnchor].active = YES;
 	
-	[[self stackView] removeArrangedSubview:battery];
-		int height = (battery.number * 85);
-		[battery.heightAnchor constraintEqualToConstant:height].active = YES;
-	[[self stackView] addArrangedSubview:battery];
+	[UIView animateWithDuration:0.3 animations:^{
+		/*if (battery.heightConstraint == nil) {
+			battery.heightConstraint = [NSLayoutConstraint constraintWithAnchor:battery.heightAnchor relatedBy:NSLayoutRelationEqual toAnchor:battery.heightAnchor multiplier:0 constant:(battery.number * 85)];
+			battery.heightConstraint.active = YES;
+			[self addConstraint:battery.heightConstraint];
+		}
+		if (battery.heightConstraint.active == YES) {
+			battery.heightConstraint.active = NO;
+			[self removeConstraint:battery.heightConstraint];
+			battery.heightConstraint = [NSLayoutConstraint constraintWithAnchor:battery.heightAnchor relatedBy:NSLayoutRelationEqual toAnchor:battery.heightAnchor multiplier:0 constant:(battery.number * 85)];
+			[self addConstraint:battery.heightConstraint];	
+		}
+
+		if (globalC == nil) {
+			globalC = [NSLayoutConstraint constraintWithAnchor:battery.heightAnchor relatedBy:NSLayoutRelationEqual toAnchor:battery.heightAnchor multiplier:0 constant:(battery.number * 85)];
+			globalC.active = YES;
+			[[self stackView] addConstraint:globalC];
+		}
+		if (globalC.active == YES) {
+			globalC.active = NO;
+			[[self stackView] removeConstraint:globalC];
+			globalC = [NSLayoutConstraint constraintWithAnchor:battery.heightAnchor relatedBy:NSLayoutRelationEqual toAnchor:battery.heightAnchor multiplier:0 constant:(battery.number * 85)];
+			[[self stackView] addConstraint:globalC];	
+		}*/
+
+		//[battery.widthAnchor constraintEqualToConstant:(battery.number * 85)].active = YES;
+		
+		/*battery.frame = CGRectMake(
+		originalBattery.origin.x,
+		originalBattery.origin.y,
+		originalBattery.size.width,
+		(battery.number * 85)
+		);*/
+	}];
+	
 }
 
 %new
 -(void)KaiInfo {
-	NSLog(@"Kai: Updating Info");
+	//NSLog(@"Kai: Updating Info");
 	[[KAIBattery sharedInstance] updateBattery];
 	[self KaiUpdate];
 }
