@@ -46,6 +46,7 @@ CGRect originalBattery;
         [[KAIBattery sharedInstance].heightAnchor constraintEqualToConstant:([KAIBattery sharedInstance].number * 85)].active = YES;*/
 
 	NSLog(@"Kai: Laying out stack view");
+	//[[KAIBattery sharedInstance].heightAnchor constraintEqualToConstant:([KAIBattery sharedInstance].number * 85)].active = YES;
 	//%orig;
 
 	[self KaiUpdate];
@@ -57,13 +58,11 @@ CGRect originalBattery;
 	NSLog(@"Kai: Updating setting stack view");
 
 	if(!self.hasKai) {
-	//original = self.superview.superview.frame;
-		KAIBattery *battery = [[KAIBattery alloc] initWithFrame:CGRectMake(0, 0, UIScreen.mainScreen.bounds.size.width, 0)];
-		/*battery.translatesAutoresizingMaskIntoConstraints = YES;
-        [battery.leftAnchor constraintEqualToAnchor:battery.leftAnchor].active = YES;
-        [battery.topAnchor constraintEqualToAnchor:battery.topAnchor].active = YES;
-        [battery.widthAnchor constraintEqualToConstant:UIScreen.mainScreen.bounds.size.width].active = YES;
-        [battery.heightAnchor constraintEqualToConstant:(battery.number * 85)].active = YES;*/
+		KAIBattery *battery = [[KAIBattery alloc] initWithFrame:CGRectMake(0, 0, UIScreen.mainScreen.bounds.size.width, 85)];
+		/*battery.translatesAutoresizingMaskIntoConstraints = NO;
+        [battery.leftAnchor constraintEqualToAnchor:battery.leftAnchor constant:0].active = YES;
+        [battery.topAnchor constraintEqualToAnchor:battery.topAnchor constant:0].active = YES;
+        [battery.widthAnchor constraintEqualToConstant:[self stackView].frame.size.width - 16].active = YES;*/
 		originalBattery = battery.frame;
 		original = self.frame;
 		setFrame = YES;
@@ -79,25 +78,23 @@ CGRect originalBattery;
 	UIStackView *newView = arg1;
 
 	if(![arg1.subviews containsObject:[KAIBattery sharedInstance]]) {
-		//[newView addSubview:[KAIBattery sharedInstance]];
 		[newView addArrangedSubview:[KAIBattery sharedInstance]];
-	}/* else if(arg1==nil) {
-		newView = (UIStackView *)[KAIBattery sharedInstance];
-	}*/
+	}
+	//[self addSubview:[KAIBattery sharedInstance]];
 	%orig(newView);
 }
 
 %new
 -(void)KaiUpdate {
 	[[KAIBattery sharedInstance] darkLightMode];
-	/*KAIBattery *battery = [KAIBattery sharedInstance];
-	battery.translatesAutoresizingMaskIntoConstraints = YES;
+	KAIBattery *battery = [KAIBattery sharedInstance];
+	//battery.translatesAutoresizingMaskIntoConstraints = YES;
 	battery.frame = CGRectMake(
 		originalBattery.origin.x,
 		originalBattery.origin.y,
 		originalBattery.size.width,
 		(battery.number * 85)
-	);*/
+	);
 }
 
 %new
