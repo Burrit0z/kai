@@ -51,7 +51,7 @@ CGRect originalBattery;
 		battery.translatesAutoresizingMaskIntoConstraints = NO;
         //[battery.widthAnchor constraintEqualToAnchor:[self stackView].widthAnchor].active = YES;
 		//[battery.heightAnchor constraintEqualToConstant:(battery.number * 85)].active = YES;
-		[battery.heightAnchor constraintEqualToConstant:100].active = YES;
+		//[battery.heightAnchor constraintEqualToConstant:100].active = YES;
 		originalBattery = battery.frame;
 		original = [self stackView].frame;
 		[[NSNotificationCenter defaultCenter] addObserver:self
@@ -89,7 +89,11 @@ CGRect originalBattery;
 
 	battery.translatesAutoresizingMaskIntoConstraints = NO;
         //[battery.widthAnchor constraintEqualToAnchor:[self stackView].widthAnchor].active = YES;
-		//[battery.heightAnchor constraintEqualToConstant:(battery.number * 85)].active = YES;
+	
+	[[self stackView] removeArrangedSubview:battery];
+		int height = (battery.number * 85);
+		[battery.heightAnchor constraintEqualToConstant:height].active = YES;
+	[[self stackView] addArrangedSubview:battery];
 }
 
 %new
