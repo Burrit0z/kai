@@ -42,7 +42,7 @@ CGRect originalBattery;
 	NSLog(@"Kai: Laying out stack view");
 	//%orig;
 
-	if(!self.hasKai) {
+	/*if(!self.hasKai) {
 	//original = self.superview.superview.frame;
 		KAIBattery *battery = [[KAIBattery alloc] initWithFrame:CGRectMake(0, 0, UIScreen.mainScreen.bounds.size.width, UIScreen.mainScreen.bounds.size.height)];
 		battery.translatesAutoresizingMaskIntoConstraints = NO;
@@ -63,7 +63,7 @@ CGRect originalBattery;
 	//CGRect frame = [self stackView].frame;
 	//[[self stackView] setFrame:CGRectMake(frame.origin.x, frame.origin.y, frame.size.width, frame.size.height + ([KAIBattery sharedInstance].number * 85))];
 	//[self setStackView:[KAIBattery sharedInstance]];
-	}
+	}*/
 
 	//[[self stackView].heightAnchor constraintEqualToAnchor:[self stackView].heightAnchor constant:([KAIBattery sharedInstance].number * 85)].active = YES;
 	//self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, self.frame.size.width, original.size.height + ([KAIBattery sharedInstance].number * 85));
