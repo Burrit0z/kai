@@ -7,14 +7,8 @@ KAIBattery *instance;
     self = [super init];
     instance = self;
     if (self) {
-        /*self.translatesAutoresizingMaskIntoConstraints = NO;
-        [self.leftAnchor constraintEqualToAnchor:self.leftAnchor constant:8].active = YES;
-        [self.topAnchor constraintEqualToAnchor:self.topAnchor constant:arg1.origin.y].active = YES;
-        [self.widthAnchor constraintEqualToConstant:UIScreen.mainScreen.bounds.size.width - 16].active = YES;
-        [self.heightAnchor constraintEqualToConstant:(self.number * 85)].active = YES;*/
         [self updateBattery];
         self.userInteractionEnabled = NO;
-        //[self addSubview:self.batteryLabel];
     }
     return self;
 }
@@ -56,7 +50,11 @@ long long lastPercentage;
                 if(shouldAdd) {
                     UIView *blank;
                     if(bannerStyle==1) {
-                        blank = [[[objc_getClass("MTMaterialView") class] alloc] _initWithRecipe:1 configuration:1 initialWeighting:1 scaleAdjustment:nil];
+                        if(kCFCoreFoundationVersionNumber > 1600) {
+                            blank = [[[objc_getClass("MTMaterialView") class] alloc] _initWithRecipe:1 configuration:1 initialWeighting:1 scaleAdjustment:nil];
+                        } else if(kCFCoreFoundationVersionNumber < 1600) {
+                            blank = [[UIVisualEffectView alloc] initWithEffect:[UIBlurEffect effectWithStyle:UIBlurEffectStyleLight]];
+                        }
                     } else if(bannerStyle==2) {
                         blank = [[UIVisualEffectView alloc] initWithEffect:[UIBlurEffect effectWithStyle:UIBlurEffectStyleDark]];
                     } else if(bannerStyle==3) {

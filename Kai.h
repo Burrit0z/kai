@@ -47,6 +47,7 @@ BOOL enabled;
 BOOL disableGlyphs;
 BOOL hidePercent;
 BOOL showAll;
+BOOL belowMusic;
 BOOL hideDeviceLabel;
 NSInteger bannerStyle;
 NSInteger bannerAlign;
@@ -107,7 +108,7 @@ static void preferencesChanged()
 
     enabled = boolValueForKey(@"enabled", YES);
     spacing = numberForValue(@"spacing", 5);
-    glyphSize = numberForValue(@"glyphSize", 35);
+    glyphSize = numberForValue(@"glyphSize", 30);
     bannerHeight = numberForValue(@"bannerHeight", 80);
     cornerRadius = numberForValue(@"cornerRadius", 13);
     disableGlyphs = boolValueForKey(@"disableGlyphs", NO);
@@ -118,6 +119,7 @@ static void preferencesChanged()
     hideDeviceLabel = boolValueForKey(@"hideDeviceLabel", NO);
     bannerAlign = numberForValue(@"bannerAlign", 2);
     horizontalOffset = numberForValue(@"horizontalOffset", 0);
+    belowMusic = boolValueForKey(@"belowMusic", NO);
 
     if(disableGlyphs) {
         glyphSize = 0;

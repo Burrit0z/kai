@@ -5,7 +5,11 @@
 
 -(void)_layoutStackView {
 
-	//NSLog(@"Kai: Laying out stack view");
+	NSInteger lastSlot = [[self stackView].subviews count] -1;
+	if([[self stackView].subviews objectAtIndex:lastSlot] != [KAIBattery sharedInstance] && belowMusic) {
+		[[self stackView] removeArrangedSubview:[KAIBattery sharedInstance]];
+		[[self stackView] insertArrangedSubview:[KAIBattery sharedInstance] atIndex:lastSlot];
+	}
 	
 	[self KaiUpdate];
 
@@ -42,14 +46,12 @@
 		if(!battery.heightConstraint) {
 			
 			battery.heightConstraint.active = NO;
-			NSLog(@"kai: 1st time, assigning to %d", 500);
-			battery.heightConstraint = [battery.heightAnchor constraintEqualToConstant:500];
+			battery.heightConstraint = [battery.heightAnchor constraintEqualToConstant:85];
 			battery.heightConstraint.active = YES;
 
 		} else {
-		int height = (battery.number * (bannerHeight + spacing));
+		int height = (battery.number * ((bannerHeight + spacing) - spacing + 5));
 			battery.heightConstraint.active = NO;
-			NSLog(@"kai: setting to %d", height);
 			battery.heightConstraint.constant = height;
 			battery.heightConstraint.active = YES;
 
@@ -104,12 +106,14 @@
 %hook CSBatteryChargingView
 
 +(id)batteryChargingViewWithSingleBattery {
-	//NSLog(@"kai: here bro: %@", [NSThread callStackSymbols]);
-	//[UIPasteboard generalPasteboard].string = [NSString stringWithFormat:@"kai: here bro: %@", [NSThread callStackSymbols]];
+	NSLog(@"kai: here bro: %@", [NSThread callStackSymbols]);
+	[UIPasteboard generalPasteboard].string = [NSString stringWithFormat:@"kai: here bro: %@", [NSThread callStackSymbols]];
 	return nil;
 }
 
 +(id)batteryChargingViewWithDoubleBattery {
+	NSLog(@"kai: here bro: %@", [NSThread callStackSymbols]);
+	[UIPasteboard generalPasteboard].string = [NSString stringWithFormat:@"kai: here bro: %@", [NSThread callStackSymbols]];
 	return nil;
 }
 

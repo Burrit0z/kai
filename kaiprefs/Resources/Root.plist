@@ -134,6 +134,18 @@
         </dict>
 		<dict>
 			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>default</key>
+			<false/>
+			<key>defaults</key>
+			<string>com.burritoz.kaiprefs</string>
+			<key>key</key>
+			<string>belowMusic</string>
+			<key>label</key>
+			<string>Show kai Below Music</string>
+		</dict>
+		<dict>
+			<key>cell</key>
 			<string>PSGroupCell</string>
 			<key>label</key>
 			<string>Banner Height (80)</string>
@@ -232,17 +244,17 @@
 			<key>cell</key>
 			<string>PSGroupCell</string>
 			<key>label</key>
-			<string>Glyph Size (35)</string>
+			<string>Glyph Size (30)</string>
 		</dict>
 		<dict>
 			<key>default</key>
-			<real>35</real>
+			<real>30</real>
 			<key>cell</key>
 			<string>PSSliderCell</string>
 			<key>min</key>
 			<real>10</real>
 			<key>max</key>
-			<real>100</real>
+			<real>60</real>
 			<key>isSegmented</key>
 			<false/>
 			<key>showValue</key>

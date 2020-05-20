@@ -14,6 +14,7 @@
 @interface MTMaterialView : UIView
 @property (nonatomic, assign) BOOL recipeDynamic;
 -(id)_initWithRecipe:(NSInteger)arg1 configuration:(NSInteger)arg2 initialWeighting:(CGFloat)arg3 scaleAdjustment:(id)arg4;
++(id)materialViewWithRecipe:(NSInteger)arg1 options:(NSInteger)arg2 initialWeighting:(CGFloat)arg3 scaleAdjustment:(id)arg4;
 @end
 
 @interface BCBatteryDeviceController
