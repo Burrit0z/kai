@@ -1,6 +1,5 @@
 #import "Kai.h"
 
-
 %hook KAITarget
 %property (nonatomic, assign) BOOL hasKai;
 
@@ -22,7 +21,6 @@
 			name:@"KaiInfoChanged"
 			object:nil];
 		KAISelf.hasKai = YES;
-	[[KAIBattery sharedInstance] darkLightMode];
 
 	UIStackView *newView = arg1;
 
@@ -37,7 +35,6 @@
 
 %new
 -(void)KaiUpdate {
-	[[KAIBattery sharedInstance] darkLightMode];
 	KAIBattery *battery = [KAIBattery sharedInstance];
 
 	[UIView animateWithDuration:0.3 animations:^{
@@ -50,7 +47,7 @@
 			battery.heightConstraint.active = YES;
 
 		} else {
-		int height = (battery.number * (80 + spacing));
+		int height = (battery.number * (bannerHeight + spacing));
 			battery.heightConstraint.active = NO;
 			NSLog(@"kai: setting to %d", height);
 			battery.heightConstraint.constant = height;
@@ -66,17 +63,20 @@
 
 %new
 -(void)KaiInfo {
-	[UIView animateWithDuration:0.3 animations:^{
-		[KAIBattery sharedInstance].alpha = 0;
-	} completion:^(BOOL finished){
-		[[KAIBattery sharedInstance] updateBattery];
-		[self KaiUpdate];
-		[UIView animateWithDuration:0.35 animations:^{
-			[KAIBattery sharedInstance].alpha = 1;
+	if(!isUpdating) {
+		isUpdating = YES;
+		[UIView animateWithDuration:0.3 animations:^{
+			[KAIBattery sharedInstance].alpha = 0;
+		} completion:^(BOOL finished){
+			[[KAIBattery sharedInstance] updateBattery];
+			[self KaiUpdate];
+			[UIView animateWithDuration:0.35 animations:^{
+				[KAIBattery sharedInstance].alpha = 1;
+			} completion:^(BOOL finished){
+				isUpdating = NO;
+			}];
 		}];
-	}];
-	[[KAIBattery sharedInstance] updateBattery];
-	[self KaiUpdate];
+	}
 }
 %end
 
@@ -86,7 +86,7 @@
 - (id)initWithIdentifier:(id)arg1 vendor:(long long)arg2 productIdentifier:(long long)arg3 parts:(unsigned long long)arg4 matchIdentifier:(id)arg5 {
 
 	[self addObserver:self forKeyPath:@"charging" options:NSKeyValueObservingOptionNew context:nil];
-	[self addObserver:self forKeyPath:@"powerSourceState" options:NSKeyValueObservingOptionNew context:nil];
+	//[self addObserver:self forKeyPath:@"powerSourceState" options:NSKeyValueObservingOptionNew context:nil];
 	[self addObserver:self forKeyPath:@"batterySaverModeActive" options:NSKeyValueObservingOptionNew context:nil];
 	[self addObserver:self forKeyPath:@"percentCharge" options:NSKeyValueObservingOptionNew context:nil];
 
@@ -120,6 +120,14 @@
 
 %ctor {
 	preferencesChanged();
+	CFNotificationCenterAddObserver(
+        CFNotificationCenterGetDarwinNotifyCenter(),
+        &observer,
+        (CFNotificationCallback)applyPrefs,
+        kSettingsChangedNotification,
+        NULL,
+        CFNotificationSuspensionBehaviorDeliverImmediately
+    );
 	Class cls = kCFCoreFoundationVersionNumber > 1600 ? ([objc_getClass("CSAdjunctListView") class]) : ([objc_getClass("SBDashBoardAdjunctListView") class]);
 	if(enabled) {
     	%init(KAITarget = cls);

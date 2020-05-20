@@ -40,14 +40,21 @@
 @property (nonatomic, assign) BOOL continuousCorners;
 @end
 
+BOOL isUpdating = NO;
+
 //prefs
 BOOL enabled;
 BOOL disableGlyphs;
 BOOL hidePercent;
+BOOL showAll;
+BOOL hideDeviceLabel;
+NSInteger bannerStyle;
+NSInteger bannerAlign;
 double spacing;
 double glyphSize;
 double bannerHeight;
 double cornerRadius;
+double bannerWidthFactor;
 
 #import "KAIBattery.mm"
 
@@ -104,8 +111,31 @@ static void preferencesChanged()
     cornerRadius = numberForValue(@"cornerRadius", 13);
     disableGlyphs = boolValueForKey(@"disableGlyphs", NO);
     hidePercent = boolValueForKey(@"hidePercent", NO);
+    bannerStyle = numberForValue(@"bannerStyle", 1);
+    showAll = boolValueForKey(@"showAll", NO);
+    bannerWidthFactor = numberForValue(@"bannerWidthFactor", 0);
+    hideDeviceLabel = boolValueForKey(@"hideDeviceLabel", NO);
+    bannerAlign = numberForValue(@"bannerAlign", 2);
 
     if(disableGlyphs) {
         glyphSize = 0;
     }
+}
+
+static void applyPrefs() 
+{
+    preferencesChanged();
+    isUpdating = YES;
+    [UIView animateWithDuration:0.3 animations:^{
+        [KAIBattery sharedInstance].alpha = 0;
+    } completion:^(BOOL finished){
+        [[KAIBattery sharedInstance] updateBattery];
+        [(CSAdjunctListView *)([KAIBattery sharedInstance].superview.superview) KaiUpdate];
+        [UIView animateWithDuration:0.35 animations:^{
+            [KAIBattery sharedInstance].alpha = 1;
+        } completion:^(BOOL finished){
+            isUpdating = NO;
+        }];
+    }];
+
 }

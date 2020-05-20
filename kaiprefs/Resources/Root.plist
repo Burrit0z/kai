@@ -36,6 +36,18 @@
 			<key>defaults</key>
 			<string>com.burritoz.kaiprefs</string>
 			<key>key</key>
+			<string>showAll</string>
+			<key>label</key>
+			<string>Show all devices</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>default</key>
+			<false/>
+			<key>defaults</key>
+			<string>com.burritoz.kaiprefs</string>
+			<key>key</key>
 			<string>disableGlyphs</string>
 			<key>label</key>
 			<string>Hide Device Glyphs</string>
@@ -54,6 +66,74 @@
 		</dict>
 		<dict>
 			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>default</key>
+			<false/>
+			<key>defaults</key>
+			<string>com.burritoz.kaiprefs</string>
+			<key>key</key>
+			<string>hideDeviceLabel</string>
+			<key>label</key>
+			<string>Hide Device Name Label</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+			<key>label</key>
+			<string>Banner Style</string>
+		</dict>
+		<dict>
+            <key>cell</key>
+            <string>PSSegmentCell</string>
+            <key>defaults</key>
+            <string>com.burritoz.kaiprefs</string>
+            <key>default</key>
+            <string>1</string>
+            <key>key</key>
+            <string>bannerStyle</string>
+            <key>validValues</key>
+            <array>
+                <string>1</string>
+                <string>2</string>
+                <string>3</string>
+            </array>
+            <key>validTitles</key>
+            <array>
+            	<string>Automatic</string>
+                <string>Dark</string>
+                <string>Light</string>
+            </array>
+        </dict>
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+			<key>label</key>
+			<string>Banner Alignment</string>
+		</dict>
+		<dict>
+            <key>cell</key>
+            <string>PSSegmentCell</string>
+            <key>defaults</key>
+            <string>com.burritoz.kaiprefs</string>
+            <key>default</key>
+            <string>2</string>
+            <key>key</key>
+            <string>bannerAlign</string>
+            <key>validValues</key>
+            <array>
+                <string>1</string>
+                <string>2</string>
+                <string>3</string>
+            </array>
+            <key>validTitles</key>
+            <array>
+            	<string>Left</string>
+                <string>Center</string>
+                <string>Right</string>
+            </array>
+        </dict>
+		<dict>
+			<key>cell</key>
 			<string>PSGroupCell</string>
 			<key>label</key>
 			<string>Banner Height (80)</string>
@@ -66,7 +146,7 @@
 			<key>min</key>
 			<real>20</real>
 			<key>max</key>
-			<real>200</real>
+			<real>400</real>
 			<key>isSegmented</key>
 			<false/>
 			<key>showValue</key>
@@ -80,6 +160,30 @@
 			<key>cell</key>
 			<string>PSGroupCell</string>
 			<key>label</key>
+			<string>Banner Width Adjustment (0)</string>
+		</dict>
+		<dict>
+			<key>default</key>
+			<real>0</real>
+			<key>cell</key>
+			<string>PSSliderCell</string>
+			<key>min</key>
+			<real>-400</real>
+			<key>max</key>
+			<real>400</real>
+			<key>isSegmented</key>
+			<false/>
+			<key>showValue</key>
+			<true/>
+			<key>defaults</key>
+			<string>com.burritoz.kaiprefs</string>
+			<key>key</key>
+			<string>bannerWidthFactor</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+			<key>label</key>
 			<string>Banner Spacing (5)</string>
 		</dict>
 		<dict>
@@ -88,9 +192,9 @@
 			<key>cell</key>
 			<string>PSSliderCell</string>
 			<key>min</key>
-			<real>0.0</real>
+			<real>-100.0</real>
 			<key>max</key>
-			<real>100</real>
+			<real>300</real>
 			<key>isSegmented</key>
 			<false/>
 			<key>showValue</key>
@@ -136,7 +240,7 @@
 			<key>cell</key>
 			<string>PSSliderCell</string>
 			<key>min</key>
-			<real>0.1</real>
+			<real>0.0</real>
 			<key>max</key>
 			<real>100</real>
 			<key>isSegmented</key>

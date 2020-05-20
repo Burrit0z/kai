@@ -1,0 +1,181 @@
+name = kaiPrefs
+lowername = kaiprefs
+
+# Build file for kaiPrefs
+# Generated at 05/20/20 13:44:10
+
+pdirname = .dragon
+
+location = /Library/PreferenceBundles/$name.bundle/
+resource_dir = Resources
+target = $pdirname/_$location$name
+
+stage2 = 
+
+builddir = $pdirname/build
+objdir = $pdirname/obj
+signdir = $pdirname/sign
+signtarget = $signdir/$target.unsigned
+symtarget = $signdir/$target.unsym
+
+dragondir = $$DRAGONBUILD
+pwd = .
+sysroot = $dragondir/sdks/iPhoneOS.sdk
+
+fwSearch = -F$sysroot/System/Library/Frameworks $
+    -F$sysroot/System/Library/PrivateFrameworks -F$dragondir/frameworks
+libSearch = -L$dragondir/lib -L.
+
+cc = clang++
+ccpp = clang++
+ld = clang++
+ldid = ldid
+dsym = dsymutil
+logos = $dragondir/bin/logos.pl
+plutil = plutil
+stage = mkdir -p .dragon/_/Library/PreferenceLoader/Preferences/ && cp $
+    entry.plist .dragon/_/Library/PreferenceLoader/Preferences/$name.plist
+
+targetios = 10.0
+
+frameworks = -framework Preferences -framework CoreFoundation -framework $
+    Foundation -framework UIKit -framework CoreGraphics -framework $
+    QuartzCore -framework CoreImage -framework AudioToolbox
+
+libs = -lobjc -lc++
+
+arc = -fobjc-arc
+btarg = -DTARGET_IPHONE=1
+warnings = -Wall
+optim = -O0
+debug = -fcolor-diagnostics
+
+header_includes = 
+cinclude = -I$dragondir/include -I$dragondir/vendor/include $
+    -I$dragondir/include/_fallback -I$DRAGONBUILD/headers/ -I$pwd
+
+usrCflags = 
+usrLDflags = 
+usrLDIDFlags = -S
+
+lopt = -dynamiclib -ggdb -Xlinker -segalign -Xlinker 4000
+typeldflags = -install_name $location$name
+
+cflags = $cinclude -fmodules -fcxx-modules -fmodule-name=$name $
+    -fbuild-session-file=.dragon/modules/ -fmodules-prune-after=345600 $
+    -fmodules-prune-interval=86400 $
+    -fmodules-validate-once-per-build-session $arc $fwSearch $
+    -miphoneos-version-min=$targetios -isysroot $sysroot $btarg $warnings $
+    $optim $debug $usrCflags $header_includes
+
+lflags = $cflags $typeldflags $frameworks $libs $lopt $libSearch $usrLDflags
+
+ldflags = $usrLDFlags
+
+pool solo
+  depth = 1
+
+rule prelogos
+  command = cat $in | python3 $$DRAGONBUILD/bin/prelogos.py > $out
+  description = Processing $in with Pre/Logos
+
+rule logos
+  command = $logos $in > $out
+  description = Processing $in with Logos
+
+rule compilearm64
+  command = $cc -arch arm64 $cflags -c $in -o $out
+  description = Compiling $in for arm64
+
+rule compilexxarm64
+  command = $cxx -arch arm64 $cflags -c $in -o $out
+  description = Compiling $in for arm64
+
+rule linkarm64
+  command = $ld -arch arm64 $lflags -o $out $in
+  description = Linking $name for arm64
+
+rule compilearm64e
+  command = $cc -arch arm64e $cflags -c $in -o $out
+  description = Compiling $in for arm64e
+
+rule compilexxarm64e
+  command = $cxx -arch arm64e $cflags -c $in -o $out
+  description = Compiling $in for arm64e
+
+rule linkarm64e
+  command = $ld -arch arm64e $lflags -o $out $in
+  description = Linking $name for arm64e
+
+rule compilearmv7
+  command = $cc -arch armv7 $cflags -c $in -o $out
+  description = Compiling $in for armv7
+
+rule compilexxarmv7
+  command = $cxx -arch armv7 $cflags -c $in -o $out
+  description = Compiling $in for armv7
+
+rule linkarmv7
+  command = $ld -arch armv7 $lflags -o $out $in
+  description = Linking $name for armv7
+
+rule compilex86_64
+  command = $cc -arch x86_64 $cflags -c $in -o $out
+  description = Compiling $in for x86_64
+
+rule compilexxx86_64
+  command = $cxx -arch x86_64 $cflags -c $in -o $out
+  description = Compiling $in for x86_64
+
+rule linkx86_64
+  command = $ld -arch x86_64 $lflags -o $out $in
+  description = Linking $name for x86_64
+
+rule lipo
+  command = lipo -create $in -output $out
+  description = Merging architectures
+
+rule bundle
+  command = mkdir -p ".dragon/_$location/" && cp -r "$resource_dir/" $
+      ".dragon/_$location" && cp $in $out
+  description = Copying Bundle Resources
+  pool = solo
+
+rule plist
+  command = $plutil -convert binary1 $in -o $out
+  description = Converting $in
+
+rule debug
+  command = $dsym "$in" 2&> /dev/null; cp $in $out
+  description = Generating Debug Symbols for $name
+
+rule sign
+  command = $ldid $usrLDIDFlags $in && cp $in $target
+  description = Signing $name
+
+rule stage
+  command = $stage $stage2
+  description = Running Stage for $name
+
+build $builddir/arm64/KAIRootListController.m.o: compilearm64 $
+    KAIRootListController.m
+
+build $builddir/$name.arm64: linkarm64 $
+    $builddir/arm64/KAIRootListController.m.o
+build $builddir/arm64e/KAIRootListController.m.o: compilearm64e $
+    KAIRootListController.m
+
+build $builddir/$name.arm64e: linkarm64e $
+    $builddir/arm64e/KAIRootListController.m.o
+build $builddir/trash/bundles: bundle build.ninja
+
+build $builddir/trash/stage: stage $target
+
+build $symtarget: lipo $builddir/$name.arm64 $builddir/$name.arm64e
+
+build $signtarget: debug $symtarget
+
+build $target: sign $signtarget
+
+default $target $builddir/trash/bundles $builddir/trash/stage
+

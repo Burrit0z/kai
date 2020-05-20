@@ -35,7 +35,7 @@ NSBundle *tweakBundle;
 -(void)viewDidLoad {
 	[super viewDidLoad];
 
-	UIBarButtonItem *applyButton = [[UIBarButtonItem alloc] initWithTitle:@"Respring" style:UIBarButtonItemStylePlain target:self action:@selector(respring:)];
+	UIBarButtonItem *applyButton = [[UIBarButtonItem alloc] initWithTitle:@"Apply" style:UIBarButtonItemStylePlain target:self action:@selector(respring:)];
     self.navigationItem.rightBarButtonItem = applyButton;
 
 	self.navigationItem.titleView = [UIView new];
@@ -67,26 +67,16 @@ NSBundle *tweakBundle;
 }
 
 -(void)respring:(id)sender {
+	CFNotificationCenterPostNotification(CFNotificationCenterGetDarwinNotifyCenter(), CFSTR("com.burritoz.kaiprefs/reload"), nil, nil, true);
 
-	tweakBundle = [NSBundle bundleWithPath:@"/Library/PreferenceBundles/MultiplaPrefs.bundle"];
+	UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Kai"
+							message:@"Your settings have been applied. You can now go back to your lockscreen (CoverSheet) to see the changes."
+							preferredStyle:UIAlertControllerStyleAlert];
 
-	UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Respring"
-							message:@"Are you sure you want to respring now?"
-							preferredStyle:UIAlertControllerStyleActionSheet];
-
-		UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"No" style:UIAlertActionStyleCancel
+		UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"Amazing!" style:UIAlertActionStyleDefault
 		handler:^(UIAlertAction * action) {}];
-
-		UIAlertAction* yes = [UIAlertAction actionWithTitle:@"Yes" style:UIAlertActionStyleDestructive
-		handler:^(UIAlertAction * action) {
-			NSTask *t = [[NSTask alloc] init];
-			[t setLaunchPath:@"usr/bin/killall"];
-			[t setArguments:[NSArray arrayWithObjects:@"backboardd", nil]];
-			[t launch];
-		}];
-
 		[alert addAction:defaultAction];
-		[alert addAction:yes];
+		
 		[self presentViewController:alert animated:YES completion:nil];
 }
 

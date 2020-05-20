@@ -32,7 +32,6 @@
 @property (nonatomic, strong) NSLayoutConstraint *heightConstraint;
 @property (nonatomic, assign) BOOL isUpdating;
 +(KAIBattery *)sharedInstance;
--(void)darkLightMode;
 -(instancetype)init;
 -(void)updateBattery;
 @end
