@@ -112,8 +112,10 @@ CGRect originalBattery;
 			[[self stackView] addConstraint:globalC];	
 		}*/
 
-		//[battery.widthAnchor constraintEqualToConstant:(battery.number * 85)].active = YES;
-		
+		battery.heightConstraint.active = NO;
+		battery.heightConstraint = [battery.heightAnchor constraintEqualToConstant:(battery.number * 85)];
+		battery.heightConstraint.active = YES;
+
 		/*battery.frame = CGRectMake(
 		originalBattery.origin.x,
 		originalBattery.origin.y,
