@@ -8,3 +8,17 @@ kai:
     - Kai.xm
   frameworks:
     - BatteryCenter
+
+kaiPrefs:
+  dir: kaiprefs
+  type: bundle
+  files:
+    - KAIRootListController.m
+  archs:
+    - arm64
+    - arm64e
+  frameworks:
+    - Preferences
+  stage: 
+    - mkdir -p .dragon/_/Library/PreferenceLoader/Preferences/
+    - cp entry.plist .dragon/_/Library/PreferenceLoader/Preferences/$name.plist

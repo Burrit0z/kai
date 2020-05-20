@@ -48,7 +48,7 @@ long long lastPercentage;
 
                 if(charging) {
 
-                    UIVisualEffectView *blank;
+                    /*UIVisualEffectView *blank;
                     if(@available(iOS 12.0, *)) {
                         if(self.traitCollection.userInterfaceStyle == UIUserInterfaceStyleDark) {
                             blank = [[UIVisualEffectView alloc] initWithEffect:[UIBlurEffect effectWithStyle:UIBlurEffectStyleDark]];
@@ -57,7 +57,9 @@ long long lastPercentage;
                         }
                     } else {
                         blank = [[UIVisualEffectView alloc] initWithEffect:[UIBlurEffect effectWithStyle:UIBlurEffectStyleLight]];
-                    }
+                    }*/
+                    MTMaterialView *blank = [[[objc_getClass("MTMaterialView") class] alloc] _initWithRecipe:1 configuration:1 initialWeighting:1 scaleAdjustment:nil];
+                    //blank.recipeDynamic = NO; //makes it stay light
                     blank.frame = CGRectMake(0, 0 + y, self.superview.bounds.size.width - 16, 80);
                     blank.layer.masksToBounds = YES;
                     blank.layer.cornerRadius = 13;
@@ -97,8 +99,8 @@ long long lastPercentage;
 
                 label.frame = CGRectMake(65.5,27.5 + y,275,25);
                 glyphView.frame = CGRectMake(20.5,18.5 + y,40,40);
-                battery.frame = CGRectMake(310,35 + y,20,10);
-                percentLabel.frame = CGRectMake(265,35 + y,36,12);
+                battery.frame = CGRectMake(self.superview.bounds.size.width - 16 - 49,35 + y,20,10);
+                percentLabel.frame = CGRectMake(self.superview.bounds.size.width - 16 - 94,35 + y,36,12);
 
             y+=85;
             self.number +=1;
@@ -123,7 +125,7 @@ long long lastPercentage;
 }
 
 -(void)darkLightMode {
-    for(UIVisualEffectView *view in self.subviews) {
+    /*for(UIVisualEffectView *view in self.subviews) {
         if(@available(iOS 12.0, *)) {
 		if(self.traitCollection.userInterfaceStyle == UIUserInterfaceStyleDark) {
 			if([view respondsToSelector:@selector(setEffect:)]) view.effect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleDark];
@@ -132,7 +134,7 @@ long long lastPercentage;
 			if([view respondsToSelector:@selector(setEffect:)]) view.effect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleLight];
 		}
 		}
-    }
+    }*/
 }
 
 @end

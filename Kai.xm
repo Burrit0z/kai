@@ -1,41 +1,4 @@
-#include <CoreFoundation/CoreFoundation.h>
-#import <Foundation/Foundation.h>
-#include <stdio.h>
-#import <objc/runtime.h>
-#import <UIKit/UIKit.h>
-
-#import "KAIBattery.mm"
-#define KAISelf ((CSAdjunctListView *)self)
-
-@interface UIApplication (Kai)
-+(id)sharedApplication;
--(BOOL)launchApplicationWithIdentifier:(id)arg1 suspended:(BOOL)arg2;
-@end
-
-@interface CSAdjunctListView : UIView
-@property (nonatomic, assign) BOOL hasKai;
--(UIStackView *)stackView;
--(void)setStackView:(UIStackView *)arg1;
--(void)KaiUpdate;
-@end
-
-@interface SBDashBoardAdjunctListView : UIView
-@property (nonatomic, assign) BOOL hasKai;
--(UIStackView *)stackView;
--(void)setStackView:(UIStackView *)arg1;
--(void)KaiUpdate;
-@end
-
-@interface CSMainPageView : UIView
--(void)updateForPresentation:(id)arg1;
-@end
-
-@interface _CSSingleBatteryChargingView : UIView
-@end
-
-@interface NSLayoutConstraint (Kai)
-+(id)constraintWithAnchor:(id)arg1 relatedBy:(long long)arg2 toAnchor:(id)arg3 multiplier:(double)arg4 constant:(double)arg5 ;
-@end
+#import "Kai.h"
 
 
 %hook KAITarget
@@ -113,7 +76,6 @@
 
 - (id)initWithIdentifier:(id)arg1 vendor:(long long)arg2 productIdentifier:(long long)arg3 parts:(unsigned long long)arg4 matchIdentifier:(id)arg5 {
 
-	[self addObserver:self forKeyPath:@"name" options:NSKeyValueObservingOptionNew context:nil];
 	[self addObserver:self forKeyPath:@"charging" options:NSKeyValueObservingOptionNew context:nil];
 	[self addObserver:self forKeyPath:@"powerSourceState" options:NSKeyValueObservingOptionNew context:nil];
 	[self addObserver:self forKeyPath:@"batterySaverModeActive" options:NSKeyValueObservingOptionNew context:nil];
@@ -148,6 +110,9 @@
 %end
 
 %ctor {
+	preferencesChanged();
 	Class cls = kCFCoreFoundationVersionNumber > 1600 ? ([objc_getClass("CSAdjunctListView") class]) : ([objc_getClass("SBDashBoardAdjunctListView") class]);
-    %init(KAITarget = cls);
+	if(enabled) {
+    	%init(KAITarget = cls);
+	}
 }
