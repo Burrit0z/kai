@@ -1,6 +1,6 @@
 Package: com.burritoz.kai
 Name: Kai
-Version: 0.1.2~alpha
+Version: 0.1.3~alpha
 Architecture: iphoneos-arm
 Description: Show charging banners on your lock screen!
 Maintainer: burrit0z

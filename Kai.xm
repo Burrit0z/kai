@@ -50,7 +50,7 @@
 			battery.heightConstraint.active = YES;
 
 		} else {
-		int height = (battery.number * ((bannerHeight + spacing) - spacing + 5));
+		int height = ((battery.number * (bannerHeight + spacing)) - spacing + 5);
 			battery.heightConstraint.active = NO;
 			battery.heightConstraint.constant = height;
 			battery.heightConstraint.active = YES;
