@@ -103,26 +103,12 @@
 }
 %end
 
-%hook CSBatteryChargingView
+%hook CSCoverSheetViewController
 
-+(id)batteryChargingViewWithSingleBattery {
-	NSLog(@"kai: here bro: %@", [NSThread callStackSymbols]);
-	[UIPasteboard generalPasteboard].string = [NSString stringWithFormat:@"kai: here bro: %@", [NSThread callStackSymbols]];
-	return nil;
-}
-
-+(id)batteryChargingViewWithDoubleBattery {
-	NSLog(@"kai: here bro: %@", [NSThread callStackSymbols]);
-	[UIPasteboard generalPasteboard].string = [NSString stringWithFormat:@"kai: here bro: %@", [NSThread callStackSymbols]];
-	return nil;
-}
-
--(CGFloat)desiredVisibilityDuration {
-	return 0;
-}
-
--(void)setBatteryVisible:(BOOL)arg1 {
-	%orig(NO);
+-(void)_transitionChargingViewToVisible:(BOOL)arg1 showBattery:(BOOL)arg2 animated:(BOOL)arg3 {
+	if(hideChargingAnimation) {
+		%orig(NO,NO,NO);
+	}
 }
 
 %end

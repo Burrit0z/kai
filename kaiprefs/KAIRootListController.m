@@ -70,7 +70,7 @@ NSBundle *tweakBundle;
 	CFNotificationCenterPostNotification(CFNotificationCenterGetDarwinNotifyCenter(), CFSTR("com.burritoz.kaiprefs/reload"), nil, nil, true);
 
 	UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Kai"
-							message:@"Your settings have been applied. You can now go back to your lockscreen (CoverSheet) to see the changes. \n Note the option to put kai below music requires a respring."
+							message:@"Your settings have been applied. You can now go back to your lockscreen (CoverSheet) to see the changes. \n Note the option to put kai below music requires a respring, as well as option to hide CoverSheet charge animations."
 							preferredStyle:UIAlertControllerStyleAlert];
 
 		UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"Amazing!" style:UIAlertActionStyleDefault

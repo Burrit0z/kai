@@ -49,6 +49,7 @@ BOOL hidePercent;
 BOOL showAll;
 BOOL belowMusic;
 BOOL hideDeviceLabel;
+BOOL hideChargingAnimation;
 NSInteger bannerStyle;
 NSInteger bannerAlign;
 double spacing;
@@ -120,6 +121,7 @@ static void preferencesChanged()
     bannerAlign = numberForValue(@"bannerAlign", 2);
     horizontalOffset = numberForValue(@"horizontalOffset", 0);
     belowMusic = boolValueForKey(@"belowMusic", NO);
+    hideChargingAnimation = boolValueForKey(@"hideChargingAnimation", YES);
 
     if(disableGlyphs) {
         glyphSize = 0;

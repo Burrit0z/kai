@@ -26,6 +26,18 @@
 		</dict>
 		<dict>
 			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>default</key>
+			<true/>
+			<key>defaults</key>
+			<string>com.burritoz.kaiprefs</string>
+			<key>key</key>
+			<string>hideChargingAnimation</string>
+			<key>label</key>
+			<string>Hide CoverSheet Charging Animations</string>
+		</dict>
+		<dict>
+			<key>cell</key>
 			<string>PSGroupCell</string>
 		</dict>
 		<dict>
