@@ -101,11 +101,16 @@
 }
 %end
 
-%hook _CSSingleBatteryChargingView
+%hook CSBatteryChargingView
 
--(void)initWithFrame:(CGRect)arg1 {
-	%orig;
-	[self removeFromSuperview];
++(id)batteryChargingViewWithSingleBattery {
+	//NSLog(@"kai: here bro: %@", [NSThread callStackSymbols]);
+	//[UIPasteboard generalPasteboard].string = [NSString stringWithFormat:@"kai: here bro: %@", [NSThread callStackSymbols]];
+	return nil;
+}
+
++(id)batteryChargingViewWithDoubleBattery {
+	return nil;
 }
 
 -(CGFloat)desiredVisibilityDuration {

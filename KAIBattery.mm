@@ -114,11 +114,11 @@ long long lastPercentage;
 
                 blank.translatesAutoresizingMaskIntoConstraints = NO;
                 if(bannerAlign==2) { //center
-                    [blank.centerXAnchor constraintEqualToAnchor:self.centerXAnchor].active = YES;
+                    [blank.centerXAnchor constraintEqualToAnchor:self.centerXAnchor constant:horizontalOffset].active = YES;
                 } else if(bannerAlign==1) { //left
-                    [blank.leftAnchor constraintEqualToAnchor:self.leftAnchor].active = YES;
+                    [blank.leftAnchor constraintEqualToAnchor:self.leftAnchor constant:horizontalOffset].active = YES;
                 } else if(bannerAlign==3) { //right
-                    [blank.rightAnchor constraintEqualToAnchor:self.rightAnchor].active = YES;
+                    [blank.rightAnchor constraintEqualToAnchor:self.rightAnchor constant:horizontalOffset].active = YES;
                 }
                 [blank.topAnchor constraintEqualToAnchor:self.topAnchor constant:y].active = YES;
                 [blank.widthAnchor constraintEqualToConstant:((self.superview.bounds.size.width - 16) + bannerWidthFactor)].active = YES;
@@ -129,14 +129,14 @@ long long lastPercentage;
                 percentLabel.translatesAutoresizingMaskIntoConstraints = NO;
                 [percentLabel.leftAnchor constraintEqualToAnchor:blank.rightAnchor constant:(- 94)].active = YES;
                 [percentLabel.centerYAnchor constraintEqualToAnchor:blank.centerYAnchor].active = YES;
-                [percentLabel.widthAnchor constraintEqualToConstant:36].active = YES;
+                [percentLabel.widthAnchor constraintEqualToConstant:35].active = YES;
                 [percentLabel.heightAnchor constraintEqualToConstant:12].active = YES;
 
                 //label.frame = CGRectMake(65.5,27.5 + y,275,25);
                 label.translatesAutoresizingMaskIntoConstraints = NO;
                 [label.leftAnchor constraintEqualToAnchor:glyphView.rightAnchor constant:4.5].active = YES;
                 [label.centerYAnchor constraintEqualToAnchor:blank.centerYAnchor].active = YES;
-                [label.rightAnchor constraintEqualToAnchor:percentLabel.leftAnchor constant:7].active = YES;
+                [label.rightAnchor constraintEqualToAnchor:percentLabel.leftAnchor constant:-4.5].active = YES;
                 [label.heightAnchor constraintEqualToConstant:25].active = YES;
 
                 //glyphView.frame = CGRectMake(20.5,18.5 + y,40,40);

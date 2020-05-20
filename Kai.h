@@ -55,6 +55,7 @@ double glyphSize;
 double bannerHeight;
 double cornerRadius;
 double bannerWidthFactor;
+double horizontalOffset;
 
 #import "KAIBattery.mm"
 
@@ -106,7 +107,7 @@ static void preferencesChanged()
 
     enabled = boolValueForKey(@"enabled", YES);
     spacing = numberForValue(@"spacing", 5);
-    glyphSize = numberForValue(@"glyphSize", 40);
+    glyphSize = numberForValue(@"glyphSize", 35);
     bannerHeight = numberForValue(@"bannerHeight", 80);
     cornerRadius = numberForValue(@"cornerRadius", 13);
     disableGlyphs = boolValueForKey(@"disableGlyphs", NO);
@@ -116,6 +117,7 @@ static void preferencesChanged()
     bannerWidthFactor = numberForValue(@"bannerWidthFactor", 0);
     hideDeviceLabel = boolValueForKey(@"hideDeviceLabel", NO);
     bannerAlign = numberForValue(@"bannerAlign", 2);
+    horizontalOffset = numberForValue(@"horizontalOffset", 0);
 
     if(disableGlyphs) {
         glyphSize = 0;

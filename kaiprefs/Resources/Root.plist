@@ -208,11 +208,35 @@
 			<key>cell</key>
 			<string>PSGroupCell</string>
 			<key>label</key>
-			<string>Glyph Size (40)</string>
+			<string>Horizontal Axis Manual Offset (0)</string>
 		</dict>
 		<dict>
 			<key>default</key>
-			<real>40</real>
+			<real>0</real>
+			<key>cell</key>
+			<string>PSSliderCell</string>
+			<key>min</key>
+			<real>-300.0</real>
+			<key>max</key>
+			<real>300</real>
+			<key>isSegmented</key>
+			<false/>
+			<key>showValue</key>
+			<true/>
+			<key>defaults</key>
+			<string>com.burritoz.kaiprefs</string>
+			<key>key</key>
+			<string>horizontalOffset</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+			<key>label</key>
+			<string>Glyph Size (35)</string>
+		</dict>
+		<dict>
+			<key>default</key>
+			<real>35</real>
 			<key>cell</key>
 			<string>PSSliderCell</string>
 			<key>min</key>
