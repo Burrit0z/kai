@@ -46,7 +46,7 @@ long long lastPercentage;
                 BOOL charging = MSHookIvar<long long>(device, "_charging");
                 BOOL LPM = MSHookIvar<BOOL>(device, "_batterySaverModeActive");
 
-                if(charging || !charging) {
+                if(charging) {
 
                     UIVisualEffectView *blank;
                     if(@available(iOS 12.0, *)) {

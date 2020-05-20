@@ -96,13 +96,24 @@ CGRect originalBattery;
 		//battery.heightConstraint.constant = (battery.number * 85);
 
 		if(!battery.heightConstraint) {
-			NSLog(@"kai: 1st time, assigning to %ld", (battery.number * 85));
-			battery.heightConstraint = [battery.heightAnchor constraintEqualToConstant:(battery.number * 85)];
+			
+			battery.heightConstraint.active = NO;
+			NSLog(@"kai: 1st time, assigning to %d", 500);
+			battery.heightConstraint = [battery.heightAnchor constraintEqualToConstant:500];
 			battery.heightConstraint.active = YES;
-		}
 
-		NSLog(@"kai: setting to %ld", (battery.number * 85));
-		battery.heightConstraint.constant = (battery.number * 85);
+		} else {
+		int height = (battery.number * 85);
+			if(height!=0) {
+				battery.heightConstraint.active = NO;
+				NSLog(@"kai: setting to %d", height);
+				battery.heightConstraint.constant = height;
+				battery.heightConstraint.active = YES;
+
+				UIStackView *s = [self stackView];
+				s.frame = CGRectMake(s.frame.origin.x, s.frame.origin.y, s.frame.size.width, (s.frame.size.height - 1));
+			}
+		}
 
 	}];
 	
