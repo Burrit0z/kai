@@ -60,9 +60,10 @@ long long lastPercentage;
                     }*/
                     MTMaterialView *blank = [[[objc_getClass("MTMaterialView") class] alloc] _initWithRecipe:1 configuration:1 initialWeighting:1 scaleAdjustment:nil];
                     //blank.recipeDynamic = NO; //makes it stay light
-                    blank.frame = CGRectMake(0, 0 + y, self.superview.bounds.size.width - 16, 80);
+                    blank.frame = CGRectMake(0, 0 + y, self.superview.bounds.size.width - 16, bannerHeight);
                     blank.layer.masksToBounds = YES;
-                    blank.layer.cornerRadius = 13;
+                    blank.layer.continuousCorners = YES;
+                    blank.layer.cornerRadius = cornerRadius;
                     //[blank setBackgroundColor:[UIColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:1]];
 
                 NSString *labelText = [NSString stringWithFormat:@"%@", deviceName];
@@ -78,7 +79,11 @@ long long lastPercentage;
                 battery.chargePercent = (batteryPercentage*0.01);
                 UILabel *percentLabel = [[UILabel alloc] init];
                     battery.showsPercentage = NO;
-                        [percentLabel setFont:[UIFont systemFontOfSize:14]];
+                        if(hidePercent) {
+                            [percentLabel setFont:[UIFont systemFontOfSize:0]];
+                        } else {
+                            [percentLabel setFont:[UIFont systemFontOfSize:14]];
+                        }
                         [percentLabel setTextColor:[UIColor whiteColor]];
                         percentLabel.lineBreakMode = NSLineBreakByWordWrapping;
                         [percentLabel setTextAlignment:NSTextAlignmentRight];
@@ -97,19 +102,44 @@ long long lastPercentage;
                     glyphView.contentMode = UIViewContentModeScaleAspectFit;
                     [glyphView setImage:glyph];
 
-                label.frame = CGRectMake(65.5,27.5 + y,275,25);
-                glyphView.frame = CGRectMake(20.5,18.5 + y,40,40);
-                battery.frame = CGRectMake(self.superview.bounds.size.width - 16 - 49,35 + y,20,10);
-                percentLabel.frame = CGRectMake(self.superview.bounds.size.width - 16 - 94,35 + y,36,12);
+                [self addSubview:blank];
+                [self addSubview:percentLabel];
+                [self addSubview:label];
+                [self addSubview:battery];
+                [self addSubview:glyphView];
 
-            y+=85;
+                //label.frame = CGRectMake(65.5,27.5 + y,275,25);
+                label.translatesAutoresizingMaskIntoConstraints = NO;
+                [label.leftAnchor constraintEqualToAnchor:glyphView.rightAnchor constant:4.5].active = YES;
+                [label.centerYAnchor constraintEqualToAnchor:blank.centerYAnchor].active = YES;
+                [label.widthAnchor constraintEqualToConstant:275].active = YES;
+                [label.heightAnchor constraintEqualToConstant:25].active = YES;
+
+                //glyphView.frame = CGRectMake(20.5,18.5 + y,40,40);
+
+                glyphView.translatesAutoresizingMaskIntoConstraints = NO;
+                [glyphView.leftAnchor constraintEqualToAnchor:blank.leftAnchor constant:20.5].active = YES;
+                [glyphView.centerYAnchor constraintEqualToAnchor:blank.centerYAnchor].active = YES;
+                [glyphView.widthAnchor constraintEqualToConstant:glyphSize].active = YES;
+                [glyphView.heightAnchor constraintEqualToConstant:glyphSize].active = YES;
+
+                //battery.frame = CGRectMake(self.superview.bounds.size.width - 16 - 49,35 + y,20,10);
+
+                battery.translatesAutoresizingMaskIntoConstraints = NO;
+                [battery.leftAnchor constraintEqualToAnchor:self.rightAnchor constant:(- 49)].active = YES;
+                [battery.centerYAnchor constraintEqualToAnchor:blank.centerYAnchor].active = YES;
+                [battery.widthAnchor constraintEqualToConstant:20].active = YES;
+                [battery.heightAnchor constraintEqualToConstant:10].active = YES;
+
+                //percentLabel.frame = CGRectMake(self.superview.bounds.size.width - 16 - 94,35 + y,36,12);
+                percentLabel.translatesAutoresizingMaskIntoConstraints = NO;
+                [percentLabel.leftAnchor constraintEqualToAnchor:self.rightAnchor constant:(- 94)].active = YES;
+                [percentLabel.centerYAnchor constraintEqualToAnchor:blank.centerYAnchor].active = YES;
+                [percentLabel.widthAnchor constraintEqualToConstant:36].active = YES;
+                [percentLabel.heightAnchor constraintEqualToConstant:12].active = YES;
+
+            y+=bannerHeight + spacing;
             self.number +=1;
-
-            [self addSubview:blank];
-            [self addSubview:percentLabel];
-            [self addSubview:label];
-            [self addSubview:battery];
-            [self addSubview:glyphView];
             //blank.alpha = 0.8;
         }
     }

@@ -4,7 +4,6 @@
 #import <objc/runtime.h>
 #import <UIKit/UIKit.h>
 
-#import "KAIBattery.mm"
 #define KAISelf ((CSAdjunctListView *)self)
 
 @interface UIApplication (Kai)
@@ -37,9 +36,20 @@
 +(id)constraintWithAnchor:(id)arg1 relatedBy:(long long)arg2 toAnchor:(id)arg3 multiplier:(double)arg4 constant:(double)arg5 ;
 @end
 
+@interface CALayer (kai)
+@property (nonatomic, assign) BOOL continuousCorners;
+@end
+
 //prefs
 BOOL enabled;
+BOOL disableGlyphs;
+BOOL hidePercent;
+double spacing;
+double glyphSize;
+double bannerHeight;
+double cornerRadius;
 
+#import "KAIBattery.mm"
 
 #define PLIST_PATH @"/User/Library/Preferences/com.burritoz.kaiprefs.plist"
 #define kIdentifier @"com.burritoz.kaiprefs"
@@ -78,9 +88,9 @@ static BOOL boolValueForKey(NSString *key, BOOL defaultValue) {
 }
 
 
-/*static double numberForValue(NSString *key, double defaultValue) {
+static double numberForValue(NSString *key, double defaultValue) {
 	return (prefs && [prefs objectForKey:key] ? [[prefs objectForKey:key] doubleValue] : defaultValue);
-}*/
+}
 
 static void preferencesChanged() 
 {
@@ -88,4 +98,14 @@ static void preferencesChanged()
     reloadPrefs();
 
     enabled = boolValueForKey(@"enabled", YES);
+    spacing = numberForValue(@"spacing", 5);
+    glyphSize = numberForValue(@"glyphSize", 40);
+    bannerHeight = numberForValue(@"bannerHeight", 80);
+    cornerRadius = numberForValue(@"cornerRadius", 13);
+    disableGlyphs = boolValueForKey(@"disableGlyphs", NO);
+    hidePercent = boolValueForKey(@"hidePercent", NO);
+
+    if(disableGlyphs) {
+        glyphSize = 0;
+    }
 }

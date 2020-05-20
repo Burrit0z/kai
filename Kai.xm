@@ -7,7 +7,7 @@
 -(void)_layoutStackView {
 
 	//NSLog(@"Kai: Laying out stack view");
-
+	
 	[self KaiUpdate];
 
 	%orig;
@@ -50,7 +50,7 @@
 			battery.heightConstraint.active = YES;
 
 		} else {
-		int height = (battery.number * 85);
+		int height = (battery.number * (80 + spacing));
 			battery.heightConstraint.active = NO;
 			NSLog(@"kai: setting to %d", height);
 			battery.heightConstraint.constant = height;
@@ -66,6 +66,15 @@
 
 %new
 -(void)KaiInfo {
+	[UIView animateWithDuration:0.3 animations:^{
+		[KAIBattery sharedInstance].alpha = 0;
+	} completion:^(BOOL finished){
+		[[KAIBattery sharedInstance] updateBattery];
+		[self KaiUpdate];
+		[UIView animateWithDuration:0.35 animations:^{
+			[KAIBattery sharedInstance].alpha = 1;
+		}];
+	}];
 	[[KAIBattery sharedInstance] updateBattery];
 	[self KaiUpdate];
 }

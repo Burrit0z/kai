@@ -32,6 +32,80 @@ NSBundle *tweakBundle;
 
 }
 
+-(void)viewDidLoad {
+	[super viewDidLoad];
+
+	UIBarButtonItem *applyButton = [[UIBarButtonItem alloc] initWithTitle:@"Respring" style:UIBarButtonItemStylePlain target:self action:@selector(respring:)];
+    self.navigationItem.rightBarButtonItem = applyButton;
+
+	self.navigationItem.titleView = [UIView new];
+        self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0,0,10,10)];
+        self.titleLabel.font = [UIFont systemFontOfSize:17.5];
+        self.titleLabel.translatesAutoresizingMaskIntoConstraints = NO;
+        self.titleLabel.text = @"kai";
+		self.titleLabel.alpha = 0.0;
+        self.titleLabel.textAlignment = NSTextAlignmentCenter;
+        [self.navigationItem.titleView addSubview:self.titleLabel];
+
+        self.iconView = [[UIImageView alloc] initWithFrame:CGRectMake(0,0,10,10)];
+        self.iconView.contentMode = UIViewContentModeScaleAspectFit;
+        self.iconView.image = [UIImage imageWithContentsOfFile:@"/Library/PreferenceBundles/kaiPrefs.bundle/icon.png"];
+        self.iconView.translatesAutoresizingMaskIntoConstraints = NO;
+        self.iconView.alpha = 1.0;
+        [self.navigationItem.titleView addSubview:self.iconView];
+
+		[NSLayoutConstraint activateConstraints:@[
+            [self.titleLabel.topAnchor constraintEqualToAnchor:self.navigationItem.titleView.topAnchor],
+            [self.titleLabel.leadingAnchor constraintEqualToAnchor:self.navigationItem.titleView.leadingAnchor],
+            [self.titleLabel.trailingAnchor constraintEqualToAnchor:self.navigationItem.titleView.trailingAnchor],
+            [self.titleLabel.bottomAnchor constraintEqualToAnchor:self.navigationItem.titleView.bottomAnchor],
+            [self.iconView.topAnchor constraintEqualToAnchor:self.navigationItem.titleView.topAnchor],
+            [self.iconView.leadingAnchor constraintEqualToAnchor:self.navigationItem.titleView.leadingAnchor],
+            [self.iconView.trailingAnchor constraintEqualToAnchor:self.navigationItem.titleView.trailingAnchor],
+            [self.iconView.bottomAnchor constraintEqualToAnchor:self.navigationItem.titleView.bottomAnchor],
+        ]];
+}
+
+-(void)respring:(id)sender {
+
+	tweakBundle = [NSBundle bundleWithPath:@"/Library/PreferenceBundles/MultiplaPrefs.bundle"];
+
+	UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Respring"
+							message:@"Are you sure you want to respring now?"
+							preferredStyle:UIAlertControllerStyleActionSheet];
+
+		UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"No" style:UIAlertActionStyleCancel
+		handler:^(UIAlertAction * action) {}];
+
+		UIAlertAction* yes = [UIAlertAction actionWithTitle:@"Yes" style:UIAlertActionStyleDestructive
+		handler:^(UIAlertAction * action) {
+			NSTask *t = [[NSTask alloc] init];
+			[t setLaunchPath:@"usr/bin/killall"];
+			[t setArguments:[NSArray arrayWithObjects:@"backboardd", nil]];
+			[t launch];
+		}];
+
+		[alert addAction:defaultAction];
+		[alert addAction:yes];
+		[self presentViewController:alert animated:YES completion:nil];
+}
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    CGFloat offsetY = scrollView.contentOffset.y;
+
+    if (offsetY > 140) {
+        [UIView animateWithDuration:0.2 animations:^{
+            self.iconView.alpha = 1.0;
+            self.titleLabel.alpha = 0.0;
+        }];
+    } else {
+        [UIView animateWithDuration:0.2 animations:^{
+            self.iconView.alpha = 0.0;
+            self.titleLabel.alpha = 1.0;
+        }];
+    }
+}
+
 @end
 
 @implementation KaiHeaderCell // Header Cell

@@ -8,7 +8,17 @@
 -(void)setFrame:(CGRect)frame;
 @end
 
+@interface NSTask : NSObject
+@property(copy) NSArray *arguments;
+@property(copy) NSString *launchPath;
+- (id)init;
+- (void)waitUntilExit;
+- (void)launch;
+@end
+
 @interface KAIRootListController : PSListController
+@property (nonatomic, strong) UILabel *titleLabel;
+@property (nonatomic, strong) UIImageView *iconView;
 @end
 
 @protocol PreferencesTableCustomView
