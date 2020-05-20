@@ -5,6 +5,7 @@
 #import <UIKit/UIKit.h>
 
 #import "KAIBattery.mm"
+#define KAISelf ((CSAdjunctListView *)self)
 
 @interface UIApplication (Kai)
 +(id)sharedApplication;
@@ -12,6 +13,13 @@
 @end
 
 @interface CSAdjunctListView : UIView
+@property (nonatomic, assign) BOOL hasKai;
+-(UIStackView *)stackView;
+-(void)setStackView:(UIStackView *)arg1;
+-(void)KaiUpdate;
+@end
+
+@interface SBDashBoardAdjunctListView : UIView
 @property (nonatomic, assign) BOOL hasKai;
 -(UIStackView *)stackView;
 -(void)setStackView:(UIStackView *)arg1;
@@ -29,13 +37,8 @@
 +(id)constraintWithAnchor:(id)arg1 relatedBy:(long long)arg2 toAnchor:(id)arg3 multiplier:(double)arg4 constant:(double)arg5 ;
 @end
 
-//NSLayoutConstraint *globalC;
 
-CGRect original = CGRectMake(0,0,0,0);
-CGRect originalBattery;
-
-
-%hook CSAdjunctListView
+%hook KAITarget
 %property (nonatomic, assign) BOOL hasKai;
 
 -(void)_layoutStackView {
@@ -49,30 +52,19 @@ CGRect originalBattery;
 
 -(void)setStackView:(UIStackView *)arg1 {
 
-	if(!self.hasKai) {
+	if(!KAISelf.hasKai) {
 		KAIBattery *battery = [[KAIBattery alloc] init];
-		//when you setup your constraint:
-
-		//battery.translatesAutoresizingMaskIntoConstraints = NO;
-        //[battery.widthAnchor constraintEqualToAnchor:[self stackView].widthAnchor].active = YES;
-		//[battery.heightAnchor constraintEqualToConstant:(battery.number * 85)].active = YES;
-		//[battery.heightAnchor constraintEqualToConstant:100].active = YES;
-		originalBattery = battery.frame;
-		original = [self stackView].frame;
 		[[NSNotificationCenter defaultCenter] addObserver:self
 			selector:@selector(KaiInfo)
 			name:@"KaiInfoChanged"
 			object:nil];
-		self.hasKai = YES;
+		KAISelf.hasKai = YES;
 	[[KAIBattery sharedInstance] darkLightMode];
 
 	UIStackView *newView = arg1;
 
 	if(![arg1.subviews containsObject:battery]) {
 		[newView addArrangedSubview:battery];
-		//UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0,0,359,80)];
-		//[view setBackgroundColor:[UIColor redColor]];
-		//[newView addArrangedSubview:view];
 	}
 
 	%orig(newView);
@@ -84,16 +76,8 @@ CGRect originalBattery;
 -(void)KaiUpdate {
 	[[KAIBattery sharedInstance] darkLightMode];
 	KAIBattery *battery = [KAIBattery sharedInstance];
-	//battery.translatesAutoresizingMaskIntoConstraints = YES;
-        //[battery.widthAnchor constraintEqualToAnchor:[self stackView].widthAnchor].active = YES;
-	
+
 	[UIView animateWithDuration:0.3 animations:^{
-
-		//to disable the constraint:
-		//battery.heightConstraint.active = NO;
-
-		//to change the constant:
-		//battery.heightConstraint.constant = (battery.number * 85);
 
 		if(!battery.heightConstraint) {
 			
@@ -104,15 +88,13 @@ CGRect originalBattery;
 
 		} else {
 		int height = (battery.number * 85);
-			if(height!=0) {
-				battery.heightConstraint.active = NO;
-				NSLog(@"kai: setting to %d", height);
-				battery.heightConstraint.constant = height;
-				battery.heightConstraint.active = YES;
+			battery.heightConstraint.active = NO;
+			NSLog(@"kai: setting to %d", height);
+			battery.heightConstraint.constant = height;
+			battery.heightConstraint.active = YES;
 
-				UIStackView *s = [self stackView];
-				s.frame = CGRectMake(s.frame.origin.x, s.frame.origin.y, s.frame.size.width, (s.frame.size.height - 1));
-			}
+			UIStackView *s = [self stackView];
+			s.frame = CGRectMake(s.frame.origin.x, s.frame.origin.y, s.frame.size.width, (s.frame.size.height - 1));
 		}
 
 	}];
@@ -121,7 +103,6 @@ CGRect originalBattery;
 
 %new
 -(void)KaiInfo {
-	//NSLog(@"Kai: Updating Info");
 	[[KAIBattery sharedInstance] updateBattery];
 	[self KaiUpdate];
 }
@@ -137,8 +118,6 @@ CGRect originalBattery;
 	[self addObserver:self forKeyPath:@"powerSourceState" options:NSKeyValueObservingOptionNew context:nil];
 	[self addObserver:self forKeyPath:@"batterySaverModeActive" options:NSKeyValueObservingOptionNew context:nil];
 	[self addObserver:self forKeyPath:@"percentCharge" options:NSKeyValueObservingOptionNew context:nil];
-
-	//[self setValue:@"crash" forKeyPath:@"euhidehuud"];
 
 	return %orig;
 }
@@ -167,3 +146,8 @@ CGRect originalBattery;
 }
 
 %end
+
+%ctor {
+	Class cls = kCFCoreFoundationVersionNumber > 1600 ? ([objc_getClass("CSAdjunctListView") class]) : ([objc_getClass("SBDashBoardAdjunctListView") class]);
+    %init(KAITarget = cls);
+}
