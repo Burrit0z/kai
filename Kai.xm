@@ -51,6 +51,8 @@ CGRect originalBattery;
 
 	if(!self.hasKai) {
 		KAIBattery *battery = [[KAIBattery alloc] init];
+		//when you setup your constraint:
+
 		//battery.translatesAutoresizingMaskIntoConstraints = NO;
         //[battery.widthAnchor constraintEqualToAnchor:[self stackView].widthAnchor].active = YES;
 		//[battery.heightAnchor constraintEqualToConstant:(battery.number * 85)].active = YES;
@@ -83,45 +85,25 @@ CGRect originalBattery;
 	[[KAIBattery sharedInstance] darkLightMode];
 	KAIBattery *battery = [KAIBattery sharedInstance];
 	//battery.translatesAutoresizingMaskIntoConstraints = YES;
-
-	battery.translatesAutoresizingMaskIntoConstraints = NO;
         //[battery.widthAnchor constraintEqualToAnchor:[self stackView].widthAnchor].active = YES;
 	
 	[UIView animateWithDuration:0.3 animations:^{
-		/*if (battery.heightConstraint == nil) {
-			battery.heightConstraint = [NSLayoutConstraint constraintWithAnchor:battery.heightAnchor relatedBy:NSLayoutRelationEqual toAnchor:battery.heightAnchor multiplier:0 constant:(battery.number * 85)];
+
+		//to disable the constraint:
+		//battery.heightConstraint.active = NO;
+
+		//to change the constant:
+		//battery.heightConstraint.constant = (battery.number * 85);
+
+		if(!battery.heightConstraint) {
+			NSLog(@"kai: 1st time, assigning to %ld", (battery.number * 85));
+			battery.heightConstraint = [battery.heightAnchor constraintEqualToConstant:(battery.number * 85)];
 			battery.heightConstraint.active = YES;
-			[self addConstraint:battery.heightConstraint];
-		}
-		if (battery.heightConstraint.active == YES) {
-			battery.heightConstraint.active = NO;
-			[self removeConstraint:battery.heightConstraint];
-			battery.heightConstraint = [NSLayoutConstraint constraintWithAnchor:battery.heightAnchor relatedBy:NSLayoutRelationEqual toAnchor:battery.heightAnchor multiplier:0 constant:(battery.number * 85)];
-			[self addConstraint:battery.heightConstraint];	
 		}
 
-		if (globalC == nil) {
-			globalC = [NSLayoutConstraint constraintWithAnchor:battery.heightAnchor relatedBy:NSLayoutRelationEqual toAnchor:battery.heightAnchor multiplier:0 constant:(battery.number * 85)];
-			globalC.active = YES;
-			[[self stackView] addConstraint:globalC];
-		}
-		if (globalC.active == YES) {
-			globalC.active = NO;
-			[[self stackView] removeConstraint:globalC];
-			globalC = [NSLayoutConstraint constraintWithAnchor:battery.heightAnchor relatedBy:NSLayoutRelationEqual toAnchor:battery.heightAnchor multiplier:0 constant:(battery.number * 85)];
-			[[self stackView] addConstraint:globalC];	
-		}*/
+		NSLog(@"kai: setting to %ld", (battery.number * 85));
+		battery.heightConstraint.constant = (battery.number * 85);
 
-		battery.heightConstraint.active = NO;
-		battery.heightConstraint = [battery.heightAnchor constraintEqualToConstant:(battery.number * 85)];
-		battery.heightConstraint.active = YES;
-
-		/*battery.frame = CGRectMake(
-		originalBattery.origin.x,
-		originalBattery.origin.y,
-		originalBattery.size.width,
-		(battery.number * 85)
-		);*/
 	}];
 	
 }
