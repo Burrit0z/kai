@@ -4,36 +4,14 @@
 #import <objc/runtime.h>
 #import <UIKit/UIKit.h>
 
-#define KAISelf ((CSAdjunctListView *)self)
-
-@interface UIApplication (Kai)
-+(id)sharedApplication;
--(BOOL)launchApplicationWithIdentifier:(id)arg1 suspended:(BOOL)arg2;
-@end
+#define KAISelf ((CSAdjunctListView *)self) //for use when calling self in KAITarget
+#define KAIBattery UHDUEIHGCEBCHYDEICVKEVSAGJKBCXAHJGKVXHAS //lmao
 
 @interface CSAdjunctListView : UIView
 @property (nonatomic, assign) BOOL hasKai;
 -(UIStackView *)stackView;
 -(void)setStackView:(UIStackView *)arg1;
 -(void)KaiUpdate;
-@end
-
-@interface SBDashBoardAdjunctListView : UIView
-@property (nonatomic, assign) BOOL hasKai;
--(UIStackView *)stackView;
--(void)setStackView:(UIStackView *)arg1;
--(void)KaiUpdate;
-@end
-
-@interface CSMainPageView : UIView
--(void)updateForPresentation:(id)arg1;
-@end
-
-@interface _CSSingleBatteryChargingView : UIView
-@end
-
-@interface NSLayoutConstraint (Kai)
-+(id)constraintWithAnchor:(id)arg1 relatedBy:(long long)arg2 toAnchor:(id)arg3 multiplier:(double)arg4 constant:(double)arg5 ;
 @end
 
 @interface CALayer (kai)
@@ -59,6 +37,7 @@ double cornerRadius;
 double bannerWidthFactor;
 double horizontalOffset;
 
+//by importing here, I can use vars in the .mm of KAIBattery
 #import "KAIBattery.mm"
 
 #define PLIST_PATH @"/User/Library/Preferences/com.burritoz.kaiprefs.plist"
@@ -131,6 +110,8 @@ static void preferencesChanged()
 static void applyPrefs() 
 {
     preferencesChanged();
+
+    //here I remotely refresh the KAIView.
     isUpdating = YES;
     [UIView animateWithDuration:0.3 animations:^{
         [KAIBattery sharedInstance].alpha = 0;
