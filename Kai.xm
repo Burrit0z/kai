@@ -59,9 +59,9 @@
 
 		} else {
 		int height = ((battery.number * (bannerHeight + spacing)) - spacing + 5); //big brain math
-			battery.heightConstraint.active = NO;
+			battery.heightConstraint.active = NO; //deactivation
 			battery.heightConstraint.constant = height;
-			battery.heightConstraint.active = YES;
+			battery.heightConstraint.active = YES; //forcing reactivation
 
 			UIStackView *s = [self stackView];
 			s.frame = CGRectMake(s.frame.origin.x, s.frame.origin.y, s.frame.size.width, (s.frame.size.height - 1));
