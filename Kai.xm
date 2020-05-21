@@ -58,7 +58,7 @@
 			battery.heightConstraint.active = YES;
 
 		} else {
-		int height = ((battery.number * (bannerHeight + spacing)) - spacing + 5); //big brain math
+		int height = ((battery.number * (bannerHeight + spacing)); //big brain math
 			battery.heightConstraint.active = NO; //deactivation
 			battery.heightConstraint.constant = height;
 			battery.heightConstraint.active = YES; //forcing reactivation
