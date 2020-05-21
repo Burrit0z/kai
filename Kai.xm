@@ -123,12 +123,19 @@
 }
 %end
 
-%hook CSCoverSheetViewController
+%hook KAICSTarget //Again, not a class
 
 -(void)_transitionChargingViewToVisible:(BOOL)arg1 showBattery:(BOOL)arg2 animated:(BOOL)arg3 {
 	if(hideChargingAnimation) {
 		//Yeah bro this just makes the method never call to show the charging thing
 		%orig(NO,NO,NO);
+	}
+}
+
+-(void)_transitionChargingViewToVisible:(BOOL)arg1 showBattery:(BOOL)arg2 animated:(BOOL)arg3 force:(BOOL)arg4 { //might just be ios12
+	if(hideChargingAnimation) {
+		//Same idea
+		%orig(NO,NO,NO,NO);
 	}
 }
 
@@ -147,7 +154,10 @@
 
 	//Bro Muirey helped me figure out a logical way to do this because iOS 12-13 classes have changed
 	Class cls = kCFCoreFoundationVersionNumber > 1600 ? ([objc_getClass("CSAdjunctListView") class]) : ([objc_getClass("SBDashBoardAdjunctListView") class]);
+
+	Class CSCls = kCFCoreFoundationVersionNumber > 1600 ? ([objc_getClass("CSCoverSheetViewController") class]) : ([objc_getClass("SBDashBoardViewController") class]);
+
 	if(enabled) {
-    	%init(KAITarget = cls);
+    	%init(KAITarget = cls, KAICSTarget = CSCls); //BIG BRAIN BRO!!
 	}
 }

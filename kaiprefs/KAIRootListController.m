@@ -13,7 +13,7 @@ NSBundle *tweakBundle;
 }
 
 -(void)viewWillAppear:(BOOL)arg1 {
-	self.navigationController.navigationController.navigationBar.barTintColor = [UIColor colorWithRed: 0.00 green: 0.77 blue: 0.95 alpha: 1.00];
+	self.navigationController.navigationController.navigationBar.barTintColor = [UIColor colorWithRed: 0.00 green: 0.735 blue: 0.965 alpha: 1.00];
     [self.navigationController.navigationController.navigationBar setShadowImage: [UIImage new]];
     self.navigationController.navigationController.navigationBar.tintColor = [UIColor whiteColor];
     self.navigationController.navigationController.navigationBar.translucent = NO;
@@ -67,10 +67,10 @@ NSBundle *tweakBundle;
 }
 
 -(void)respring:(id)sender {
-	CFNotificationCenterPostNotification(CFNotificationCenterGetDarwinNotifyCenter(), CFSTR("com.burritoz.kaiprefs/reload"), nil, nil, true);
+	CFNotificationCenterPostNotification(CFNotificationCenterGetDarwinNotifyCenter(), CFSTR("com.burritoz.kaiPrefs/reload"), nil, nil, true);
 
 	UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Kai"
-							message:@"Your settings have been applied. You can now go back to your lockscreen (CoverSheet) to see the changes. \n Note the option to put kai below music requires a respring, as well as option to hide CoverSheet charge animations."
+							message:@"Your settings have been applied. You can now go back to your lockscreen (CoverSheet) to see the changes. \n \n If some of your options did not apply, a respring might be necessary."
 							preferredStyle:UIAlertControllerStyleAlert];
 
 		UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"Amazing!" style:UIAlertActionStyleDefault
@@ -126,10 +126,11 @@ NSBundle *tweakBundle;
 	versionLabel.alpha = 0.8;
     versionLabel.text = @"alpha";
 
-	NSBundle *bundle = [[NSBundle alloc]initWithPath:@"/Library/PreferenceBundles/KaiPrefs.bundle"];
+	NSBundle *bundle = [[NSBundle alloc]initWithPath:@"/Library/PreferenceBundles/kaiPrefs.bundle"];
 	UIImage *phone = [UIImage imageWithContentsOfFile:[bundle pathForResource:@"kai" ofType:@"png"]];
 	UIImageView *phoneImage = [[UIImageView alloc]initWithImage:phone];
-	[phoneImage setFrame:self.frame];
+	[phoneImage setFrame:CGRectMake(40,40,190,160)];
+    phoneImage.clipsToBounds = YES;
     
     bgView.backgroundColor = [UIColor colorWithRed: 0.00 green: 0.82 blue: 1.00 alpha: 1.00];
     
