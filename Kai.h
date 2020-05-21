@@ -37,7 +37,8 @@ double cornerRadius;
 double bannerWidthFactor;
 double horizontalOffset;
 
-//by importing here, I can use vars in the .mm of KAIBattery
+//by importing here, I can use vars in the .mm files
+#import "KAIBatteryCell.mm"
 #import "KAIBattery.mm"
 
 #define PLIST_PATH @"/User/Library/Preferences/com.burritoz.kaiprefs.plist"
