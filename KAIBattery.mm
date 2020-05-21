@@ -74,7 +74,7 @@ long long lastPercentage;
                 }
                 [label setTextColor:[UIColor whiteColor]];
                 label.lineBreakMode = NSLineBreakByWordWrapping;
-                label.numberOfLines = 0;
+                label.numberOfLines = 1;
                 [label setText:labelText];
 
                 _UIBatteryView *battery = [[_UIBatteryView alloc] init];
@@ -89,7 +89,7 @@ long long lastPercentage;
                         [percentLabel setTextColor:[UIColor whiteColor]];
                         percentLabel.lineBreakMode = NSLineBreakByWordWrapping;
                         [percentLabel setTextAlignment:NSTextAlignmentRight];
-                        percentLabel.numberOfLines = 0;
+                        percentLabel.numberOfLines = 1;
                         [percentLabel setText:[NSString stringWithFormat:@"%ld%%", (long)((NSInteger) batteryPercentage)]];
                 if(charging) battery.chargingState = 1;
                 battery.showsInlineChargingIndicator = YES;
