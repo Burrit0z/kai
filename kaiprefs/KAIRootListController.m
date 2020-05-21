@@ -67,7 +67,7 @@ NSBundle *tweakBundle;
 }
 
 -(void)respring:(id)sender {
-	CFNotificationCenterPostNotification(CFNotificationCenterGetDarwinNotifyCenter(), CFSTR("com.burritoz.kaiPrefs/reload"), nil, nil, true);
+	CFNotificationCenterPostNotification(CFNotificationCenterGetDarwinNotifyCenter(), CFSTR("com.burritoz.kaiprefs/reload"), nil, nil, true);
 
 	UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Kai"
 							message:@"Your settings have been applied. You can now go back to your lockscreen (CoverSheet) to see the changes. \n \n If some of your options did not apply, a respring might be necessary."
