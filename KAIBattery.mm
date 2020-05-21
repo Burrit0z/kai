@@ -125,9 +125,9 @@ long long lastPercentage;
 
                 //percentLabel.frame = CGRectMake(self.superview.bounds.size.width - 16 - 94,35 + y,36,12);
                 percentLabel.translatesAutoresizingMaskIntoConstraints = NO;
-                [percentLabel.leftAnchor constraintEqualToAnchor:blank.rightAnchor constant:(- 94)].active = YES;
+                [percentLabel.leftAnchor constraintEqualToAnchor:blank.rightAnchor constant:(- 96)].active = YES;
                 [percentLabel.centerYAnchor constraintEqualToAnchor:blank.centerYAnchor].active = YES;
-                [percentLabel.widthAnchor constraintEqualToConstant:35].active = YES;
+                [percentLabel.widthAnchor constraintEqualToConstant:37].active = YES;
                 [percentLabel.heightAnchor constraintEqualToConstant:12].active = YES;
 
                 //label.frame = CGRectMake(65.5,27.5 + y,275,25);
