@@ -85,7 +85,7 @@ NSMutableArray *deviceInstances;
         } else if(bannerAlign==3) { //right
             [blank.rightAnchor constraintEqualToAnchor:self.rightAnchor constant:horizontalOffset].active = YES;
         }
-        [blank.topAnchor constraintEqualToAnchor:self.topAnchor constant:self.frame.origin.y].active = YES;
+        [blank.topAnchor constraintEqualToAnchor:self.topAnchor].active = YES;
         [blank.widthAnchor constraintEqualToConstant:((self.frame.size.width) + bannerWidthFactor)].active = YES;
         [blank.heightAnchor constraintEqualToConstant:bannerHeight].active = YES;
 

@@ -70,7 +70,7 @@ long long lastPercentage;
                         NSLog(@"Kai: Updating cell: %@ for device:%@", cell, device);
                     } else if(![self.displayingDevices containsObject:deviceName]) {
                         KAIBatteryCell *newCell = [[KAIBatteryCell alloc] initWithFrame:CGRectMake(0, y, self.frame.size.width, bannerHeight) device:device];
-                        [self.superview addSubview:newCell];
+                        [self addSubview:newCell];
                         [self.displayingDevices addObject:deviceName];
                         //y+=bannerHeight + spacing;
                         NSLog(@"Kai: Added cell: %@ for device:%@", cell, device);
