@@ -20,7 +20,7 @@ long long batteryPercentage;
 long long lastPercentage;
 
 -(void)updateBattery {
-    dispatch_async(dispatch_get_main_queue(), ^{
+    //dispatch_async(dispatch_get_main_queue(), ^{
         //NSLog(@"kai: battery platter called to update");
     if(!self.isUpdating) {
     self.isUpdating = YES;
@@ -56,6 +56,12 @@ long long lastPercentage;
 
                 KAIBatteryCell *cell = [KAIBatteryCell cellForDeviceIfExists:device frameToCreateNew:CGRectMake(0, y, self.frame.size.width, bannerHeight)];
 
+                if(cell) {
+                    cell.device = device;
+                    cell.frame = cell.frame = CGRectMake(0, y, self.frame.size.width, bannerHeight); //bro im like creating my own stack view
+                    [cell updateInfo];
+                }
+
                 if(shouldAdd && [deviceName length]!=0) {
                     if(![self.subviews containsObject:cell]) {
                         cell.frame = CGRectMake(0, y, self.frame.size.width, bannerHeight);
@@ -70,8 +76,9 @@ long long lastPercentage;
             //[self.heightAnchor constraintEqualToConstant:(self.number * 85)].active = YES;
             self.isUpdating = NO;
             self.number = [self.subviews count];
+            [(CSAdjunctListView *)self.superview KaiUpdate];
         }
-    });
+    //});
 }
 
 -(void)removeAllAndRefresh {

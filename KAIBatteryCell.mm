@@ -150,7 +150,7 @@ NSMutableArray *deviceInstances = [[NSMutableArray alloc] init];
     //NSString *deviceName = MSHookIvar<NSString *>(device, "_name");
 
     for(KAIBatteryCell *cell in deviceInstances) {
-        if(cell.device == device || [cell.device.accessoryIdentifier isEqualToString:device.accessoryIdentifier]) {
+        if(cell.device == device || [cell.device.identifier isEqualToString:device.identifier]) {
             foundCell = cell;
             break;
         }

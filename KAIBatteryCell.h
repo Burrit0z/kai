@@ -24,7 +24,7 @@
 @end
 
 @interface BCBatteryDevice : NSObject
-@property (nonatomic, strong) NSString *accessoryIdentifier;
+@property (nonatomic, strong) NSString *identifier;
 -(id)glyph;
 @end
 
