@@ -38,12 +38,18 @@ long long lastPercentage;
             }*/
 
             for(KAIBatteryCell *cell in addedCells) {
-                if(![devices containsObject:cell.device]) {
-                    cell.device = nil;
-                    [cell removeFromSuperview];
-                    [self.displayingDevices removeObject:cell.label.text]; //lmaoo
+                if(cell.device!=nil) {
+                    NSString *cellName = MSHookIvar<NSString *>(cell.device, "_name");
+                    if(![addedCells containsObject:cellName]) {
+                        cell.device = nil;
+                        [cell removeFromSuperview];
+                        [self.displayingDevices removeObject:cell.label.text]; //lmaoo
+                    } else {
+                        [cell updateInfo];
+                    }
                 } else {
-                    [cell updateInfo];
+                    //[cell removeFromSuperview];
+                    //[addedCells removeObject:cell];
                 }
             }
 
@@ -86,8 +92,10 @@ long long lastPercentage;
                 } else if(!shouldAdd) {
 
                     if([self.displayingDevices containsObject:deviceName]) {
+                        cell.device = nil;
                         [cell removeFromSuperview];
                         [self.displayingDevices removeObject:deviceName];
+                        [addedCells removeObject:cell];
                     }
 
                 }
