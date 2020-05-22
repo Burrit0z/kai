@@ -6,14 +6,14 @@
 
 -(void)_layoutStackView {
 
-	NSInteger lastSlot = [[self stackView].subviews count] -1;
+	//NSInteger lastSlot = [[self stackView].subviews count] -1;
 	//this code is used to determine if kai is at the bottom of the stack view
-	if([[self stackView].subviews objectAtIndex:lastSlot] != [KAIBattery sharedInstance] && belowMusic) {
+	//if([[self stackView].subviews objectAtIndex:lastSlot] != [KAIBattery sharedInstance] && belowMusic) {
 		//if it is not, but the option to have kai below music is on, i simply remove from it's current pos. 
 		//and insert into last slot.
-		[[self stackView] removeArrangedSubview:[KAIBattery sharedInstance]];
-		[[self stackView] insertArrangedSubview:[KAIBattery sharedInstance] atIndex:lastSlot];
-	}
+		//[[self stackView] removeArrangedSubview:[KAIBattery sharedInstance]];
+		//[[self stackView] insertArrangedSubview:[KAIBattery sharedInstance] atIndex:lastSlot];
+	//}
 	
 	//makes kai lay itself out when the stack does
 	[self KaiUpdate];
@@ -78,6 +78,13 @@
 	if(!isUpdating) {
 
 		isUpdating = YES;
+
+		[[KAIBattery sharedInstance] updateBattery];
+		[self KaiUpdate];
+
+		isUpdating = NO;
+
+		/*isUpdating = YES;
 		[UIView animateWithDuration:0.3 animations:^{
 
 			//nice fade out
@@ -94,7 +101,7 @@
 				isUpdating = NO;
 			}];
 
-		}];
+		}];*/
 
 	}
 

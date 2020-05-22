@@ -112,8 +112,15 @@ static void applyPrefs()
 {
     preferencesChanged();
 
-    //here I remotely refresh the KAIView.
     isUpdating = YES;
+
+    [[KAIBattery sharedInstance] updateBattery];
+    [(CSAdjunctListView *)([KAIBattery sharedInstance].superview.superview) KaiUpdate];
+
+    isUpdating = NO;
+
+    //here I remotely refresh the KAIView.
+    /*isUpdating = YES;
     [UIView animateWithDuration:0.3 animations:^{
         [KAIBattery sharedInstance].alpha = 0;
     } completion:^(BOOL finished){
@@ -124,6 +131,6 @@ static void applyPrefs()
         } completion:^(BOOL finished){
             isUpdating = NO;
         }];
-    }];
+    }];*/
 
 }

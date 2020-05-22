@@ -86,7 +86,7 @@ NSMutableArray *deviceInstances;
             [blank.rightAnchor constraintEqualToAnchor:self.rightAnchor constant:horizontalOffset].active = YES;
         }
         [blank.topAnchor constraintEqualToAnchor:self.topAnchor constant:self.frame.origin.y].active = YES;
-        [blank.widthAnchor constraintEqualToConstant:((self.superview.bounds.size.width - 16) + bannerWidthFactor)].active = YES;
+        [blank.widthAnchor constraintEqualToConstant:((self.frame.size.width) + bannerWidthFactor)].active = YES;
         [blank.heightAnchor constraintEqualToConstant:bannerHeight].active = YES;
 
         self.percentLabel.translatesAutoresizingMaskIntoConstraints = NO;
@@ -131,7 +131,7 @@ NSMutableArray *deviceInstances;
     self.label.text = [NSString stringWithFormat:@"%@", deviceName];
     [self.percentLabel setText:[NSString stringWithFormat:@"%ld%%", (long)((NSInteger) batteryPercentage)]];
     self.battery.chargePercent = (batteryPercentage*0.01);
-    if(charging) self.battery.chargingState = 1;
+    if(charging) { self.battery.chargingState = 1; } else { self.battery.chargingState = 0; }
     self.battery.showsInlineChargingIndicator = YES;
     if(LPM) self.battery.saverModeActive = YES;
     if(kCFCoreFoundationVersionNumber > 1600) {

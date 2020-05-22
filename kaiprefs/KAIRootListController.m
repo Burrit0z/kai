@@ -83,7 +83,7 @@ NSBundle *tweakBundle;
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
     CGFloat offsetY = scrollView.contentOffset.y;
 
-    if (offsetY > 140) {
+    if (offsetY > 120) {
         [UIView animateWithDuration:0.2 animations:^{
             self.iconView.alpha = 1.0;
             self.titleLabel.alpha = 0.0;
