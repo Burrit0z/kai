@@ -80,7 +80,7 @@
 
 		isUpdating = YES;
 
-		NSLog(@"kai: kai info will update");
+		//NSLog(@"kai: kai info will update");
 
 		[[KAIBattery sharedInstance] updateBattery];
 		[self KaiUpdate];
