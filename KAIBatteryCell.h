@@ -33,11 +33,6 @@
 @property (nonatomic, strong) UILabel *percentLabel;
 @property (nonatomic, strong) UIImageView *glyphView;
 @property (nonatomic, strong) _UIBatteryView *battery;
-
-@property (nonatomic, assign) BOOL lastChargingState;
-@property (nonatomic, assign) BOOL lastLPM;
-@property (nonatomic, assign) double lastPercent;
-
 -(instancetype)initWithFrame:(CGRect)arg1 device:(BCBatteryDevice *)device;
 -(void)updateInfo;
 +(instancetype)cellForDeviceIfExists:(BCBatteryDevice *)device;

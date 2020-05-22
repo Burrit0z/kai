@@ -1,6 +1,6 @@
 #import "KAIBatteryCell.h"
 
-NSMutableArray *deviceInstances;
+NSMutableArray *deviceInstances = [[NSMutableArray alloc] init];
 
 @implementation KAIBatteryCell
 
@@ -113,15 +113,14 @@ NSMutableArray *deviceInstances;
         [self.battery.widthAnchor constraintEqualToConstant:20].active = YES;
         [self.battery.heightAnchor constraintEqualToConstant:10].active = YES;
 
-        self.lastChargingState = charging;
-        self.lastLPM = LPM;
-        self.lastPercent = batteryPercentage;
+        [deviceInstances addObject:self];
     }
 
     return self;
 }
 
 -(void)updateInfo {
+    NSLog(@"kai: updating cell info");
 
     NSString *deviceName = MSHookIvar<NSString *>(self.device, "_name");
     double batteryPercentage = MSHookIvar<long long>(self.device, "_percentCharge");
@@ -133,7 +132,7 @@ NSMutableArray *deviceInstances;
     self.battery.chargePercent = (batteryPercentage*0.01);
     if(charging) { self.battery.chargingState = 1; } else { self.battery.chargingState = 0; }
     self.battery.showsInlineChargingIndicator = YES;
-    if(LPM) self.battery.saverModeActive = YES;
+    if(LPM) { self.battery.saverModeActive = YES; } else { self.battery.saverModeActive = NO; }
     if(kCFCoreFoundationVersionNumber > 1600) {
         [self.battery setBodyColorAlpha:1.0];
         [self.battery setPinColorAlpha:1.0];
@@ -143,9 +142,7 @@ NSMutableArray *deviceInstances;
 
     [self.glyphView setImage:[self.device glyph]];
 
-    self.lastChargingState = charging;
-        self.lastLPM = LPM;
-        self.lastPercent = batteryPercentage;
+    [deviceInstances addObject:self];
 
 }
 
@@ -157,14 +154,17 @@ NSMutableArray *deviceInstances;
 +(instancetype)cellForDeviceIfExists:(BCBatteryDevice *)device {
     KAIBatteryCell *foundCell;
 
+    NSString *deviceName = MSHookIvar<NSString *>(device, "_name");
+
     for(KAIBatteryCell *cell in deviceInstances) {
-        if(cell.device == device) {
+        if(cell.label.text == deviceName) {
             foundCell = cell;
             break;
         }
     }
 
     return foundCell;
+    //return deviceInstances;
 }
 
 @end

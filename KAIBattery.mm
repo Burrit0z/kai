@@ -1,6 +1,8 @@
 #import "KAIBattery.h"
 
 KAIBattery *instance;
+NSMutableArray *addedCells = [[NSMutableArray alloc] init];
+
 @implementation KAIBattery
 
 -(instancetype)init {
@@ -19,6 +21,7 @@ long long lastPercentage;
 
 -(void)updateBattery {
     dispatch_async(dispatch_get_main_queue(), ^{
+        NSLog(@"kai: battery platter called to update");
     if(!self.isUpdating) {
     self.isUpdating = YES;
     self.number = 0;
@@ -34,11 +37,21 @@ long long lastPercentage;
                 }
             }*/
 
+            for(KAIBatteryCell *cell in addedCells) {
+                if(![devices containsObject:cell.device]) {
+                    cell.device = nil;
+                    [cell removeFromSuperview];
+                    [self.displayingDevices removeObject:cell.label.text]; //lmaoo
+                } else {
+                    [cell updateInfo];
+                }
+            }
+
             for (BCBatteryDevice *device in devices) {
                 NSString *deviceName = MSHookIvar<NSString *>(device, "_name");
-                double batteryPercentage = MSHookIvar<long long>(device, "_percentCharge");
+                //double batteryPercentage = MSHookIvar<long long>(device, "_percentCharge");
                 BOOL charging = MSHookIvar<long long>(device, "_charging");
-                BOOL LPM = MSHookIvar<BOOL>(device, "_batterySaverModeActive");
+                //BOOL LPM = MSHookIvar<BOOL>(device, "_batterySaverModeActive");
 
                 BOOL shouldAdd = NO;
 
@@ -50,8 +63,6 @@ long long lastPercentage;
                     NSLog(@"Kai: SHOULD ADD");
                 }
 
-                BOOL shouldRefresh = NO;
-
                 KAIBatteryCell *cell = [KAIBatteryCell cellForDeviceIfExists:device];
 
                 /*
@@ -59,41 +70,48 @@ long long lastPercentage;
                 @property (nonatomic, assign) BOOL lastLPM;
                 @property (nonatomic, assign) double lastPercent;
                 */
-                if(cell.lastChargingState != charging || cell.lastLPM != LPM || cell.lastPercent != batteryPercentage) {
-                    shouldRefresh = YES;
-                    NSLog(@"Kai: SHOULD REFRESH");
-                }
 
                 if(shouldAdd && [deviceName length]!=0) {
 
-                    if([self.displayingDevices containsObject:device] && shouldRefresh) {
-                        NSLog(@"Kai: Updating cell: %@ for device:%@", cell, device);
-                    } else if(![self.displayingDevices containsObject:deviceName]) {
+                    if(cell==nil && ![self.displayingDevices containsObject:deviceName]) {
                         KAIBatteryCell *newCell = [[KAIBatteryCell alloc] initWithFrame:CGRectMake(0, y, self.frame.size.width, bannerHeight) device:device];
                         [self addSubview:newCell];
                         [self.displayingDevices addObject:deviceName];
+                        [addedCells addObject:newCell];
                         //y+=bannerHeight + spacing;
-                        NSLog(@"Kai: Added cell: %@ for device:%@", cell, device);
                     }
-                    self.number +=1;
+                    //self.number +=1;
                     y+=bannerHeight + spacing;
-                    NSLog(@"Kai: incremented y, so now it is %f", y);
-                    [cell updateInfo];
 
                 } else if(!shouldAdd) {
 
-                    if([self.displayingDevices containsObject:device]) {
+                    if([self.displayingDevices containsObject:deviceName]) {
                         [cell removeFromSuperview];
-                        [self.displayingDevices removeObject:device];
-                        NSLog(@"Kai: Removed cell: %@ for device: %@", cell, device);
+                        [self.displayingDevices removeObject:deviceName];
                     }
 
                 }
             }
             //[self.heightAnchor constraintEqualToConstant:(self.number * 85)].active = YES;
             self.isUpdating = NO;
+            self.number = [self.subviews count];
         }
     });
+}
+
+-(void)removeAllAndRefresh {
+    for( UIView *view in self.subviews ) {
+        @try {
+            [view removeFromSuperview];
+        } @catch (NSException *exception) {
+            //Panik
+        }
+    }
+
+    self.displayingDevices = [[NSMutableArray alloc] init];
+
+    addedCells = nil;
+    [self updateBattery];
 }
 
 +(KAIBattery *)sharedInstance {
