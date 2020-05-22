@@ -24,6 +24,7 @@
 @end
 
 @interface BCBatteryDevice : NSObject
+@property (nonatomic, strong) NSString *accessoryIdentifier;
 -(id)glyph;
 @end
 
@@ -35,5 +36,5 @@
 @property (nonatomic, strong) _UIBatteryView *battery;
 -(instancetype)initWithFrame:(CGRect)arg1 device:(BCBatteryDevice *)device;
 -(void)updateInfo;
-+(instancetype)cellForDeviceIfExists:(BCBatteryDevice *)device;
++(instancetype)cellForDeviceIfExists:(BCBatteryDevice *)device frameToCreateNew:(CGRect)arg2;
 @end

@@ -1,7 +1,7 @@
 #import "KAIBattery.h"
 
 KAIBattery *instance;
-NSMutableArray *addedCells = [[NSMutableArray alloc] init];
+//NSMutableArray *showingCells = [[NSMutableArray alloc] init];
 
 @implementation KAIBattery
 
@@ -21,7 +21,7 @@ long long lastPercentage;
 
 -(void)updateBattery {
     dispatch_async(dispatch_get_main_queue(), ^{
-        NSLog(@"kai: battery platter called to update");
+        //NSLog(@"kai: battery platter called to update");
     if(!self.isUpdating) {
     self.isUpdating = YES;
     self.number = 0;
@@ -29,29 +29,14 @@ long long lastPercentage;
     BCBatteryDeviceController *bcb = [BCBatteryDeviceController sharedInstance];
             NSArray *devices = MSHookIvar<NSArray *>(bcb, "_sortedDevices");
 
-            /*for( UIView *view in self.subviews ) {
-                @try {
-                    [view removeFromSuperview];
-                } @catch (NSException *exception) {
-                    //Panik
-                }
-            }*/
-
-            for(KAIBatteryCell *cell in addedCells) {
-                if(cell.device!=nil) {
-                    NSString *cellName = MSHookIvar<NSString *>(cell.device, "_name");
-                    if(![addedCells containsObject:cellName]) {
-                        cell.device = nil;
-                        [cell removeFromSuperview];
-                        [self.displayingDevices removeObject:cell.label.text]; //lmaoo
-                    } else {
-                        [cell updateInfo];
-                    }
-                } else {
-                    //[cell removeFromSuperview];
-                    //[addedCells removeObject:cell];
+            for(KAIBatteryCell *cell in self.subviews) {
+                if([cell respondsToSelector:@selector(updateInfo)] && ![devices containsObject:cell.device]) { //to confirm is a cell and battery device does not exist
+                    [cell removeFromSuperview];
+                } else if([cell respondsToSelector:@selector(updateInfo)]) {
+                    [cell updateInfo];
                 }
             }
+
 
             for (BCBatteryDevice *device in devices) {
                 NSString *deviceName = MSHookIvar<NSString *>(device, "_name");
@@ -63,41 +48,23 @@ long long lastPercentage;
 
                 if(showAll) {
                     shouldAdd = YES;
-                    NSLog(@"Kai: SHOULD ADD");
+                    //NSLog(@"Kai: SHOULD ADD");
                 } else if(!showAll && charging) {
                     shouldAdd = YES;
-                    NSLog(@"Kai: SHOULD ADD");
+                    //NSLog(@"Kai: SHOULD ADD");
                 }
 
-                KAIBatteryCell *cell = [KAIBatteryCell cellForDeviceIfExists:device];
-
-                /*
-                @property (nonatomic, assign) BOOL lastChargingState;
-                @property (nonatomic, assign) BOOL lastLPM;
-                @property (nonatomic, assign) double lastPercent;
-                */
+                KAIBatteryCell *cell = [KAIBatteryCell cellForDeviceIfExists:device frameToCreateNew:CGRectMake(0, y, self.frame.size.width, bannerHeight)];
 
                 if(shouldAdd && [deviceName length]!=0) {
-
-                    if(cell==nil && ![self.displayingDevices containsObject:deviceName]) {
-                        KAIBatteryCell *newCell = [[KAIBatteryCell alloc] initWithFrame:CGRectMake(0, y, self.frame.size.width, bannerHeight) device:device];
-                        [self addSubview:newCell];
-                        [self.displayingDevices addObject:deviceName];
-                        [addedCells addObject:newCell];
-                        //y+=bannerHeight + spacing;
+                    if(![self.subviews containsObject:cell]) {
+                        cell.frame = CGRectMake(0, y, self.frame.size.width, bannerHeight);
+                        [self addSubview:cell];
                     }
-                    //self.number +=1;
                     y+=bannerHeight + spacing;
 
                 } else if(!shouldAdd) {
-
-                    if([self.displayingDevices containsObject:deviceName]) {
-                        cell.device = nil;
-                        [cell removeFromSuperview];
-                        [self.displayingDevices removeObject:deviceName];
-                        [addedCells removeObject:cell];
-                    }
-
+                    [cell removeFromSuperview];
                 }
             }
             //[self.heightAnchor constraintEqualToConstant:(self.number * 85)].active = YES;
@@ -116,9 +83,9 @@ long long lastPercentage;
         }
     }
 
-    self.displayingDevices = [[NSMutableArray alloc] init];
+    //self.displayingDevices = [[NSMutableArray alloc] init];
 
-    addedCells = nil;
+    //addedCells = nil;
     [self updateBattery];
 }
 

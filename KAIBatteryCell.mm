@@ -120,7 +120,7 @@ NSMutableArray *deviceInstances = [[NSMutableArray alloc] init];
 }
 
 -(void)updateInfo {
-    NSLog(@"kai: updating cell info");
+    //NSLog(@"kai: updating cell info");
 
     NSString *deviceName = MSHookIvar<NSString *>(self.device, "_name");
     double batteryPercentage = MSHookIvar<long long>(self.device, "_percentCharge");
@@ -142,29 +142,30 @@ NSMutableArray *deviceInstances = [[NSMutableArray alloc] init];
 
     [self.glyphView setImage:[self.device glyph]];
 
-    [deviceInstances addObject:self];
-
 }
 
--(void)removeFromSuperview {
-    [super removeFromSuperview];
-    [deviceInstances removeObject:self];
-}
-
-+(instancetype)cellForDeviceIfExists:(BCBatteryDevice *)device {
++(instancetype)cellForDeviceIfExists:(BCBatteryDevice *)device frameToCreateNew:(CGRect)arg2 {
     KAIBatteryCell *foundCell;
 
-    NSString *deviceName = MSHookIvar<NSString *>(device, "_name");
+    //NSString *deviceName = MSHookIvar<NSString *>(device, "_name");
 
     for(KAIBatteryCell *cell in deviceInstances) {
-        if(cell.label.text == deviceName) {
+        if(cell.device == device || [cell.device.accessoryIdentifier isEqualToString:device.accessoryIdentifier]) {
             foundCell = cell;
             break;
         }
     }
 
+    if(foundCell == nil) {
+        foundCell = [[KAIBatteryCell alloc] initWithFrame:arg2 device:device];
+    }
+
     return foundCell;
     //return deviceInstances;
+}
+
++(id)array {
+    return deviceInstances;
 }
 
 @end
