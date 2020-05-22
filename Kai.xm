@@ -81,11 +81,13 @@
 		isUpdating = YES;
 
 		//NSLog(@"kai: kai info will update");
+		dispatch_async(dispatch_get_main_queue(), ^{
 
 		[[KAIBattery sharedInstance] updateBattery];
 		[self KaiUpdate];
 
 		isUpdating = NO;
+		});
 
 		/*isUpdating = YES;
 		[UIView animateWithDuration:0.3 animations:^{
