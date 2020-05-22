@@ -89,6 +89,7 @@ long long lastPercentage;
             //Panik
         }
     }
+    [KAIBatteryCell resetArray];
 
     //self.displayingDevices = [[NSMutableArray alloc] init];
 

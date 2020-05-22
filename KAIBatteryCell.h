@@ -37,4 +37,5 @@
 -(instancetype)initWithFrame:(CGRect)arg1 device:(BCBatteryDevice *)device;
 -(void)updateInfo;
 +(instancetype)cellForDeviceIfExists:(BCBatteryDevice *)device frameToCreateNew:(CGRect)arg2;
++(void)resetArray;
 @end

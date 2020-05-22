@@ -164,8 +164,8 @@ NSMutableArray *deviceInstances = [[NSMutableArray alloc] init];
     //return deviceInstances;
 }
 
-+(id)array {
-    return deviceInstances;
++(void)resetArray {
+    deviceInstances = [[NSMutableArray alloc] init];
 }
 
 @end
