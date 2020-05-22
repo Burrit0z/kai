@@ -20,14 +20,17 @@ long long batteryPercentage;
 long long lastPercentage;
 
 -(void)updateBattery {
-    //dispatch_async(dispatch_get_main_queue(), ^{
+    dispatch_async(dispatch_get_main_queue(), ^{
         //NSLog(@"kai: battery platter called to update");
     if(!self.isUpdating) {
+        NSLog(@"kai: IS Updating");
     self.isUpdating = YES;
-    self.number = 0;
+    //self.number = 0;
     float y = 0;
     BCBatteryDeviceController *bcb = [BCBatteryDeviceController sharedInstance];
             NSArray *devices = MSHookIvar<NSArray *>(bcb, "_sortedDevices");
+            if([devices count]!=0) {
+                NSLog(@"kai: info is good, will proceed");
 
             for(KAIBatteryCell *cell in self.subviews) {
                 if([cell respondsToSelector:@selector(updateInfo)] && ![devices containsObject:cell.device]) { //to confirm is a cell and battery device does not exist
@@ -59,7 +62,7 @@ long long lastPercentage;
                 if(cell) {
                     cell.device = device;
                     cell.frame = cell.frame = CGRectMake(0, y, self.frame.size.width, bannerHeight); //bro im like creating my own stack view
-                    [cell updateInfo];
+                    //[cell updateInfo];
                 }
 
                 if(shouldAdd && [deviceName length]!=0) {
@@ -74,11 +77,13 @@ long long lastPercentage;
                 }
             }
             //[self.heightAnchor constraintEqualToConstant:(self.number * 85)].active = YES;
-            self.isUpdating = NO;
             self.number = [self.subviews count];
             [(CSAdjunctListView *)self.superview.superview KaiUpdate];
+            }
+            self.isUpdating = NO;
+            NSLog(@"kai: finished update");
         }
-    //});
+    });
 }
 
 -(void)removeAllAndRefresh {
