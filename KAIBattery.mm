@@ -76,7 +76,7 @@ long long lastPercentage;
             //[self.heightAnchor constraintEqualToConstant:(self.number * 85)].active = YES;
             self.isUpdating = NO;
             self.number = [self.subviews count];
-            [(CSAdjunctListView *)self.superview KaiUpdate];
+            [(CSAdjunctListView *)self.superview.superview KaiUpdate];
         }
     //});
 }
