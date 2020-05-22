@@ -17,13 +17,18 @@
 +(id)materialViewWithRecipe:(NSInteger)arg1 options:(NSInteger)arg2 initialWeighting:(CGFloat)arg3 scaleAdjustment:(id)arg4;
 @end
 
-@interface BCBatteryDeviceController
+@interface BCBatteryDeviceController : NSObject
 @property (nonatomic, strong) NSArray *sortedDevices;
 -(id)_sortedDevices;
 +(id)sharedInstance;
 @end
 
 @interface BCBatteryDevice : NSObject
+@property (nonatomic, strong) id kaiCell;
+@property (nonatomic, strong) NSString *name;
+@property (nonatomic, assign) long long percentCharge;
+@property (nonatomic, assign) BOOL charging;
+@property (nonatomic, assign) BOOL batterySaverModeActive;
 @property (nonatomic, strong) NSString *identifier;
 -(id)glyph;
 @end

@@ -1,9 +1,9 @@
-@interface KAIBattery : UIView
+@interface KAIBatteryStack : UIStackView
 @property (nonatomic, strong) NSMutableArray *displayingDevices;
 @property (nonatomic, assign) NSInteger number;
 @property (nonatomic, strong) NSLayoutConstraint *heightConstraint;
 @property (nonatomic, assign) BOOL isUpdating;
-+(KAIBattery *)sharedInstance;
++(KAIBatteryStack *)sharedInstance;
 -(instancetype)init;
 -(void)removeAllAndRefresh;
 -(void)updateBattery;

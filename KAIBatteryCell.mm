@@ -6,14 +6,14 @@ NSMutableArray *deviceInstances = [[NSMutableArray alloc] init];
 
 -(instancetype)initWithFrame:(CGRect)arg1 device:(BCBatteryDevice *)device {
     self = [super initWithFrame:arg1];
-    if(self) {
+    if(self && device!=nil) {
 
         self.device = device;
-
-        NSString *deviceName = MSHookIvar<NSString *>(device, "_name");
-        double batteryPercentage = MSHookIvar<long long>(device, "_percentCharge");
-        BOOL charging = MSHookIvar<long long>(device, "_charging");
-        BOOL LPM = MSHookIvar<BOOL>(device, "_batterySaverModeActive");
+        
+        NSString *deviceName = device.name;
+        double batteryPercentage = device.percentCharge;
+        BOOL charging = device.charging;
+        BOOL LPM = device.batterySaverModeActive;
 
         UIView *blank;
         if(bannerStyle==1) {

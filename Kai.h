@@ -5,7 +5,8 @@
 #import <UIKit/UIKit.h>
 
 #define KAISelf ((CSAdjunctListView *)self) //for use when calling self in KAITarget
-#define KAIBattery UHDUEIHGCEBCHYDEICVKEVSAGJKBCXAHJGKVXHAS //lmao
+//#define KAIBatteryStack UHDUEIHGCEBCHYDEICVKEVSAGJKBCXAHJGKVXHAS //lmao
+//#define KAIBatteryCell HDEIUOGEUBGUYOEXHNOPUSZIOJIGECEXIUSHXJXBE //very good
 
 @interface CSAdjunctListView : UIView
 @property (nonatomic, assign) BOOL hasKai;
@@ -39,7 +40,7 @@ double horizontalOffset;
 
 //by importing here, I can use vars in the .mm files
 #import "KAIBatteryCell.mm"
-#import "KAIBattery.mm"
+#import "KAIBatteryStack.mm"
 
 #define PLIST_PATH @"/User/Library/Preferences/com.burritoz.kaiprefs.plist"
 #define kIdentifier @"com.burritoz.kaiprefs"
@@ -114,20 +115,20 @@ static void applyPrefs()
 
     isUpdating = YES;
 
-    [[KAIBattery sharedInstance] removeAllAndRefresh];
-    [(CSAdjunctListView *)([KAIBattery sharedInstance].superview.superview) KaiUpdate];
+    [[KAIBatteryStack sharedInstance] removeAllAndRefresh];
+    [(CSAdjunctListView *)([KAIBatteryStack sharedInstance].superview.superview) KaiUpdate];
 
     isUpdating = NO;
 
     //here I remotely refresh the KAIView.
     /*isUpdating = YES;
     [UIView animateWithDuration:0.3 animations:^{
-        [KAIBattery sharedInstance].alpha = 0;
+        [KAIBatteryStack sharedInstance].alpha = 0;
     } completion:^(BOOL finished){
-        [[KAIBattery sharedInstance] updateBattery];
-        [(CSAdjunctListView *)([KAIBattery sharedInstance].superview.superview) KaiUpdate];
+        [[KAIBatteryStack sharedInstance] updateBattery];
+        [(CSAdjunctListView *)([KAIBatteryStack sharedInstance].superview.superview) KaiUpdate];
         [UIView animateWithDuration:0.35 animations:^{
-            [KAIBattery sharedInstance].alpha = 1;
+            [KAIBatteryStack sharedInstance].alpha = 1;
         } completion:^(BOOL finished){
             isUpdating = NO;
         }];

@@ -8,11 +8,11 @@
 
 	NSInteger lastSlot = [[self stackView].subviews count] -1;
 	//this code is used to determine if kai is at the bottom of the stack view
-	if([[self stackView].subviews objectAtIndex:lastSlot] != [KAIBattery sharedInstance] && belowMusic) {
+	if([[self stackView].subviews objectAtIndex:lastSlot] != [KAIBatteryStack sharedInstance] && belowMusic) {
 		//if it is not, but the option to have kai below music is on, i simply remove from it's current pos. 
 		//and insert into last slot.
-		[[self stackView] removeArrangedSubview:[KAIBattery sharedInstance]];
-		[[self stackView] insertArrangedSubview:[KAIBattery sharedInstance] atIndex:lastSlot];
+		[[self stackView] removeArrangedSubview:[KAIBatteryStack sharedInstance]];
+		[[self stackView] insertArrangedSubview:[KAIBatteryStack sharedInstance] atIndex:lastSlot];
 	}
 	
 	//makes kai lay itself out when the stack does
@@ -25,7 +25,7 @@
 -(void)setStackView:(UIStackView *)arg1 {
 
 	if(!KAISelf.hasKai) {
-		KAIBattery *battery = [[KAIBattery alloc] init];
+		KAIBatteryStack *battery = [[KAIBatteryStack alloc] init];
 
 		//Add noti observer
 		[[NSNotificationCenter defaultCenter] addObserver:self
@@ -47,7 +47,7 @@
 
 %new
 -(void)KaiUpdate {
-	KAIBattery *battery = [KAIBattery sharedInstance];
+	KAIBatteryStack *battery = [KAIBatteryStack sharedInstance];
 	battery.number = [battery.subviews count];
 
 	[UIView animateWithDuration:0.3 animations:^{
@@ -84,30 +84,11 @@
 		//NSLog(@"kai: kai info will update");
 		dispatch_async(dispatch_get_main_queue(), ^{
 
-		[[KAIBattery sharedInstance] updateBattery];
+		[[KAIBatteryStack sharedInstance] updateBattery];
 		[self KaiUpdate];
 
 		isUpdating = NO;
 		});
-
-		/*isUpdating = YES;
-		[UIView animateWithDuration:0.3 animations:^{
-
-			//nice fade out
-			[KAIBattery sharedInstance].alpha = 0;
-
-		} completion:^(BOOL finished){
-
-			[[KAIBattery sharedInstance] updateBattery];
-			[self KaiUpdate];
-			[UIView animateWithDuration:0.35 animations:^{
-				//fade back in
-				[KAIBattery sharedInstance].alpha = 1;
-			} completion:^(BOOL finished){
-				isUpdating = NO;
-			}];
-
-		}];*/
 
 	}
 
@@ -116,6 +97,7 @@
 
 
 %hook BCBatteryDevice
+%property (nonatomic, strong) KAIBatteryCell *kaiCell;
 
 - (id)initWithIdentifier:(id)arg1 vendor:(long long)arg2 productIdentifier:(long long)arg3 parts:(unsigned long long)arg4 matchIdentifier:(id)arg5 {
 
@@ -128,9 +110,29 @@
 }
 
 -(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
+	if(self && self.kaiCell == nil) {
+		self.kaiCell = [[KAIBatteryCell alloc] initWithFrame:CGRectMake(0,0,0,0) device:self]; }
+		((KAIBatteryCell *)self.kaiCell).translatesAutoresizingMaskIntoConstraints = NO;
+		[((KAIBatteryCell *)self.kaiCell).heightAnchor constraintEqualToConstant:bannerHeight].active = YES;
 	dispatch_async(dispatch_get_main_queue(), ^{
 		//sends the noti to update battery info
 		[[NSNotificationCenter defaultCenter] postNotificationName:@"KaiInfoChanged" object:nil userInfo:nil];
+		[(KAIBatteryCell *)self.kaiCell updateInfo];
+
+		BOOL shouldAdd = NO;
+
+		if(showAll) {
+			shouldAdd = YES;
+		} else if(!showAll && self.charging) {
+			shouldAdd = YES;
+		}
+
+		if(![[KAIBatteryStack sharedInstance].subviews containsObject:self.kaiCell] && shouldAdd) {
+			[[KAIBatteryStack sharedInstance] addArrangedSubview:self.kaiCell];
+		} else if([[KAIBatteryStack sharedInstance].subviews containsObject:self.kaiCell] && !shouldAdd) {
+			[[KAIBatteryStack sharedInstance] removeArrangedSubview:self.kaiCell];
+		}
+
 	});
 	
 }

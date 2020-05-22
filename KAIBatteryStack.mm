@@ -1,17 +1,21 @@
-#import "KAIBattery.h"
+#import "KAIBatteryStack.h"
 
-KAIBattery *instance;
+KAIBatteryStack *instance;
 //NSMutableArray *showingCells = [[NSMutableArray alloc] init];
 
-@implementation KAIBattery
+@implementation KAIBatteryStack
 
 -(instancetype)init {
     self = [super init];
     instance = self;
     if (self) {
         self.displayingDevices = [[NSMutableArray alloc] init];
+        self.axis = 1;
+        self.distribution = 0;
+        self.spacing = spacing;
+        self.alignment = 0;
         [self updateBattery];
-        self.clipsToBounds = YES;
+        //self.clipsToBounds = YES;
         self.userInteractionEnabled = NO;
     }
     return self;
@@ -21,6 +25,8 @@ long long batteryPercentage;
 long long lastPercentage;
 
 -(void)updateBattery {
+    /*
+    self.spacing = spacing;
     dispatch_async(dispatch_get_main_queue(), ^{
         //NSLog(@"kai: battery platter called to update");
     if(!self.isUpdating) {
@@ -107,7 +113,8 @@ long long lastPercentage;
             //[(CSAdjunctListView *)self.superview.superview KaiUpdate];
             [(CSAdjunctListView *)self.superview.superview performSelector:@selector(KaiUpdate) withObject:(CSAdjunctListView *)self.superview.superview afterDelay:0.2];
         }
-    });
+    });*/
+    self.number = [self.subviews count];
 }
 
 -(void)removeAllAndRefresh {
@@ -126,7 +133,7 @@ long long lastPercentage;
     [self updateBattery];
 }
 
-+(KAIBattery *)sharedInstance {
++(KAIBatteryStack *)sharedInstance {
     return instance;
 }
 
