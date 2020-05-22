@@ -11,6 +11,7 @@ KAIBattery *instance;
     if (self) {
         self.displayingDevices = [[NSMutableArray alloc] init];
         [self updateBattery];
+        self.clipsToBounds = YES;
         self.userInteractionEnabled = NO;
     }
     return self;
@@ -32,13 +33,17 @@ long long lastPercentage;
             if([devices count]!=0) {
                 //NSLog(@"kai: info is good, will proceed");
 
-            __block float ytwo = 0;
+            float ytwo = 0;
 
             for(KAIBatteryCell *cell in self.subviews) {
                 if([cell respondsToSelector:@selector(updateInfo)] && ![devices containsObject:cell.device]) { //to confirm is a cell and battery device does not exist
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        [cell removeFromSuperview];
-                    });
+                    //dispatch_async(dispatch_get_main_queue(), ^{
+                        [UIView animateWithDuration:0.2 animations:^{
+                            cell.alpha = 0;
+                        } completion:^(BOOL finished){
+                            [cell removeFromSuperview];
+                        }];
+                    //});
                 } else if([cell respondsToSelector:@selector(updateInfo)]) {
                         cell.frame = CGRectMake(0, y, self.frame.size.width, bannerHeight);
                         [cell updateInfo];
@@ -75,16 +80,22 @@ long long lastPercentage;
                 if(shouldAdd && [deviceName length]!=0) {
                     if(![self.subviews containsObject:cell]) {
                         cell.frame = CGRectMake(0, y, self.frame.size.width, bannerHeight);
-                        dispatch_async(dispatch_get_main_queue(), ^{
-                            [self addSubview:cell];
-                        });
+                        cell.alpha = 0;
+                        [self addSubview:cell];
+                        [UIView animateWithDuration:0.3 animations:^{
+                            cell.alpha = 1;
+                        }];
                     }
                     y+=bannerHeight + spacing;
 
                 } else if(!shouldAdd) {
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        [cell removeFromSuperview];
-                    });
+                    //dispatch_async(dispatch_get_main_queue(), ^{
+                        [UIView animateWithDuration:0.2 animations:^{
+                            cell.alpha = 0;
+                        } completion:^(BOOL finished){
+                            [cell removeFromSuperview];
+                        }];
+                    //});
                 }
             }
             //[self.heightAnchor constraintEqualToConstant:(self.number * 85)].active = YES;
@@ -93,7 +104,8 @@ long long lastPercentage;
             }
             self.isUpdating = NO;
             //NSLog(@"kai: finished update");
-            [(CSAdjunctListView *)self.superview.superview KaiUpdate];
+            //[(CSAdjunctListView *)self.superview.superview KaiUpdate];
+            [(CSAdjunctListView *)self.superview.superview performSelector:@selector(KaiUpdate) withObject:(CSAdjunctListView *)self.superview.superview afterDelay:0.2];
         }
     });
 }

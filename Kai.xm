@@ -48,6 +48,7 @@
 %new
 -(void)KaiUpdate {
 	KAIBattery *battery = [KAIBattery sharedInstance];
+	battery.number = [battery.subviews count];
 
 	[UIView animateWithDuration:0.3 animations:^{
 
