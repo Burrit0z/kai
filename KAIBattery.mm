@@ -32,15 +32,17 @@ long long lastPercentage;
             if([devices count]!=0) {
                 //NSLog(@"kai: info is good, will proceed");
 
+            __block float ytwo = 0;
+
             for(KAIBatteryCell *cell in self.subviews) {
                 if([cell respondsToSelector:@selector(updateInfo)] && ![devices containsObject:cell.device]) { //to confirm is a cell and battery device does not exist
                     dispatch_async(dispatch_get_main_queue(), ^{
                         [cell removeFromSuperview];
                     });
                 } else if([cell respondsToSelector:@selector(updateInfo)]) {
-                    dispatch_async(dispatch_get_main_queue(), ^{
+                        cell.frame = CGRectMake(0, y, self.frame.size.width, bannerHeight);
                         [cell updateInfo];
-                    });
+                        ytwo+= bannerHeight + spacing;
                 }
             }
 
@@ -62,10 +64,11 @@ long long lastPercentage;
                 }
 
                 KAIBatteryCell *cell = [KAIBatteryCell cellForDeviceIfExists:device frameToCreateNew:CGRectMake(0, y, self.frame.size.width, bannerHeight)];
+                cell.frame = CGRectMake(0, y, self.frame.size.width, bannerHeight);
 
                 if(cell) {
                     cell.device = device;
-                    cell.frame = cell.frame = CGRectMake(0, y, self.frame.size.width, bannerHeight); //bro im like creating my own stack view
+                    //cell.frame = cell.frame = CGRectMake(0, y, self.frame.size.width, bannerHeight); //bro im like creating my own stack view
                     //[cell updateInfo];
                 }
 
