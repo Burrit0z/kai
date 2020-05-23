@@ -110,11 +110,15 @@
 }
 
 -(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
-	if(self && self.kaiCell == nil) {
-		self.kaiCell = [[KAIBatteryCell alloc] initWithFrame:CGRectMake(0,0,0,0) device:self]; }
-		((KAIBatteryCell *)self.kaiCell).translatesAutoresizingMaskIntoConstraints = NO;
-		[((KAIBatteryCell *)self.kaiCell).heightAnchor constraintEqualToConstant:bannerHeight].active = YES;
+	@try {
+	if([self isMemberOfClass:[objc_getClass("BCBatteryDevice") class]] && [self respondsToSelector:@selector(_kaiCell)]) {
 	dispatch_async(dispatch_get_main_queue(), ^{
+
+		if(self && self.kaiCell == nil) {
+		self.kaiCell = [[KAIBatteryCell alloc] initWithFrame:CGRectMake(0,0,[KAIBatteryStack sharedInstance].frame.size.width,0) device:self]; }
+		((KAIBatteryCell *)self.kaiCell).translatesAutoresizingMaskIntoConstraints = NO;
+		[((KAIBatteryCell *)self.kaiCell).heightAnchor constraintEqualToConstant:bannerHeight + spacing].active = YES;
+
 		//sends the noti to update battery info
 		[[NSNotificationCenter defaultCenter] postNotificationName:@"KaiInfoChanged" object:nil userInfo:nil];
 		[(KAIBatteryCell *)self.kaiCell updateInfo];
@@ -134,7 +138,14 @@
 		}
 
 	});
+	}
+	} @catch (NSException *exc) {}
 	
+}
+
+%new
+-(id)_kaiCell {
+	return self.kaiCell;
 }
 %end
 

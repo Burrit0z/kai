@@ -12,7 +12,7 @@ KAIBatteryStack *instance;
         self.displayingDevices = [[NSMutableArray alloc] init];
         self.axis = 1;
         self.distribution = 0;
-        self.spacing = spacing;
+        self.spacing = 0;
         self.alignment = 0;
         [self updateBattery];
         //self.clipsToBounds = YES;
