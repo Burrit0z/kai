@@ -38,6 +38,7 @@
 		//add kai to the stack view
 		[arg1 addArrangedSubview:battery];
 	}
+	[battery updateBattery];
 
 	//send the adjusted stackview as arg1 
 	%orig(arg1);
@@ -61,9 +62,9 @@
 
 		} else {
 		int height = (battery.number * (bannerHeight + spacing)); //big brain math
-			battery.heightConstraint.active = NO; //deactivation
+			//battery.heightConstraint.active = NO; //deactivation
 			battery.heightConstraint.constant = height;
-			battery.heightConstraint.active = YES; //forcing reactivation
+			//battery.heightConstraint.active = YES; //forcing reactivation
 
 			UIStackView *s = [self stackView];
 			s.frame = CGRectMake(s.frame.origin.x, s.frame.origin.y, s.frame.size.width, (s.frame.size.height - 1));
@@ -110,41 +111,23 @@
 }
 
 -(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
-	@try {
-	if([self isMemberOfClass:[objc_getClass("BCBatteryDevice") class]] && [self respondsToSelector:@selector(_kaiCell)]) {
-	dispatch_async(dispatch_get_main_queue(), ^{
-
-		if(self && self.kaiCell == nil) {
-		self.kaiCell = [[KAIBatteryCell alloc] initWithFrame:CGRectMake(0,0,[KAIBatteryStack sharedInstance].frame.size.width,0) device:self]; }
-		((KAIBatteryCell *)self.kaiCell).translatesAutoresizingMaskIntoConstraints = NO;
-		[((KAIBatteryCell *)self.kaiCell).heightAnchor constraintEqualToConstant:bannerHeight + spacing].active = YES;
+	if([self isMemberOfClass:[objc_getClass("BCBatteryDevice") class]] && [self respondsToSelector:@selector(_kaiCell)] && object == self && ([keyPath isEqualToString:@"charging"] || [keyPath isEqualToString:@"percentCharge"] || [keyPath isEqualToString:@"batterySaverModeActive"])) {
 
 		//sends the noti to update battery info
 		[[NSNotificationCenter defaultCenter] postNotificationName:@"KaiInfoChanged" object:nil userInfo:nil];
-		[(KAIBatteryCell *)self.kaiCell updateInfo];
-
-		BOOL shouldAdd = NO;
-
-		if(showAll) {
-			shouldAdd = YES;
-		} else if(!showAll && self.charging) {
-			shouldAdd = YES;
-		}
-
-		if(![[KAIBatteryStack sharedInstance].subviews containsObject:self.kaiCell] && shouldAdd) {
-			[[KAIBatteryStack sharedInstance] addArrangedSubview:self.kaiCell];
-		} else if([[KAIBatteryStack sharedInstance].subviews containsObject:self.kaiCell] && !shouldAdd) {
-			[[KAIBatteryStack sharedInstance] removeArrangedSubview:self.kaiCell];
-		}
-
-	});
 	}
-	} @catch (NSException *exc) {}
 	
 }
 
 %new
--(id)_kaiCell {
+-(id)kaiCellForDevice {
+	if(self && self.kaiCell == nil) {
+		self.kaiCell = [[KAIBatteryCell alloc] initWithFrame:CGRectMake(0,0,[KAIBatteryStack sharedInstance].frame.size.width,0) device:self]; }
+		((KAIBatteryCell *)self.kaiCell).translatesAutoresizingMaskIntoConstraints = NO;
+		[((KAIBatteryCell *)self.kaiCell).heightAnchor constraintEqualToConstant:bannerHeight + spacing].active = YES;
+
+		[(KAIBatteryCell *)self.kaiCell updateInfo];
+
 	return self.kaiCell;
 }
 %end

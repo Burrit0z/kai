@@ -25,7 +25,6 @@ long long batteryPercentage;
 long long lastPercentage;
 
 -(void)updateBattery {
-    /*
     self.spacing = spacing;
     dispatch_async(dispatch_get_main_queue(), ^{
         //NSLog(@"kai: battery platter called to update");
@@ -33,87 +32,72 @@ long long lastPercentage;
         //NSLog(@"kai: IS Updating");
     self.isUpdating = YES;
     //self.number = 0;
-    float y = 0;
+    //float y = 0;
     BCBatteryDeviceController *bcb = [BCBatteryDeviceController sharedInstance];
-            NSArray *devices = MSHookIvar<NSArray *>(bcb, "_sortedDevices");
-            if([devices count]!=0) {
-                //NSLog(@"kai: info is good, will proceed");
+        NSArray *devices = MSHookIvar<NSArray *>(bcb, "_sortedDevices");
 
-            float ytwo = 0;
-
-            for(KAIBatteryCell *cell in self.subviews) {
-                if([cell respondsToSelector:@selector(updateInfo)] && ![devices containsObject:cell.device]) { //to confirm is a cell and battery device does not exist
-                    //dispatch_async(dispatch_get_main_queue(), ^{
-                        [UIView animateWithDuration:0.2 animations:^{
-                            cell.alpha = 0;
-                        } completion:^(BOOL finished){
-                            [cell removeFromSuperview];
-                        }];
-                    //});
-                } else if([cell respondsToSelector:@selector(updateInfo)]) {
-                        cell.frame = CGRectMake(0, y, self.frame.size.width, bannerHeight);
-                        [cell updateInfo];
-                        ytwo+= bannerHeight + spacing;
-                }
-            }
-
-
-            for (BCBatteryDevice *device in devices) {
-                NSString *deviceName = MSHookIvar<NSString *>(device, "_name");
-                //double batteryPercentage = MSHookIvar<long long>(device, "_percentCharge");
-                BOOL charging = MSHookIvar<long long>(device, "_charging");
-                //BOOL LPM = MSHookIvar<BOOL>(device, "_batterySaverModeActive");
-
-                BOOL shouldAdd = NO;
-
-                if(showAll) {
-                    shouldAdd = YES;
-                    //NSLog(@"Kai: SHOULD ADD");
-                } else if(!showAll && charging) {
-                    shouldAdd = YES;
-                    //NSLog(@"Kai: SHOULD ADD");
-                }
-
-                KAIBatteryCell *cell = [KAIBatteryCell cellForDeviceIfExists:device frameToCreateNew:CGRectMake(0, y, self.frame.size.width, bannerHeight)];
-                cell.frame = CGRectMake(0, y, self.frame.size.width, bannerHeight);
-
-                if(cell) {
-                    cell.device = device;
-                    //cell.frame = cell.frame = CGRectMake(0, y, self.frame.size.width, bannerHeight); //bro im like creating my own stack view
-                    //[cell updateInfo];
-                }
-
-                if(shouldAdd && [deviceName length]!=0) {
-                    if(![self.subviews containsObject:cell]) {
-                        cell.frame = CGRectMake(0, y, self.frame.size.width, bannerHeight);
-                        cell.alpha = 0;
-                        [self addSubview:cell];
-                        [UIView animateWithDuration:0.3 animations:^{
-                            cell.alpha = 1;
-                        }];
-                    }
-                    y+=bannerHeight + spacing;
-
-                } else if(!shouldAdd) {
-                    //dispatch_async(dispatch_get_main_queue(), ^{
-                        [UIView animateWithDuration:0.2 animations:^{
-                            cell.alpha = 0;
-                        } completion:^(BOOL finished){
-                            [cell removeFromSuperview];
-                        }];
-                    //});
-                }
-            }
-            //[self.heightAnchor constraintEqualToConstant:(self.number * 85)].active = YES;
-            self.number = [self.subviews count];
-            //[(CSAdjunctListView *)self.superview.superview KaiUpdate];
-            }
-            self.isUpdating = NO;
-            //NSLog(@"kai: finished update");
-            //[(CSAdjunctListView *)self.superview.superview KaiUpdate];
-            [(CSAdjunctListView *)self.superview.superview performSelector:@selector(KaiUpdate) withObject:(CSAdjunctListView *)self.superview.superview afterDelay:0.2];
+        NSLog(@"kai: devices are %@", devices);
+ 
+        for(KAIBatteryCell *cell in self.subviews) {
+            //BCBatteryDevice *device = cell.device;
+            [cell updateInfo];
         }
-    });*/
+        
+        for (BCBatteryDevice *device in devices) {
+            KAIBatteryCell *cell = [device kaiCellForDevice];
+
+            [cell updateInfo];
+            BOOL shouldAdd = NO;
+
+            if(showAll) {
+                shouldAdd = YES;
+            } else if(!showAll && device.charging) {
+                shouldAdd = YES;
+            }
+
+            if(![self.subviews containsObject:cell] && shouldAdd && [devices containsObject:device]) {
+                [cell setFrame:CGRectMake(0,0,self.frame.size.width, bannerHeight + spacing)];
+                [self addArrangedSubview:cell];
+            } else {
+                [self removeArrangedSubview:cell];
+            }
+
+            if(!cell.height) {
+                
+                cell.height.active = NO;
+                cell.height = [cell.heightAnchor constraintEqualToConstant:(bannerHeight + spacing)];
+                cell.height.active = YES;
+
+            } else {
+                int height = (bannerHeight + spacing);
+                cell.height.constant = height;
+
+                UIStackView *s = self;
+                s.frame = CGRectMake(s.frame.origin.x, s.frame.origin.y, s.frame.size.width, (s.frame.size.height - 1));
+            }
+
+            if(!cell.width) {
+                
+                cell.width.active = NO;
+                cell.width = [cell.widthAnchor constraintEqualToConstant:(self.frame.size.width)];
+                cell.width.active = YES;
+
+            } else {
+                int width = self.frame.size.width;
+                cell.width.constant = width;
+
+                UIStackView *s = self;
+                s.frame = CGRectMake(s.frame.origin.x, s.frame.origin.y, s.frame.size.width, (s.frame.size.height - 1));
+            }
+
+        }
+        self.number = [self.subviews count];
+        }
+        self.isUpdating = NO;
+        //NSLog(@"kai: finished update");
+        //[(CSAdjunctListView *)self.superview.superview KaiUpdate];
+        [(CSAdjunctListView *)self.superview.superview performSelector:@selector(KaiUpdate) withObject:(CSAdjunctListView *)self.superview.superview afterDelay:0.2];
+    });
     self.number = [self.subviews count];
 }
 
@@ -126,10 +110,6 @@ long long lastPercentage;
         }
     }
     [KAIBatteryCell resetArray];
-
-    //self.displayingDevices = [[NSMutableArray alloc] init];
-
-    //addedCells = nil;
     [self updateBattery];
 }
 
