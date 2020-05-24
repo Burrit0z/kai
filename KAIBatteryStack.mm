@@ -40,23 +40,33 @@ long long lastPercentage;
         
         for (BCBatteryDevice *device in devices) {
             KAIBatteryCell *cell = [device kaiCellForDevice];
+            BOOL charging = MSHookIvar<long long>(device, "_charging");
 
             [cell updateInfo];
             BOOL shouldAdd = NO;
 
             if(showAll) {
                 shouldAdd = YES;
-            } else if(!showAll && device.charging) {
+            } else if(!showAll && charging) {
                 shouldAdd = YES;
             }
 
             if(![self.subviews containsObject:cell] && shouldAdd && [devices containsObject:device]) {
-                [cell setFrame:CGRectMake(0,0,self.frame.size.width, bannerHeight + spacing)];
+                //[cell setFrame:CGRectMake(0,0,self.frame.size.width, bannerHeight)];
+                cell.alpha = 0;
                 [self addSubview:cell];
                 [self addArrangedSubview:cell];
+                [UIView animateWithDuration:0.3 animations:^{
+                    cell.alpha = 1;
+                }];
             } else if([self.subviews containsObject:cell] && !shouldAdd){
-                [cell removeFromSuperview];
-                [self removeArrangedSubview:cell];
+                [UIView animateWithDuration:0.3 animations:^{
+                    cell.alpha = 0;
+                } completion:^(BOOL finished) {
+                    [cell removeFromSuperview];
+                    [self removeArrangedSubview:cell];
+                    cell.alpha = 1;
+                }];
             }
 
         }
@@ -65,8 +75,13 @@ long long lastPercentage;
             //BCBatteryDevice *device = cell.device;
             [cell updateInfo];
             if(![devices containsObject:cell.device]) {
-                [cell removeFromSuperview];
-                [self removeArrangedSubview:cell];
+                [UIView animateWithDuration:0.3 animations:^{
+                    cell.alpha = 0;
+                } completion:^(BOOL finished) {
+                    [cell removeFromSuperview];
+                    [self removeArrangedSubview:cell];
+                    cell.alpha = 1;
+                }];
             }
         }
                                                                                                                                                                                               

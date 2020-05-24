@@ -111,11 +111,11 @@
 }
 
 -(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
-	if([self isMemberOfClass:[objc_getClass("BCBatteryDevice") class]] && [self respondsToSelector:@selector(_kaiCell)] && object == self && ([keyPath isEqualToString:@"charging"] || [keyPath isEqualToString:@"percentCharge"] || [keyPath isEqualToString:@"batterySaverModeActive"])) {
+	//if([self isMemberOfClass:[objc_getClass("BCBatteryDevice") class]] && [self respondsToSelector:@selector(_kaiCell)] && object == self && ([keyPath isEqualToString:@"charging"] || [keyPath isEqualToString:@"percentCharge"] || [keyPath isEqualToString:@"batterySaverModeActive"])) {
 
 		//sends the noti to update battery info
 		[[NSNotificationCenter defaultCenter] postNotificationName:@"KaiInfoChanged" object:nil userInfo:nil];
-	}
+	//}
 	
 }
 
@@ -124,7 +124,7 @@
 	if(self && self.kaiCell == nil) {
 		self.kaiCell = [[KAIBatteryCell alloc] initWithFrame:CGRectMake(0,0,[KAIBatteryStack sharedInstance].frame.size.width,0) device:self]; }
 		((KAIBatteryCell *)self.kaiCell).translatesAutoresizingMaskIntoConstraints = NO;
-		[((KAIBatteryCell *)self.kaiCell).heightAnchor constraintEqualToConstant:bannerHeight + spacing].active = YES;
+		[((KAIBatteryCell *)self.kaiCell).heightAnchor constraintEqualToConstant:bannerHeight].active = YES;
 
 		[(KAIBatteryCell *)self.kaiCell updateInfo];
 
