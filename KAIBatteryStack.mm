@@ -82,11 +82,21 @@ long long lastPercentage;
 }
 
 -(void)refreshForPrefs {
+    for( UIView *view in self.subviews ) {
+        @try {
+            [view removeFromSuperview];
+        } @catch (NSException *exception) {
+            //Panik
+        }
+    }
+
     BCBatteryDeviceController *bcb = [BCBatteryDeviceController sharedInstance];
         NSArray *devices = MSHookIvar<NSArray *>(bcb, "_sortedDevices");
     for(BCBatteryDevice *device in devices) {
         [device resetKaiCellForNewPrefs];
     }
+
+    [self updateBattery];
 }
 
 +(KAIBatteryStack *)sharedInstance {
