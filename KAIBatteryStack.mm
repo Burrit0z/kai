@@ -37,11 +37,6 @@ long long lastPercentage;
         NSArray *devices = MSHookIvar<NSArray *>(bcb, "_sortedDevices");
 
         NSLog(@"kai: devices are %@", devices);
- 
-        for(KAIBatteryCell *cell in self.subviews) {
-            //BCBatteryDevice *device = cell.device;
-            [cell updateInfo];
-        }
         
         for (BCBatteryDevice *device in devices) {
             KAIBatteryCell *cell = [device kaiCellForDevice];
@@ -56,41 +51,25 @@ long long lastPercentage;
             }
 
             if(![self.subviews containsObject:cell] && shouldAdd && [devices containsObject:device]) {
-                [cell setFrame:CGRectMake(0,0,self.frame.size.width, bannerHeight + spacing)];
+                //[cell setFrame:CGRectMake(0,0,self.frame.size.width, bannerHeight + spacing)];
+                [self addSubview:cell];
                 [self addArrangedSubview:cell];
-            } else {
+            } else if([self.subviews containsObject:cell] && !shouldAdd){
+                [cell removeFromSuperview];
                 [self removeArrangedSubview:cell];
             }
 
-            if(!cell.height) {
-                
-                cell.height.active = NO;
-                cell.height = [cell.heightAnchor constraintEqualToConstant:(bannerHeight + spacing)];
-                cell.height.active = YES;
-
-            } else {
-                int height = (bannerHeight + spacing);
-                cell.height.constant = height;
-
-                UIStackView *s = self;
-                s.frame = CGRectMake(s.frame.origin.x, s.frame.origin.y, s.frame.size.width, (s.frame.size.height - 1));
-            }
-
-            if(!cell.width) {
-                
-                cell.width.active = NO;
-                cell.width = [cell.widthAnchor constraintEqualToConstant:(self.frame.size.width)];
-                cell.width.active = YES;
-
-            } else {
-                int width = self.frame.size.width;
-                cell.width.constant = width;
-
-                UIStackView *s = self;
-                s.frame = CGRectMake(s.frame.origin.x, s.frame.origin.y, s.frame.size.width, (s.frame.size.height - 1));
-            }
-
         }
+
+        for(KAIBatteryCell *cell in self.subviews) {
+            //BCBatteryDevice *device = cell.device;
+            [cell updateInfo];
+            if(![devices containsObject:cell.device]) {
+                [cell removeFromSuperview];
+                [self removeArrangedSubview:cell];
+            }
+        }
+                                                                                                                                                                                              
         self.number = [self.subviews count];
         }
         self.isUpdating = NO;

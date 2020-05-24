@@ -142,6 +142,28 @@ NSMutableArray *deviceInstances = [[NSMutableArray alloc] init];
 
     [self.glyphView setImage:[self.device glyph]];
 
+    if(!self.height) {
+                
+        self.height.active = NO;
+        self.height = [self.heightAnchor constraintEqualToConstant:(bannerHeight + spacing)];
+        self.height.active = YES;
+
+    } //else {
+        //int height = (bannerHeight + spacing);
+        //self.height.constant = height;
+    //}
+
+    if(!self.width) {
+        
+        self.width.active = NO;
+        self.width = [self.widthAnchor constraintEqualToConstant:(self.frame.size.width)];
+        self.width.active = YES;
+
+    } //else {
+        //int width = self.frame.size.width;
+        //self.width.constant = width;
+    //}
+
 }
 
 +(instancetype)cellForDeviceIfExists:(BCBatteryDevice *)device frameToCreateNew:(CGRect)arg2 {
