@@ -50,6 +50,21 @@
 -(void)KaiUpdate {
 	KAIBatteryStack *battery = [KAIBatteryStack sharedInstance];
 	//battery.number = [battery.subviews count];
+	BCBatteryDeviceController *bcb = [BCBatteryDeviceController sharedInstance];
+        NSArray *devices = MSHookIvar<NSArray *>(bcb, "_sortedDevices");
+	for(KAIBatteryCell *cell in battery.subviews) {
+            //BCBatteryDevice *device = cell.device;
+            [cell updateInfo];
+            if(![devices containsObject:cell.device]) {
+                [UIView animateWithDuration:0.3 animations:^{
+                    cell.alpha = 0;
+                } completion:^(BOOL finished) {
+                    [cell removeFromSuperview];
+                    [battery removeArrangedSubview:cell];
+                    cell.alpha = 1;
+                }];
+            }
+        }
 
 	[UIView animateWithDuration:0.3 animations:^{
 
@@ -129,6 +144,15 @@
 		[(KAIBatteryCell *)self.kaiCell updateInfo];
 
 	return self.kaiCell;
+}
+
+%new
+-(void)resetKaiCellForNewPrefs {
+	self.kaiCell = [[KAIBatteryCell alloc] initWithFrame:CGRectMake(0,0,[KAIBatteryStack sharedInstance].frame.size.width,0) device:self]; 
+		((KAIBatteryCell *)self.kaiCell).translatesAutoresizingMaskIntoConstraints = NO;
+		[((KAIBatteryCell *)self.kaiCell).heightAnchor constraintEqualToConstant:bannerHeight].active = YES;
+
+		[(KAIBatteryCell *)self.kaiCell updateInfo];
 }
 %end
 

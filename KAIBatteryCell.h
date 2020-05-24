@@ -32,6 +32,7 @@
 @property (nonatomic, strong) NSString *identifier;
 -(id)glyph;
 -(id)kaiCellForDevice;
+-(void)resetKaiCellForNewPrefs;
 @end
 
 @interface KAIBatteryCell : UIView
@@ -44,6 +45,4 @@
 @property (nonatomic, strong) NSLayoutConstraint *height;
 -(instancetype)initWithFrame:(CGRect)arg1 device:(BCBatteryDevice *)device;
 -(void)updateInfo;
-+(instancetype)cellForDeviceIfExists:(BCBatteryDevice *)device frameToCreateNew:(CGRect)arg2;
-+(void)resetArray;
 @end

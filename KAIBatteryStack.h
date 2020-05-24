@@ -5,6 +5,6 @@
 @property (nonatomic, assign) BOOL isUpdating;
 +(KAIBatteryStack *)sharedInstance;
 -(instancetype)init;
--(void)removeAllAndRefresh;
+-(void)refreshForPrefs;
 -(void)updateBattery;
 @end

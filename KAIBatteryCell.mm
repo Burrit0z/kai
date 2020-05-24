@@ -1,7 +1,5 @@
 #import "KAIBatteryCell.h"
 
-NSMutableArray *deviceInstances = [[NSMutableArray alloc] init];
-
 @implementation KAIBatteryCell
 
 -(instancetype)initWithFrame:(CGRect)arg1 device:(BCBatteryDevice *)device {
@@ -113,7 +111,6 @@ NSMutableArray *deviceInstances = [[NSMutableArray alloc] init];
         [self.battery.widthAnchor constraintEqualToConstant:20].active = YES;
         [self.battery.heightAnchor constraintEqualToConstant:10].active = YES;
 
-        [deviceInstances addObject:self];
     }
 
     return self;
@@ -164,30 +161,6 @@ NSMutableArray *deviceInstances = [[NSMutableArray alloc] init];
         //self.width.constant = width;
     //}
 
-}
-
-+(instancetype)cellForDeviceIfExists:(BCBatteryDevice *)device frameToCreateNew:(CGRect)arg2 {
-    KAIBatteryCell *foundCell;
-
-    //NSString *deviceName = MSHookIvar<NSString *>(device, "_name");
-
-    for(KAIBatteryCell *cell in deviceInstances) {
-        if(cell.device == device || [cell.device.identifier isEqualToString:device.identifier]) {
-            foundCell = cell;
-            break;
-        }
-    }
-
-    if(foundCell == nil) {
-        foundCell = [[KAIBatteryCell alloc] initWithFrame:arg2 device:device];
-    }
-
-    return foundCell;
-    //return deviceInstances;
-}
-
-+(void)resetArray {
-    deviceInstances = [[NSMutableArray alloc] init];
 }
 
 @end

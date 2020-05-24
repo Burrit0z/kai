@@ -115,7 +115,7 @@ static void applyPrefs()
 
     isUpdating = YES;
 
-    [[KAIBatteryStack sharedInstance] removeAllAndRefresh];
+    [[KAIBatteryStack sharedInstance] refreshForPrefs];
     [(CSAdjunctListView *)([KAIBatteryStack sharedInstance].superview.superview) KaiUpdate];
 
     isUpdating = NO;

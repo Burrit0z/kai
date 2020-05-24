@@ -36,7 +36,7 @@ long long lastPercentage;
     BCBatteryDeviceController *bcb = [BCBatteryDeviceController sharedInstance];
         NSArray *devices = MSHookIvar<NSArray *>(bcb, "_sortedDevices");
 
-        NSLog(@"kai: devices are %@", devices);
+        //NSLog(@"kai: devices are %@", devices);
         
         for (BCBatteryDevice *device in devices) {
             KAIBatteryCell *cell = [device kaiCellForDevice];
@@ -70,20 +70,6 @@ long long lastPercentage;
             }
 
         }
-
-        for(KAIBatteryCell *cell in self.subviews) {
-            //BCBatteryDevice *device = cell.device;
-            [cell updateInfo];
-            if(![devices containsObject:cell.device]) {
-                [UIView animateWithDuration:0.3 animations:^{
-                    cell.alpha = 0;
-                } completion:^(BOOL finished) {
-                    [cell removeFromSuperview];
-                    [self removeArrangedSubview:cell];
-                    cell.alpha = 1;
-                }];
-            }
-        }
                                                                                                                                                                                               
         self.number = [self.subviews count];
         }
@@ -95,16 +81,12 @@ long long lastPercentage;
     self.number = [self.subviews count];
 }
 
--(void)removeAllAndRefresh {
-    for( UIView *view in self.subviews ) {
-        @try {
-            [view removeFromSuperview];
-        } @catch (NSException *exception) {
-            //Panik
-        }
+-(void)refreshForPrefs {
+    BCBatteryDeviceController *bcb = [BCBatteryDeviceController sharedInstance];
+        NSArray *devices = MSHookIvar<NSArray *>(bcb, "_sortedDevices");
+    for(BCBatteryDevice *device in devices) {
+        [device resetKaiCellForNewPrefs];
     }
-    [KAIBatteryCell resetArray];
-    [self updateBattery];
 }
 
 +(KAIBatteryStack *)sharedInstance {
