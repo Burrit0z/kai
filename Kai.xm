@@ -53,7 +53,7 @@
 
 	[UIView animateWithDuration:0.3 animations:^{
 
-		/*if(!battery.heightConstraint) {
+		if(!battery.heightConstraint) {
 			
 			battery.heightConstraint.active = NO;
 			battery.heightConstraint = [battery.heightAnchor constraintEqualToConstant:85];
@@ -69,7 +69,7 @@
 			UIStackView *s = [self stackView];
 			s.frame = CGRectMake(s.frame.origin.x, s.frame.origin.y, s.frame.size.width, (s.frame.size.height - 1));
 			//literally does nothing but makes the stack view lay itself out (doesnt adjust frame because translatesAutoreszingMaskIntoConstraints = NO on stack views)
-		}*/
+		}
 
 	}];
 	

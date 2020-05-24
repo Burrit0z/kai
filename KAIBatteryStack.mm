@@ -51,7 +51,7 @@ long long lastPercentage;
             }
 
             if(![self.subviews containsObject:cell] && shouldAdd && [devices containsObject:device]) {
-                //[cell setFrame:CGRectMake(0,0,self.frame.size.width, bannerHeight + spacing)];
+                [cell setFrame:CGRectMake(0,0,self.frame.size.width, bannerHeight + spacing)];
                 [self addSubview:cell];
                 [self addArrangedSubview:cell];
             } else if([self.subviews containsObject:cell] && !shouldAdd){
