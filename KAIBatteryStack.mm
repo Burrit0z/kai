@@ -1,6 +1,7 @@
 #import "KAIBatteryStack.h"
 
 KAIBatteryStack *instance;
+NSTimer *queueTimer = nil;
 //NSMutableArray *showingCells = [[NSMutableArray alloc] init];
 
 @implementation KAIBatteryStack
@@ -14,6 +15,8 @@ KAIBatteryStack *instance;
         self.distribution = 0;
         self.spacing = 0;
         self.alignment = 0;
+        self.oldCountOfDevices = -100;
+        self.queued = NO;
         [self updateBattery];
         //self.clipsToBounds = YES;
         self.userInteractionEnabled = NO;
@@ -25,24 +28,29 @@ long long batteryPercentage;
 long long lastPercentage;
 
 -(void)updateBattery {
-    self.spacing = spacing;
     dispatch_async(dispatch_get_main_queue(), ^{
-        //NSLog(@"kai: battery platter called to update");
-    if(!self.isUpdating) {
-        //NSLog(@"kai: IS Updating");
-    self.isUpdating = YES;
-    //self.number = 0;
-    //float y = 0;
-    BCBatteryDeviceController *bcb = [BCBatteryDeviceController sharedInstance];
+        BCBatteryDeviceController *bcb = [BCBatteryDeviceController sharedInstance];
         NSArray *devices = MSHookIvar<NSArray *>(bcb, "_sortedDevices");
+    
+    if(self.oldCountOfDevices == -100) {
+        self.oldCountOfDevices = [devices count] + 1;
+    }
+    self.oldCountOfDevices = [devices count];
 
-        //NSLog(@"kai: devices are %@", devices);
+    for (BCBatteryDevice *device in devices) {
+        KAIBatteryCell *cell = [device kaiCellForDevice];
+
+        [cell updateInfo];
+    }
+
+    if(!self.isUpdating && self.oldCountOfDevices != 0 && ([devices count] + 1 == self.oldCountOfDevices || [devices count] - 1 == self.oldCountOfDevices || [devices count] == self.oldCountOfDevices)) {
+
+    self.isUpdating = YES;
+
         
         for (BCBatteryDevice *device in devices) {
             KAIBatteryCell *cell = [device kaiCellForDevice];
             BOOL charging = MSHookIvar<long long>(device, "_charging");
-
-            [cell updateInfo];
             BOOL shouldAdd = NO;
 
             if(showAll) {
@@ -70,15 +78,16 @@ long long lastPercentage;
             }
 
         }
-                                                                                                                                                                                              
-        self.number = [self.subviews count];
+
+        queueTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(dispatchQueue) userInfo:nil repeats:NO];
+        } else if(self.isUpdating) {
+            self.queued = YES;
         }
-        self.isUpdating = NO;
-        //NSLog(@"kai: finished update");
-        //[(CSAdjunctListView *)self.superview.superview KaiUpdate];
-        [(CSAdjunctListView *)self.superview.superview performSelector:@selector(KaiUpdate) withObject:(CSAdjunctListView *)self.superview.superview afterDelay:0.2];
+        self.number = [self.subviews count];
+        [(CSAdjunctListView *)self.superview.superview KaiUpdate];
+
     });
-    self.number = [self.subviews count];
+
 }
 
 -(void)refreshForPrefs {
@@ -97,6 +106,16 @@ long long lastPercentage;
     }
 
     [self updateBattery];
+}
+
+-(void)dispatchQueue {
+    self.isUpdating = NO;
+    if(self.queued) {
+        [self updateBattery];
+        self.queued = NO;
+    }
+    [queueTimer invalidate];
+    queueTimer = nil;
 }
 
 +(KAIBatteryStack *)sharedInstance {

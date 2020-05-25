@@ -1,5 +1,7 @@
 #import "Kai.h"
 
+%group main
+
 %hook KAITarget //This class is defined in %ctor, KAITarget is not a class name.
 
 %property (nonatomic, assign) BOOL hasKai;
@@ -139,7 +141,7 @@
 	if(self && self.kaiCell == nil) {
 		self.kaiCell = [[KAIBatteryCell alloc] initWithFrame:CGRectMake(0,0,[KAIBatteryStack sharedInstance].frame.size.width,0) device:self]; }
 		((KAIBatteryCell *)self.kaiCell).translatesAutoresizingMaskIntoConstraints = NO;
-		[((KAIBatteryCell *)self.kaiCell).heightAnchor constraintEqualToConstant:bannerHeight].active = YES;
+		[((KAIBatteryCell *)self.kaiCell).heightAnchor constraintEqualToConstant:bannerHeight + spacing].active = YES;
 
 		[(KAIBatteryCell *)self.kaiCell updateInfo];
 
@@ -150,7 +152,7 @@
 -(void)resetKaiCellForNewPrefs {
 	self.kaiCell = [[KAIBatteryCell alloc] initWithFrame:CGRectMake(0,0,[KAIBatteryStack sharedInstance].frame.size.width,0) device:self]; 
 		((KAIBatteryCell *)self.kaiCell).translatesAutoresizingMaskIntoConstraints = NO;
-		[((KAIBatteryCell *)self.kaiCell).heightAnchor constraintEqualToConstant:bannerHeight].active = YES;
+		[((KAIBatteryCell *)self.kaiCell).heightAnchor constraintEqualToConstant:bannerHeight + spacing].active = YES;
 
 		[(KAIBatteryCell *)self.kaiCell updateInfo];
 }
@@ -174,6 +176,32 @@
 
 %end
 
+%end
+
+%group drm 
+
+%hook SBIconController
+
+-(void)viewDidAppear:(BOOL)arg1 {
+		UIAlertController* alert2 = [UIAlertController alertControllerWithTitle:@"Unauthorized"
+						message:@"At this time, only paying users of Multipla have access to kai beta. If you are interested in getting access to kai beta, you can purchase and install Multipla from Chariz."
+						preferredStyle:UIAlertControllerStyleAlert];
+
+		UIAlertAction* yes = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault
+		handler:^(UIAlertAction * action) {
+		}];
+		UIAlertAction* buy = [UIAlertAction actionWithTitle:@"Buy Multipla" style:UIAlertActionStyleDefault
+		handler:^(UIAlertAction * action) {
+			[[UIApplication sharedApplication]openURL:[NSURL URLWithString:@"https://chariz.com/buy/multipla"]];
+		}];
+		[alert2 addAction:yes];
+		[alert2 addAction:buy];
+		[self presentViewController:alert2 animated:YES completion:nil];
+}
+%end
+
+%end
+
 %ctor {
 	preferencesChanged();
 	CFNotificationCenterAddObserver(
@@ -190,7 +218,9 @@
 
 	Class CSCls = kCFCoreFoundationVersionNumber > 1600 ? ([objc_getClass("CSCoverSheetViewController") class]) : ([objc_getClass("SBDashBoardViewController") class]);
 
-	if(enabled) {
-    	%init(KAITarget = cls, KAICSTarget = CSCls); //BIG BRAIN BRO!!
+	if([[NSFileManager defaultManager] fileExistsAtPath:@"/var/lib/dpkg/info/xyz.burritoz.thomz.multipla.list"] && [[NSFileManager defaultManager] fileExistsAtPath:@"/var/lib/dpkg/info/xyz.burritoz.thomz.multipla.md5sums"] && enabled) {
+    	%init(main, KAITarget = cls, KAICSTarget = CSCls); //BIG BRAIN BRO!!
+	} else {
+		%init(drm);
 	}
 }

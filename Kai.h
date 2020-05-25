@@ -19,6 +19,9 @@
 @property (nonatomic, assign) BOOL continuousCorners;
 @end
 
+@interface SBIconController : UIViewController
+@end
+
 BOOL isUpdating = NO;
 
 //prefs
