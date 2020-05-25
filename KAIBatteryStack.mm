@@ -80,9 +80,11 @@ long long lastPercentage;
         }
 
         queueTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(dispatchQueue) userInfo:nil repeats:NO];
+
         } else if(self.isUpdating) {
             self.queued = YES;
         }
+        
         self.number = [self.subviews count];
         [(CSAdjunctListView *)self.superview.superview KaiUpdate];
 
