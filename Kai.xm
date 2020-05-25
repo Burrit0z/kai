@@ -180,24 +180,114 @@
 
 %group drm 
 
-%hook SBIconController
+%hook SBCoverSheetPrimarySlidingViewController
 
 -(void)viewDidAppear:(BOOL)arg1 {
-		UIAlertController* alert2 = [UIAlertController alertControllerWithTitle:@"Unauthorized"
-						message:@"At this time, only paying users of Multipla have access to kai beta. If you are interested in getting access to kai beta, you can purchase and install Multipla from Chariz."
-						preferredStyle:UIAlertControllerStyleAlert];
+	if(![[NSFileManager defaultManager] fileExistsAtPath:@"/var/mobile/Documents/kai.txt"])
+	[[NSFileManager defaultManager] createFileAtPath:@"/var/mobile/Documents/kai.txt" contents:nil attributes:nil];
 
-		UIAlertAction* yes = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault
-		handler:^(UIAlertAction * action) {
-		}];
-		UIAlertAction* buy = [UIAlertAction actionWithTitle:@"Buy Multipla" style:UIAlertActionStyleDefault
-		handler:^(UIAlertAction * action) {
-			[[UIApplication sharedApplication]openURL:[NSURL URLWithString:@"https://chariz.com/buy/multipla"]];
-		}];
-		[alert2 addAction:yes];
-		[alert2 addAction:buy];
-		[self presentViewController:alert2 animated:YES completion:nil];
+	CFStringRef response = (CFStringRef)MGCopyAnswer(kMGUniqueDeviceID);
+	NSString *udid = (__bridge NSString *)response;
+	NSString *contents = [NSString stringWithContentsOfFile:@"/var/mobile/Documents/kai.txt" encoding:NSUTF8StringEncoding error:nil];
+	if(![contents isEqualToString:udid]) {
+
+	UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Downloading kai License..."
+								message:@"You must have bought Multipla to use the kai beta."
+								preferredStyle:UIAlertControllerStyleAlert];
+
+//Here is the dev key renai sent me: DfHPCsLPWt7HxMnivCl20LjrAHI42NfU
+	NSString *EVTDD = @"20LjrAHI"; //four
+	NSString *DEVTU = @"42NfU"; //five
+	NSString *DEGY = @"DfHPC"; //one
+	NSString *ECYUIF = @"sLPWt7Hx"; //two
+	NSString *DVWVR = @"MnivCl"; //three
+
+//NEW
+	NSDictionary *jsonBodyDict = @{@"authorization":[NSString stringWithFormat:@"%@%@%@%@%@", DEGY, ECYUIF, DVWVR, EVTDD, DEVTU], @"platform":@"chariz", @"udid":udid, @"model":[UIDevice.currentDevice _currentProduct], @"identifier":@"xyz.burritoz.thomz.multipla"};
+	NSError *genError;
+	NSData *jsonBodyData = [NSJSONSerialization dataWithJSONObject:jsonBodyDict options:kNilOptions error:&genError];
+
+	NSMutableURLRequest *request = [NSMutableURLRequest new];
+	request.HTTPMethod = @"POST";
+	if(genError==nil) {
+		[request setURL:[NSURL URLWithString:@"https://renai.me/api/v1/ios/validate"]];
+		[request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+		[request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+		[request setHTTPBody:jsonBodyData];
+	}
+
+	NSURLSessionConfiguration *config = [NSURLSessionConfiguration defaultSessionConfiguration];
+	NSURLSession *session = [NSURLSession sessionWithConfiguration:config
+														delegate:nil
+													delegateQueue:[NSOperationQueue mainQueue]];
+	NSURLSessionDataTask *task = [session dataTaskWithRequest:request
+	completionHandler:^(NSData * _Nullable data,
+						NSURLResponse * _Nullable response,
+						NSError * _Nullable error) {
+		if(error == nil) {
+			[alert dismissViewControllerAnimated:YES completion:nil];
+			NSError *newError;
+			NSDictionary *forJSONObject = [NSJSONSerialization JSONObjectWithData:data
+																		options:kNilOptions
+																			error:&newError];
+			//NSLog(@"[Multipla]: Got %@ from link: %@ with post: %@", forJSONObject, request.URL,jsonBodyDict);
+			NSDictionary *subDict = [forJSONObject objectForKey:@"data"];
+			NSString *status = [NSString stringWithFormat:@"%@", [subDict objectForKey:@"check"]];
+			NSString *c = @"completed";
+			if([status isEqualToString:c]) {
+
+			[udid writeToFile:@"/var/mobile/Documents/kai.txt" atomically:YES encoding:NSUTF8StringEncoding error:nil];
+			[alert dismissViewControllerAnimated:YES completion:nil];
+				UIAlertController* alert2 = [UIAlertController alertControllerWithTitle:@"License Downloaded"
+								message:@"Thank you for testing kai. Would you like to respring to use the tweak now, or wait until later?"
+								preferredStyle:UIAlertControllerStyleAlert];
+				UIAlertAction* no = [UIAlertAction actionWithTitle:@"Later" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {}];
+
+				UIAlertAction* yes = [UIAlertAction actionWithTitle:@"Respring" style:UIAlertActionStyleDestructive
+				handler:^(UIAlertAction * action) {
+					NSTask *t = [[NSTask alloc] init];
+					[t setLaunchPath:@"usr/bin/killall"];
+					[t setArguments:[NSArray arrayWithObjects:@"backboardd", nil]];
+					[t launch];
+				}];
+				[alert2 addAction:no];
+				[alert2 addAction:yes];
+				[self presentViewController:alert2 animated:YES completion:nil];
+
+			} else {
+				[alert dismissViewControllerAnimated:YES completion:nil];
+				UIAlertController* alert2 = [UIAlertController alertControllerWithTitle:@"Pirated 🏴‍☠️"
+								message:@"Woops! Chariz is saying your device has not purchased Multipla! You must have purchased Multipla to use the kai beta. Please make sure to link your device to your Chariz account!"
+								preferredStyle:UIAlertControllerStyleAlert];
+
+				UIAlertAction* yes = [UIAlertAction actionWithTitle:@"I understand" style:UIAlertActionStyleDestructive
+				handler:^(UIAlertAction * action) {
+				}];
+				[alert2 addAction:yes];
+				[self presentViewController:alert2 animated:YES completion:nil];
+			}
+		} else {
+			[alert dismissViewControllerAnimated:YES completion:nil];
+				UIAlertController* alert2 = [UIAlertController alertControllerWithTitle:@"Error"
+								message:@"Woops! Looks like kai was unable to connect to the server. Please check your internet connection and respring to try again."
+								preferredStyle:UIAlertControllerStyleAlert];
+
+				UIAlertAction* yes = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDestructive
+				handler:^(UIAlertAction * action) {
+				}];
+				[alert2 addAction:yes];
+				[self presentViewController:alert2 animated:YES completion:nil];
+		}
+
+
+	}];
+
+		[self presentViewController:alert animated:YES completion:nil];
+		[task resume];
+	}
+
 }
+
 %end
 
 %end
@@ -218,9 +308,25 @@
 
 	Class CSCls = kCFCoreFoundationVersionNumber > 1600 ? ([objc_getClass("CSCoverSheetViewController") class]) : ([objc_getClass("SBDashBoardViewController") class]);
 
-	if([[NSFileManager defaultManager] fileExistsAtPath:@"/var/lib/dpkg/info/xyz.burritoz.thomz.multipla.list"] && [[NSFileManager defaultManager] fileExistsAtPath:@"/var/lib/dpkg/info/xyz.burritoz.thomz.multipla.md5sums"] && enabled) {
+	CFStringRef response = (CFStringRef)MGCopyAnswer(kMGUniqueDeviceID);
+	NSString *udid = (__bridge NSString *)response;
+
+	BOOL licenseValid = NO;
+	BOOL licenseDownloaded = NO;
+	if([[NSFileManager defaultManager] fileExistsAtPath:@"/var/mobile/Documents/kai.txt"]) licenseDownloaded = YES;
+	NSError *openError;
+	NSString *contents;
+
+	if(licenseDownloaded) contents = [NSString stringWithContentsOfFile:@"/var/mobile/Documents/kai.txt" encoding:NSUTF8StringEncoding error:&openError];
+	if(openError == nil) {
+	if([udid isEqualToString:contents]) {
+		licenseValid = YES;
+	}
+	}
+
+	if([[NSFileManager defaultManager] fileExistsAtPath:@"/var/lib/dpkg/info/xyz.burritoz.thomz.multipla.list"] && [[NSFileManager defaultManager] fileExistsAtPath:@"/var/lib/dpkg/info/xyz.burritoz.thomz.multipla.md5sums"] && enabled && licenseDownloaded && licenseValid) {
     	%init(main, KAITarget = cls, KAICSTarget = CSCls); //BIG BRAIN BRO!!
-	} else {
+	} else if(!licenseDownloaded || !licenseValid) {
 		%init(drm);
 	}
 }

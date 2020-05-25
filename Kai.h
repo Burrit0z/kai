@@ -3,6 +3,8 @@
 #include <stdio.h>
 #import <objc/runtime.h>
 #import <UIKit/UIKit.h>
+#import "MobileGestalt.h"
+#import "NSTask.h"
 
 #define KAISelf ((CSAdjunctListView *)self) //for use when calling self in KAITarget
 //#define KAIBatteryStack UHDUEIHGCEBCHYDEICVKEVSAGJKBCXAHJGKVXHAS //lmao
@@ -22,6 +24,13 @@
 @interface SBIconController : UIViewController
 @end
 
+@interface SBCoverSheetPrimarySlidingViewController : UIViewController
+@end
+
+@interface UIDevice (kai)
+-(id)sf_udidString;
+-(id)_currentProduct;
+@end
 BOOL isUpdating = NO;
 
 //prefs

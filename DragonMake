@@ -8,6 +8,8 @@ kai:
     - Kai.xm
   frameworks:
     - BatteryCenter
+  libs:
+    - MobileGestalt
 
 kaiPrefs:
   dir: kaiprefs
