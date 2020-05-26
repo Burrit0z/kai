@@ -120,6 +120,34 @@
 			<key>cell</key>
 			<string>PSGroupCell</string>
 			<key>label</key>
+			<string>Text Color</string>
+		</dict>
+		<dict>
+            <key>cell</key>
+            <string>PSSegmentCell</string>
+            <key>defaults</key>
+            <string>com.burritoz.kaiprefs</string>
+            <key>default</key>
+            <string>0</string>
+            <key>key</key>
+            <string>textColor</string>
+            <key>validValues</key>
+            <array>
+				<string>0</string>
+                <string>1</string>
+                <string>2</string>
+            </array>
+            <key>validTitles</key>
+            <array>
+				<string>Adaptive</string>
+                <string>White</string>
+                <string>Black</string>
+            </array>
+        </dict>
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+			<key>label</key>
 			<string>Banner Alignment</string>
 		</dict>
 		<dict>

@@ -32,7 +32,7 @@ long long lastPercentage;
         BCBatteryDeviceController *bcb = [BCBatteryDeviceController sharedInstance];
         NSArray *devices = MSHookIvar<NSArray *>(bcb, "_sortedDevices");
     
-    if(self.oldCountOfDevices == -100) {
+    /*if(self.oldCountOfDevices == -100) {
         self.oldCountOfDevices = [devices count] + 1;
     }
     self.oldCountOfDevices = [devices count];
@@ -43,7 +43,8 @@ long long lastPercentage;
         [cell updateInfo];
     }
 
-    if(!self.isUpdating && self.oldCountOfDevices != 0 && ([devices count] + 1 == self.oldCountOfDevices || [devices count] - 1 == self.oldCountOfDevices || [devices count] == self.oldCountOfDevices)) {
+    if(!self.isUpdating && self.oldCountOfDevices != 0 && ([devices count] + 1 == self.oldCountOfDevices || [devices count] - 1 == self.oldCountOfDevices || [devices count] == self.oldCountOfDevices)) {*/
+    if(!self.isUpdating) {
 
     self.isUpdating = YES;
 
@@ -79,17 +80,95 @@ long long lastPercentage;
 
         }
 
-        queueTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(dispatchQueue) userInfo:nil repeats:NO];
+        for(KAIBatteryCell *cell in self.subviews) {
+            if(![devices containsObject:cell.device]) {
+                [UIView animateWithDuration:0.3 animations:^{
+                    cell.alpha = 0;
+                } completion:^(BOOL finished) {
+                    [cell removeFromSuperview];
+                    [self removeArrangedSubview:cell];
+                    cell.alpha = 1;
+                }];
+            }
+        }
+
+         //queueTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(dispatchQueue) userInfo:nil repeats:NO];
+        self.isUpdating = NO;
 
         } else if(self.isUpdating) {
             self.queued = YES;
         }
-        
-        self.number = [self.subviews count];
-        [(CSAdjunctListView *)self.superview.superview KaiUpdate];
+
 
     });
 
+}
+
+-(void)addArrangedSubview:(UIView *)view {
+    [super addArrangedSubview:view];
+    self.number = [self.subviews count];
+
+    [UIView animateWithDuration:0.3 animations:^{
+
+		if(!self.heightConstraint) {
+			
+			self.heightConstraint.active = NO;
+			self.heightConstraint = [self.heightAnchor constraintEqualToConstant:85];
+			//set an initial constraint
+			self.heightConstraint.active = YES;
+
+		} else {
+		int height = (self.number * (bannerHeight + spacing)); //big brain math
+			//self.heightConstraint.active = NO; //deactivation
+			self.heightConstraint.constant = height;
+			//self.heightConstraint.active = YES; //forcing reactivation
+
+			UIStackView *s = (UIStackView *)(self.superview);
+			s.frame = CGRectMake(s.frame.origin.x, s.frame.origin.y, s.frame.size.width, (s.frame.size.height - 1));
+			//literally does nothing but makes the stack view lay itself out (doesnt adjust frame because translatesAutoreszingMaskIntoConstraints = NO on stack views)
+		}
+
+        }];
+
+    if(textColor==0) {
+        KAIBatteryCell *cell = (KAIBatteryCell *)view;
+        if(@available(iOS 12.0, *)) {
+			if(self.traitCollection.userInterfaceStyle == UIUserInterfaceStyleDark) {
+                [cell.label setTextColor:[UIColor whiteColor]];
+                [cell.percentLabel setTextColor:[UIColor whiteColor]];
+            } else if(self.traitCollection.userInterfaceStyle == UIUserInterfaceStyleLight) {
+                [cell.label setTextColor:[UIColor blackColor]];
+                [cell.percentLabel setTextColor:[UIColor blackColor]];   
+            }
+        }
+    }
+}
+
+-(void)removeArrangedSubview:(UIView *)view {
+    [super removeArrangedSubview:view];
+    self.number = [self.subviews count];
+
+    [UIView animateWithDuration:0.3 animations:^{
+
+		if(!self.heightConstraint) {
+			
+			self.heightConstraint.active = NO;
+			self.heightConstraint = [self.heightAnchor constraintEqualToConstant:85];
+			//set an initial constraint
+			self.heightConstraint.active = YES;
+
+		} else {
+		int height = (self.number * (bannerHeight + spacing)); //big brain math
+			//self.heightConstraint.active = NO; //deactivation
+			self.heightConstraint.constant = height;
+			//self.heightConstraint.active = YES; //forcing reactivation
+
+			UIStackView *s = (UIStackView *)(self.superview);
+			s.frame = CGRectMake(s.frame.origin.x, s.frame.origin.y, s.frame.size.width, (s.frame.size.height - 1));
+			//literally does nothing but makes the stack view lay itself out (doesnt adjust frame because translatesAutoreszingMaskIntoConstraints = NO on stack views)
+		}
+
+        }];
 }
 
 -(void)refreshForPrefs {

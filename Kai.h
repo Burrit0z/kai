@@ -14,7 +14,6 @@
 @property (nonatomic, assign) BOOL hasKai;
 -(UIStackView *)stackView;
 -(void)setStackView:(UIStackView *)arg1;
--(void)KaiUpdate;
 @end
 
 @interface CALayer (kai)
@@ -43,6 +42,7 @@ BOOL hideDeviceLabel;
 BOOL hideChargingAnimation;
 NSInteger bannerStyle;
 NSInteger bannerAlign;
+NSInteger textColor;
 double spacing;
 double glyphSize;
 double bannerHeight;
@@ -115,6 +115,7 @@ static void preferencesChanged()
     horizontalOffset = numberForValue(@"horizontalOffset", 0);
     belowMusic = boolValueForKey(@"belowMusic", NO);
     hideChargingAnimation = boolValueForKey(@"hideChargingAnimation", YES);
+    textColor = numberForValue(@"textColor", 0);
 
     if(disableGlyphs) {
         glyphSize = 0;
@@ -127,23 +128,8 @@ static void applyPrefs()
 
     isUpdating = YES;
 
-    [[KAIBatteryStack sharedInstance] refreshForPrefs];
-    [(CSAdjunctListView *)([KAIBatteryStack sharedInstance].superview.superview) KaiUpdate];
+    [[KAIBatteryStack sharedInstance] refreshForPrefs]; //so hard (not)
 
     isUpdating = NO;
-
-    //here I remotely refresh the KAIView.
-    /*isUpdating = YES;
-    [UIView animateWithDuration:0.3 animations:^{
-        [KAIBatteryStack sharedInstance].alpha = 0;
-    } completion:^(BOOL finished){
-        [[KAIBatteryStack sharedInstance] updateBattery];
-        [(CSAdjunctListView *)([KAIBatteryStack sharedInstance].superview.superview) KaiUpdate];
-        [UIView animateWithDuration:0.35 animations:^{
-            [KAIBatteryStack sharedInstance].alpha = 1;
-        } completion:^(BOOL finished){
-            isUpdating = NO;
-        }];
-    }];*/
 
 }

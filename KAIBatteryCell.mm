@@ -37,7 +37,11 @@
         } else if(hideDeviceLabel) {
             [self.label setFont:[UIFont systemFontOfSize:0]];
         }
-        [self.label setTextColor:[UIColor whiteColor]];
+        if(textColor==1) {
+            [self.label setTextColor:[UIColor whiteColor]];
+        } else {
+            [self.label setTextColor:[UIColor blackColor]];
+        }
         self.label.lineBreakMode = NSLineBreakByWordWrapping;
         self.label.numberOfLines = 1;
         [self.label setText:labelText];
@@ -51,7 +55,11 @@
                 } else {
                     [self.percentLabel setFont:[UIFont systemFontOfSize:14]];
                 }
-                [self.percentLabel setTextColor:[UIColor whiteColor]];
+                if(textColor==1) {
+                    [self.percentLabel setTextColor:[UIColor whiteColor]];
+                } else {
+                    [self.percentLabel setTextColor:[UIColor blackColor]];
+                }
                 self.percentLabel.lineBreakMode = NSLineBreakByWordWrapping;
                 [self.percentLabel setTextAlignment:NSTextAlignmentRight];
                 self.percentLabel.numberOfLines = 1;
@@ -114,6 +122,21 @@
     }
 
     return self;
+}
+
+-(void)traitCollectionDidChange:(id)arg1 {
+    [super traitCollectionDidChange:arg1];
+    if(textColor==0) {
+        if(@available(iOS 12.0, *)) {
+			if(self.traitCollection.userInterfaceStyle == UIUserInterfaceStyleDark) {
+                [self.label setTextColor:[UIColor whiteColor]];
+                [self.percentLabel setTextColor:[UIColor whiteColor]];
+            } else if(self.traitCollection.userInterfaceStyle == UIUserInterfaceStyleLight) {
+                [self.label setTextColor:[UIColor blackColor]];
+                [self.percentLabel setTextColor:[UIColor blackColor]];   
+            }
+        }
+    }
 }
 
 -(void)updateInfo {
