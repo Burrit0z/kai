@@ -30,6 +30,11 @@
 -(id)sf_udidString;
 -(id)_currentProduct;
 @end
+
+@interface NCNotificationListView : UIView
+-(void)fixComplicationsViewFrame;
+@end
+
 BOOL isUpdating = NO;
 
 //prefs

@@ -125,7 +125,9 @@ long long lastPercentage;
 		}
 
         }];
-
+    if([self.superview.superview.superview respondsToSelector:@selector(fixComplicationsViewFrame)]) {
+        [(NCNotificationListView *)(self.superview.superview.superview) fixComplicationsViewFrame];
+    }
     });
 
 }
@@ -133,6 +135,9 @@ long long lastPercentage;
 -(void)addArrangedSubview:(UIView *)view {
     [super addArrangedSubview:view];
     self.number = [self.subviews count];
+    if([self.superview.superview.superview respondsToSelector:@selector(fixComplicationsViewFrame)]) {
+        [(NCNotificationListView *)(self.superview.superview.superview) fixComplicationsViewFrame];
+    }
 
     [UIView animateWithDuration:0.3 animations:^{
 
@@ -173,6 +178,9 @@ long long lastPercentage;
 -(void)removeArrangedSubview:(UIView *)view {
     [super removeArrangedSubview:view];
     self.number = [self.subviews count];
+    if([self.superview.superview.superview respondsToSelector:@selector(fixComplicationsViewFrame)]) {
+        [(NCNotificationListView *)(self.superview.superview.superview) fixComplicationsViewFrame];
+    }
 
     [UIView animateWithDuration:0.3 animations:^{
 
