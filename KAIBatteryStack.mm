@@ -52,9 +52,12 @@ long long lastPercentage;
         for (BCBatteryDevice *device in devices) {
             KAIBatteryCell *cell = [device kaiCellForDevice];
             BOOL charging = MSHookIvar<long long>(device, "_charging");
+            BOOL internal = MSHookIvar<BOOL>(device, "_internal");
             BOOL shouldAdd = NO;
 
             if(showAll) {
+                shouldAdd = YES;
+            } else if(showAllMinusInternal && !internal) {
                 shouldAdd = YES;
             } else if(!showAll && charging) {
                 shouldAdd = YES;
@@ -99,6 +102,29 @@ long long lastPercentage;
             self.queued = YES;
         }
 
+        self.number = [self.subviews count];
+
+    [UIView animateWithDuration:0.3 animations:^{
+
+		if(!self.heightConstraint) {
+			
+			self.heightConstraint.active = NO;
+			self.heightConstraint = [self.heightAnchor constraintEqualToConstant:(self.number * (bannerHeight + spacing))];
+			//set an initial constraint
+			self.heightConstraint.active = YES;
+
+		} else {
+		int height = (self.number * (bannerHeight + spacing)); //big brain math
+			//self.heightConstraint.active = NO; //deactivation
+			self.heightConstraint.constant = height;
+			//self.heightConstraint.active = YES; //forcing reactivation
+
+			UIStackView *s = (UIStackView *)(self.superview);
+			s.frame = CGRectMake(s.frame.origin.x, s.frame.origin.y, s.frame.size.width, (s.frame.size.height - 1));
+			//literally does nothing but makes the stack view lay itself out (doesnt adjust frame because translatesAutoreszingMaskIntoConstraints = NO on stack views)
+		}
+
+        }];
 
     });
 
@@ -113,7 +139,7 @@ long long lastPercentage;
 		if(!self.heightConstraint) {
 			
 			self.heightConstraint.active = NO;
-			self.heightConstraint = [self.heightAnchor constraintEqualToConstant:85];
+			self.heightConstraint = [self.heightAnchor constraintEqualToConstant:(self.number * (bannerHeight + spacing))];
 			//set an initial constraint
 			self.heightConstraint.active = YES;
 
@@ -153,7 +179,7 @@ long long lastPercentage;
 		if(!self.heightConstraint) {
 			
 			self.heightConstraint.active = NO;
-			self.heightConstraint = [self.heightAnchor constraintEqualToConstant:85];
+			self.heightConstraint = [self.heightAnchor constraintEqualToConstant:(self.number * (bannerHeight + spacing))];
 			//set an initial constraint
 			self.heightConstraint.active = YES;
 

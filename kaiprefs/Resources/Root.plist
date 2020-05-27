@@ -39,6 +39,8 @@
 		<dict>
 			<key>cell</key>
 			<string>PSGroupCell</string>
+			<key>footerText</key>
+			<string>By having the show all devices option on, all deviecs, not only devices that are charging, will show. When the always show bluetooth devices option is on, kai will show all connected bluetooth devices if they are charging or not.</string>
 		</dict>
 		<dict>
 			<key>cell</key>
@@ -51,6 +53,18 @@
 			<string>showAll</string>
 			<key>label</key>
 			<string>Show all devices</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>default</key>
+			<false/>
+			<key>defaults</key>
+			<string>com.burritoz.kaiprefs</string>
+			<key>key</key>
+			<string>showAllMinusInternal</string>
+			<key>label</key>
+			<string>Always show bluetooth devices</string>
 		</dict>
 		<dict>
 			<key>cell</key>
@@ -327,6 +341,30 @@
 			<string>com.burritoz.kaiprefs</string>
 			<key>key</key>
 			<string>cornerRadius</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+			<key>label</key>
+			<string>Banner Blur Alpha (1)</string>
+		</dict>
+		<dict>
+			<key>default</key>
+			<real>1</real>
+			<key>cell</key>
+			<string>PSSliderCell</string>
+			<key>min</key>
+			<real>0.0</real>
+			<key>max</key>
+			<real>1</real>
+			<key>isSegmented</key>
+			<false/>
+			<key>showValue</key>
+			<true/>
+			<key>defaults</key>
+			<string>com.burritoz.kaiprefs</string>
+			<key>key</key>
+			<string>bannerAlpha</string>
 		</dict>
 	</array>
 	<key>title</key>

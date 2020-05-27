@@ -40,6 +40,7 @@ BOOL showAll;
 BOOL belowMusic;
 BOOL hideDeviceLabel;
 BOOL hideChargingAnimation;
+BOOL showAllMinusInternal;
 NSInteger bannerStyle;
 NSInteger bannerAlign;
 NSInteger textColor;
@@ -49,6 +50,7 @@ double bannerHeight;
 double cornerRadius;
 double bannerWidthFactor;
 double horizontalOffset;
+double bannerAlpha;
 
 //by importing here, I can use vars in the .mm files
 #import "KAIBatteryCell.mm"
@@ -116,6 +118,8 @@ static void preferencesChanged()
     belowMusic = boolValueForKey(@"belowMusic", NO);
     hideChargingAnimation = boolValueForKey(@"hideChargingAnimation", YES);
     textColor = numberForValue(@"textColor", 0);
+    bannerAlpha = numberForValue(@"bannerAlpha", 1);
+    showAllMinusInternal = boolValueForKey(@"showAllMinusInternal", NO);
 
     if(disableGlyphs) {
         glyphSize = 0;

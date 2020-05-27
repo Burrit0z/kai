@@ -28,6 +28,7 @@
 @property (nonatomic, strong) NSString *name;
 @property (nonatomic, assign) long long percentCharge;
 @property (nonatomic, assign) BOOL charging;
+@property (nonatomic, assign) BOOL internal;
 @property (nonatomic, assign) BOOL batterySaverModeActive;
 @property (nonatomic, strong) NSString *identifier;
 -(id)glyph;

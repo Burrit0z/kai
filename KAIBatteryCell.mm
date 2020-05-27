@@ -13,21 +13,23 @@
         BOOL charging = MSHookIvar<long long>(device, "_charging");
         BOOL LPM = MSHookIvar<BOOL>(device, "_batterySaverModeActive");
 
-        UIView *blank;
+        UIView *blur;
+        UIView *blurPlatter = [[UIView alloc] init];
         if(bannerStyle==1) {
             if(kCFCoreFoundationVersionNumber > 1600) {
-                blank = [[[objc_getClass("MTMaterialView") class] alloc] _initWithRecipe:1 configuration:1 initialWeighting:1 scaleAdjustment:nil];
+                blur = [[[objc_getClass("MTMaterialView") class] alloc] _initWithRecipe:1 configuration:1 initialWeighting:1 scaleAdjustment:nil];
             } else if(kCFCoreFoundationVersionNumber < 1600) {
-                blank = [[UIVisualEffectView alloc] initWithEffect:[UIBlurEffect effectWithStyle:UIBlurEffectStyleLight]];
+                blur = [[UIVisualEffectView alloc] initWithEffect:[UIBlurEffect effectWithStyle:UIBlurEffectStyleLight]];
             }
         } else if(bannerStyle==2) {
-            blank = [[UIVisualEffectView alloc] initWithEffect:[UIBlurEffect effectWithStyle:UIBlurEffectStyleDark]];
+            blur = [[UIVisualEffectView alloc] initWithEffect:[UIBlurEffect effectWithStyle:UIBlurEffectStyleDark]];
         } else if(bannerStyle==3) {
-            blank = [[UIVisualEffectView alloc] initWithEffect:[UIBlurEffect effectWithStyle:UIBlurEffectStyleLight]];
+            blur = [[UIVisualEffectView alloc] initWithEffect:[UIBlurEffect effectWithStyle:UIBlurEffectStyleLight]];
         }
-        blank.layer.masksToBounds = YES;
-        blank.layer.continuousCorners = YES;
-        blank.layer.cornerRadius = cornerRadius;
+        blur.layer.masksToBounds = YES;
+        blur.layer.continuousCorners = YES;
+        blur.layer.cornerRadius = cornerRadius;
+        blurPlatter.alpha = bannerAlpha;
 
         NSString *labelText = [NSString stringWithFormat:@"%@", deviceName];
 
@@ -77,45 +79,52 @@
             self.glyphView.contentMode = UIViewContentModeScaleAspectFit;
             [self.glyphView setImage:glyph];
 
-        [self addSubview:blank];
+        [self addSubview:blurPlatter];
+        [blurPlatter addSubview:blur];
         [self addSubview:self.percentLabel];
         [self addSubview:self.label];
         [self addSubview:self.battery];
         [self addSubview:self.glyphView];
 
-        blank.translatesAutoresizingMaskIntoConstraints = NO;
+        blurPlatter.translatesAutoresizingMaskIntoConstraints = NO;
         if(bannerAlign==2) { //center
-            [blank.centerXAnchor constraintEqualToAnchor:self.centerXAnchor constant:horizontalOffset].active = YES;
+            [blurPlatter.centerXAnchor constraintEqualToAnchor:self.centerXAnchor constant:horizontalOffset].active = YES;
         } else if(bannerAlign==1) { //left
-            [blank.leftAnchor constraintEqualToAnchor:self.leftAnchor constant:horizontalOffset].active = YES;
+            [blurPlatter.leftAnchor constraintEqualToAnchor:self.leftAnchor constant:horizontalOffset].active = YES;
         } else if(bannerAlign==3) { //right
-            [blank.rightAnchor constraintEqualToAnchor:self.rightAnchor constant:horizontalOffset].active = YES;
+            [blurPlatter.rightAnchor constraintEqualToAnchor:self.rightAnchor constant:horizontalOffset].active = YES;
         }
-        [blank.topAnchor constraintEqualToAnchor:self.topAnchor].active = YES;
-        [blank.widthAnchor constraintEqualToConstant:((self.frame.size.width) + bannerWidthFactor)].active = YES;
-        [blank.heightAnchor constraintEqualToConstant:bannerHeight].active = YES;
+        [blurPlatter.topAnchor constraintEqualToAnchor:self.topAnchor].active = YES;
+        [blurPlatter.widthAnchor constraintEqualToConstant:((self.frame.size.width) + bannerWidthFactor)].active = YES;
+        [blurPlatter.heightAnchor constraintEqualToConstant:bannerHeight].active = YES;
+
+        blur.translatesAutoresizingMaskIntoConstraints = NO;
+        [blur.centerXAnchor constraintEqualToAnchor:blurPlatter.centerXAnchor].active = YES;
+        [blur.topAnchor constraintEqualToAnchor:blurPlatter.topAnchor].active = YES;
+        [blur.widthAnchor constraintEqualToAnchor:blurPlatter.widthAnchor].active = YES;
+        [blur.heightAnchor constraintEqualToAnchor:blurPlatter.heightAnchor].active = YES;
 
         self.percentLabel.translatesAutoresizingMaskIntoConstraints = NO;
-        [self.percentLabel.leftAnchor constraintEqualToAnchor:blank.rightAnchor constant:(- 96)].active = YES;
-        [self.percentLabel.centerYAnchor constraintEqualToAnchor:blank.centerYAnchor].active = YES;
+        [self.percentLabel.leftAnchor constraintEqualToAnchor:blurPlatter.rightAnchor constant:(- 96)].active = YES;
+        [self.percentLabel.centerYAnchor constraintEqualToAnchor:blurPlatter.centerYAnchor].active = YES;
         [self.percentLabel.widthAnchor constraintEqualToConstant:37].active = YES;
         [self.percentLabel.heightAnchor constraintEqualToConstant:12].active = YES;
 
         self.label.translatesAutoresizingMaskIntoConstraints = NO;
         [self.label.leftAnchor constraintEqualToAnchor:self.glyphView.rightAnchor constant:4.5].active = YES;
-        [self.label.centerYAnchor constraintEqualToAnchor:blank.centerYAnchor].active = YES;
+        [self.label.centerYAnchor constraintEqualToAnchor:blurPlatter.centerYAnchor].active = YES;
         [self.label.rightAnchor constraintEqualToAnchor:self.percentLabel.leftAnchor constant:-4.5].active = YES;
         [self.label.heightAnchor constraintEqualToConstant:25].active = YES;
 
         self.glyphView.translatesAutoresizingMaskIntoConstraints = NO;
-        [self.glyphView.leftAnchor constraintEqualToAnchor:blank.leftAnchor constant:20.5].active = YES;
-        [self.glyphView.centerYAnchor constraintEqualToAnchor:blank.centerYAnchor].active = YES;
+        [self.glyphView.leftAnchor constraintEqualToAnchor:blurPlatter.leftAnchor constant:20.5].active = YES;
+        [self.glyphView.centerYAnchor constraintEqualToAnchor:blurPlatter.centerYAnchor].active = YES;
         [self.glyphView.widthAnchor constraintEqualToConstant:glyphSize].active = YES;
         [self.glyphView.heightAnchor constraintEqualToConstant:glyphSize].active = YES;
 
         self.battery.translatesAutoresizingMaskIntoConstraints = NO;
-        [self.battery.leftAnchor constraintEqualToAnchor:blank.rightAnchor constant:(- 49)].active = YES;
-        [self.battery.centerYAnchor constraintEqualToAnchor:blank.centerYAnchor].active = YES;
+        [self.battery.leftAnchor constraintEqualToAnchor:blurPlatter.rightAnchor constant:(- 49)].active = YES;
+        [self.battery.centerYAnchor constraintEqualToAnchor:blurPlatter.centerYAnchor].active = YES;
         [self.battery.widthAnchor constraintEqualToConstant:20].active = YES;
         [self.battery.heightAnchor constraintEqualToConstant:10].active = YES;
 
@@ -161,14 +170,15 @@
     self.battery.chargePercent = (batteryPercentage*0.01);
 
     [self.glyphView setImage:[self.device glyph]];
+    [self.heightAnchor constraintEqualToConstant:(bannerHeight + spacing)].active = YES;
 
-    if(!self.height) {
+    /*if(!self.height) {
                 
         self.height.active = NO;
         self.height = [self.heightAnchor constraintEqualToConstant:(bannerHeight + spacing)];
         self.height.active = YES;
 
-    } //else {
+    }*/ //else {
         //int height = (bannerHeight + spacing);
         //self.height.constant = height;
     //}
