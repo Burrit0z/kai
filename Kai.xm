@@ -59,7 +59,9 @@
 		dispatch_async(dispatch_get_main_queue(), ^{
 
 		[[KAIBatteryStack sharedInstance] updateBattery];
+		if([KAISelf.superview respondsToSelector:@selector(fixComplicationsViewFrame)]) {
 		[KAISelf.superview performSelector:@selector(fixComplicationsViewFrame) withObject:KAISelf.superview afterDelay:0.2];
+		}
 
 		isUpdating = NO;
 		});
