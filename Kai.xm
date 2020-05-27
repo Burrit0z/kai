@@ -17,6 +17,10 @@
 		[[self stackView] insertArrangedSubview:[KAIBatteryStack sharedInstance] atIndex:lastSlot];
 	}
 
+	if([KAISelf.superview respondsToSelector:@selector(fixComplicationsViewFrame)]) {
+        [(NCNotificationListView *)(KAISelf.superview) fixComplicationsViewFrame];
+    }
+
 	%orig;
 }
 
@@ -55,6 +59,7 @@
 		dispatch_async(dispatch_get_main_queue(), ^{
 
 		[[KAIBatteryStack sharedInstance] updateBattery];
+		[KAISelf.superview performSelector:@selector(fixComplicationsViewFrame) withObject:KAISelf.superview afterDelay:0.2];
 
 		isUpdating = NO;
 		});

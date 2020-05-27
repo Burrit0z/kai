@@ -32,19 +32,12 @@ long long lastPercentage;
         BCBatteryDeviceController *bcb = [BCBatteryDeviceController sharedInstance];
         NSArray *devices = MSHookIvar<NSArray *>(bcb, "_sortedDevices");
     
-    /*if(self.oldCountOfDevices == -100) {
+    if(self.oldCountOfDevices == -100) {
         self.oldCountOfDevices = [devices count] + 1;
     }
-    self.oldCountOfDevices = [devices count];
 
-    for (BCBatteryDevice *device in devices) {
-        KAIBatteryCell *cell = [device kaiCellForDevice];
-
-        [cell updateInfo];
-    }
-
-    if(!self.isUpdating && self.oldCountOfDevices != 0 && ([devices count] + 1 == self.oldCountOfDevices || [devices count] - 1 == self.oldCountOfDevices || [devices count] == self.oldCountOfDevices)) {*/
-    if(!self.isUpdating) {
+    if(!self.isUpdating && self.oldCountOfDevices != 0 && ([devices count] + 1 == self.oldCountOfDevices || [devices count] - 1 == self.oldCountOfDevices || [devices count] == self.oldCountOfDevices)) {
+    //if(!self.isUpdating) {
 
     self.isUpdating = YES;
 
@@ -95,29 +88,27 @@ long long lastPercentage;
             }
         }
 
-         //queueTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(dispatchQueue) userInfo:nil repeats:NO];
+        queueTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(dispatchQueue) userInfo:nil repeats:NO];
         self.isUpdating = NO;
 
         } else if(self.isUpdating) {
             self.queued = YES;
         }
 
+        self.oldCountOfDevices = [devices count];
+
         self.number = [self.subviews count];
 
     [UIView animateWithDuration:0.3 animations:^{
 
 		if(!self.heightConstraint) {
-			
-			self.heightConstraint.active = NO;
+
 			self.heightConstraint = [self.heightAnchor constraintEqualToConstant:(self.number * (bannerHeight + spacing))];
-			//set an initial constraint
 			self.heightConstraint.active = YES;
 
 		} else {
-		int height = (self.number * (bannerHeight + spacing)); //big brain math
-			//self.heightConstraint.active = NO; //deactivation
+		int height = (self.number * (bannerHeight + spacing));
 			self.heightConstraint.constant = height;
-			//self.heightConstraint.active = YES; //forcing reactivation
 
 			UIStackView *s = (UIStackView *)(self.superview);
 			s.frame = CGRectMake(s.frame.origin.x, s.frame.origin.y, s.frame.size.width, (s.frame.size.height - 1));
@@ -227,6 +218,9 @@ long long lastPercentage;
     self.isUpdating = NO;
     if(self.queued) {
         [self updateBattery];
+        if([self.superview.superview.superview respondsToSelector:@selector(fixComplicationsViewFrame)]) {
+        [(NCNotificationListView *)(self.superview.superview.superview) fixComplicationsViewFrame];
+        }
         self.queued = NO;
     }
     [queueTimer invalidate];
