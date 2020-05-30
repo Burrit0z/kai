@@ -1,5 +1,4 @@
 @interface KAIBatteryStack : UIStackView
-@property (nonatomic, strong) NSMutableArray *displayingDevices;
 @property (nonatomic, assign) NSInteger number;
 @property (nonatomic, assign) NSInteger oldCountOfDevices;
 @property (nonatomic, strong) NSLayoutConstraint *heightConstraint;

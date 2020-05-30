@@ -109,8 +109,6 @@
 	if(self && self.kaiCell == nil) {
 		self.kaiCell = [[KAIBatteryCell alloc] initWithFrame:CGRectMake(0,0,[KAIBatteryStack sharedInstance].frame.size.width,0) device:self]; }
 		((KAIBatteryCell *)self.kaiCell).translatesAutoresizingMaskIntoConstraints = NO;
-		[((KAIBatteryCell *)self.kaiCell).heightAnchor constraintEqualToConstant:bannerHeight + spacing].active = YES;
-
 		[(KAIBatteryCell *)self.kaiCell updateInfo];
 
 	return self.kaiCell;
@@ -120,8 +118,6 @@
 -(void)resetKaiCellForNewPrefs {
 	self.kaiCell = [[KAIBatteryCell alloc] initWithFrame:CGRectMake(0,0,[KAIBatteryStack sharedInstance].frame.size.width,0) device:self]; 
 		((KAIBatteryCell *)self.kaiCell).translatesAutoresizingMaskIntoConstraints = NO;
-		[((KAIBatteryCell *)self.kaiCell).heightAnchor constraintEqualToConstant:bannerHeight + spacing].active = YES;
-
 		[(KAIBatteryCell *)self.kaiCell updateInfo];
 }
 %end

@@ -134,6 +134,9 @@
             [self.label.rightAnchor constraintEqualToAnchor:self.battery.leftAnchor constant:-4.5].active = YES;
         }
 
+        [self.heightAnchor constraintEqualToConstant:(bannerHeight + spacing)].active = YES;
+        [self.widthAnchor constraintEqualToConstant:(self.frame.size.width)].active = YES;
+
     }
 
     return self;
@@ -176,29 +179,6 @@
     self.battery.chargePercent = (batteryPercentage*0.01);
 
     [self.glyphView setImage:[self.device glyph]];
-    //[self.heightAnchor constraintEqualToConstant:(bannerHeight + spacing)].active = YES;
-
-    if(!self.height) {
-                
-        self.height.active = NO;
-        self.height = [self.heightAnchor constraintEqualToConstant:(bannerHeight + spacing)];
-        self.height.active = YES;
-
-    } else {
-        int height = (bannerHeight + spacing);
-        self.height.constant = height;
-    }
-
-    if(!self.width) {
-        
-        self.width.active = NO;
-        self.width = [self.widthAnchor constraintEqualToConstant:(self.frame.size.width)];
-        self.width.active = YES;
-
-    } //else {
-        //int width = self.frame.size.width;
-        //self.width.constant = width;
-    //}
 
 }
 

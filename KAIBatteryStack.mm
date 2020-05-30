@@ -2,7 +2,6 @@
 
 KAIBatteryStack *instance;
 NSTimer *queueTimer = nil;
-//NSMutableArray *showingCells = [[NSMutableArray alloc] init];
 
 @implementation KAIBatteryStack
 
@@ -10,7 +9,6 @@ NSTimer *queueTimer = nil;
     self = [super init];
     instance = self;
     if (self) {
-        self.displayingDevices = [[NSMutableArray alloc] init];
         self.axis = 1;
         self.distribution = 0;
         self.spacing = 0;
@@ -18,7 +16,6 @@ NSTimer *queueTimer = nil;
         self.oldCountOfDevices = -100;
         self.queued = NO;
         [self updateBattery];
-        //self.clipsToBounds = YES;
         self.userInteractionEnabled = NO;
     }
     return self;
@@ -89,7 +86,7 @@ long long lastPercentage;
         }
 
         queueTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(dispatchQueue) userInfo:nil repeats:NO];
-        self.isUpdating = NO;
+        //self.isUpdating = NO;
 
         } else if(self.isUpdating) {
             self.queued = YES;
@@ -116,12 +113,7 @@ long long lastPercentage;
 			self.heightConstraint.active = YES;
 
 		} else {
-            int height;
-            if([self.superview.subviews objectAtIndex:([self.superview.subviews count] - 1)] == self) {
-                height = (self.number * (bannerHeight + spacing));
-            } else {
-		        height = (self.number * (bannerHeight + spacing)) - spacing;
-            }
+		    int height = (self.number * (bannerHeight + spacing)) - spacing;
 			self.heightConstraint.constant = height;
 
 			UIStackView *s = (UIStackView *)(self.superview);

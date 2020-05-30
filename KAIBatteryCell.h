@@ -42,8 +42,6 @@
 @property (nonatomic, strong) UILabel *percentLabel;
 @property (nonatomic, strong) UIImageView *glyphView;
 @property (nonatomic, strong) _UIBatteryView *battery;
-@property (nonatomic, strong) NSLayoutConstraint *width;
-@property (nonatomic, strong) NSLayoutConstraint *height;
 -(instancetype)initWithFrame:(CGRect)arg1 device:(BCBatteryDevice *)device;
 -(void)updateInfo;
 @end
