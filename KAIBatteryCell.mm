@@ -176,18 +176,18 @@
     self.battery.chargePercent = (batteryPercentage*0.01);
 
     [self.glyphView setImage:[self.device glyph]];
-    [self.heightAnchor constraintEqualToConstant:(bannerHeight)].active = YES;
+    //[self.heightAnchor constraintEqualToConstant:(bannerHeight + spacing)].active = YES;
 
-    /*if(!self.height) {
+    if(!self.height) {
                 
         self.height.active = NO;
         self.height = [self.heightAnchor constraintEqualToConstant:(bannerHeight + spacing)];
         self.height.active = YES;
 
-    }*/ //else {
-        //int height = (bannerHeight + spacing);
-        //self.height.constant = height;
-    //}
+    } else {
+        int height = (bannerHeight + spacing);
+        self.height.constant = height;
+    }
 
     if(!self.width) {
         

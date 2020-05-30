@@ -13,7 +13,7 @@ NSTimer *queueTimer = nil;
         self.displayingDevices = [[NSMutableArray alloc] init];
         self.axis = 1;
         self.distribution = 0;
-        self.spacing = spacing;
+        self.spacing = 0;
         self.alignment = 0;
         self.oldCountOfDevices = -100;
         self.queued = NO;
@@ -116,7 +116,12 @@ long long lastPercentage;
 			self.heightConstraint.active = YES;
 
 		} else {
-		int height = (arg1 * (bannerHeight + spacing)) - spacing;
+            int height;
+            /*if([self.superview.subviews objectAtIndex:([self.superview.subviews count] - 1)] == self) {
+                height = (self.number * (bannerHeight + spacing));
+            } else {*/
+		        height = (self.number * (bannerHeight + spacing)) - spacing;
+            //}
 			self.heightConstraint.constant = height;
 
 			UIStackView *s = (UIStackView *)(self.superview);
@@ -133,28 +138,6 @@ long long lastPercentage;
     if([self.superview.superview.superview respondsToSelector:@selector(fixComplicationsViewFrame)]) {
         [(NCNotificationListView *)(self.superview.superview.superview) fixComplicationsViewFrame];
     }
-
-    [UIView animateWithDuration:0.3 animations:^{
-
-		if(!self.heightConstraint) {
-			
-			self.heightConstraint.active = NO;
-			self.heightConstraint = [self.heightAnchor constraintEqualToConstant:(self.number * (bannerHeight + spacing))];
-			//set an initial constraint
-			self.heightConstraint.active = YES;
-
-		} else {
-		int height = (self.number * (bannerHeight + spacing)) - spacing; //big brain math
-			//self.heightConstraint.active = NO; //deactivation
-			self.heightConstraint.constant = height;
-			//self.heightConstraint.active = YES; //forcing reactivation
-
-			UIStackView *s = (UIStackView *)(self.superview);
-			s.frame = CGRectMake(s.frame.origin.x, s.frame.origin.y, s.frame.size.width, (s.frame.size.height - 1));
-			//literally does nothing but makes the stack view lay itself out (doesnt adjust frame because translatesAutoreszingMaskIntoConstraints = NO on stack views)
-		}
-
-        }];
 
     if(textColor==0) {
         KAIBatteryCell *cell = (KAIBatteryCell *)view;
@@ -177,27 +160,6 @@ long long lastPercentage;
         [(NCNotificationListView *)(self.superview.superview.superview) fixComplicationsViewFrame];
     }
 
-    [UIView animateWithDuration:0.3 animations:^{
-
-		if(!self.heightConstraint) {
-			
-			self.heightConstraint.active = NO;
-			self.heightConstraint = [self.heightAnchor constraintEqualToConstant:(self.number * (bannerHeight + spacing))];
-			//set an initial constraint
-			self.heightConstraint.active = YES;
-
-		} else {
-		int height = (self.number * (bannerHeight + spacing)) - spacing; //big brain math
-			//self.heightConstraint.active = NO; //deactivation
-			self.heightConstraint.constant = height;
-			//self.heightConstraint.active = YES; //forcing reactivation
-
-			UIStackView *s = (UIStackView *)(self.superview);
-			s.frame = CGRectMake(s.frame.origin.x, s.frame.origin.y, s.frame.size.width, (s.frame.size.height - 1));
-			//literally does nothing but makes the stack view lay itself out (doesnt adjust frame because translatesAutoreszingMaskIntoConstraints = NO on stack views)
-		}
-
-        }];
 }
 
 -(void)refreshForPrefs {
@@ -214,7 +176,7 @@ long long lastPercentage;
     for(BCBatteryDevice *device in devices) {
         [device resetKaiCellForNewPrefs];
     }
-    self.spacing = spacing;
+    //self.spacing = spacing;
     [self updateBattery];
 }
 

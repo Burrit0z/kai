@@ -21,6 +21,8 @@
         [(NCNotificationListView *)(KAISelf.superview) fixComplicationsViewFrame];
     }
 
+	[[KAIBatteryStack sharedInstance] setNumber:[KAIBatteryStack sharedInstance].number];
+
 	%orig;
 }
 
