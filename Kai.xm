@@ -60,7 +60,8 @@
 
 		[[KAIBatteryStack sharedInstance] updateBattery];
 		if([KAISelf.superview respondsToSelector:@selector(fixComplicationsViewFrame)]) {
-		[KAISelf.superview performSelector:@selector(fixComplicationsViewFrame) withObject:KAISelf.superview afterDelay:0.2];
+		[KAISelf.superview performSelector:@selector(fixComplicationsViewFrame) withObject:KAISelf.superview afterDelay:0.35];
+		//[KAISelf.superview performSelector:@selector(fixComplicationsViewFrame) withObject:KAISelf.superview afterDelay:0.5];
 		}
 
 		isUpdating = NO;

@@ -19,6 +19,10 @@
 @interface KAIRootListController : PSListController
 @property (nonatomic, strong) UILabel *titleLabel;
 @property (nonatomic, strong) UIImageView *iconView;
+-(void)followMeOnRedditBurritoz;
+@end
+
+@interface Thomz_TwitterCell : PSTableCell
 @end
 
 @protocol PreferencesTableCustomView

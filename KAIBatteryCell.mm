@@ -113,7 +113,9 @@
         self.label.translatesAutoresizingMaskIntoConstraints = NO;
         [self.label.leftAnchor constraintEqualToAnchor:self.glyphView.rightAnchor constant:4.5].active = YES;
         [self.label.centerYAnchor constraintEqualToAnchor:blurPlatter.centerYAnchor].active = YES;
-        [self.label.rightAnchor constraintEqualToAnchor:self.percentLabel.leftAnchor constant:-4.5].active = YES;
+        if(!hidePercent) {
+            [self.label.rightAnchor constraintEqualToAnchor:self.percentLabel.leftAnchor constant:-4.5].active = YES;
+        }
         [self.label.heightAnchor constraintEqualToConstant:25].active = YES;
 
         self.glyphView.translatesAutoresizingMaskIntoConstraints = NO;
@@ -127,6 +129,10 @@
         [self.battery.centerYAnchor constraintEqualToAnchor:blurPlatter.centerYAnchor].active = YES;
         [self.battery.widthAnchor constraintEqualToConstant:20].active = YES;
         [self.battery.heightAnchor constraintEqualToConstant:10].active = YES;
+
+        if(hidePercent) {
+            [self.label.rightAnchor constraintEqualToAnchor:self.battery.leftAnchor constant:-4.5].active = YES;
+        }
 
     }
 
@@ -170,7 +176,7 @@
     self.battery.chargePercent = (batteryPercentage*0.01);
 
     [self.glyphView setImage:[self.device glyph]];
-    [self.heightAnchor constraintEqualToConstant:(bannerHeight + spacing)].active = YES;
+    [self.heightAnchor constraintEqualToConstant:(bannerHeight)].active = YES;
 
     /*if(!self.height) {
                 

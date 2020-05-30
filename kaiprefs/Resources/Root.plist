@@ -366,6 +366,26 @@
 			<key>key</key>
 			<string>bannerAlpha</string>
 		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSButtonCell</string>
+			<key>cellClass</key>
+			<string>Thomz_TwitterCell</string>
+			<key>user</key>
+			<string>Burrit0z</string>
+			<key>description</key>
+			<string>Developer</string>
+			<key>height</key>
+			<integer>70</integer>
+			<key>image</key>
+			<string>burritoz</string>
+			<key>action</key>
+			<string>followMeOnRedditBurritoz</string>
+		</dict>
 	</array>
 	<key>title</key>
 	<string>kai</string>

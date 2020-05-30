@@ -1,9 +1,9 @@
 Package: com.burritoz.kai
 Name: Kai
-Version: 0.2.6~alpha4
+Version: 0.9.9~1
 Architecture: iphoneos-arm
 Description: Show charging banners on your lock screen!
 Maintainer: burrit0z
 Author: burrit0z
 Section: Tweaks
-Depends: mobilesubstrate (>= 0.9.5000), preferenceloader
+Depends: mobilesubstrate (>= 0.9.5000), preferenceloader, xyz.burritoz.thomz.multipla (>=1.2.0)

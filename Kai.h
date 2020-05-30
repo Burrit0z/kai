@@ -13,6 +13,7 @@
 @interface CSAdjunctListView : UIView
 @property (nonatomic, assign) BOOL hasKai;
 -(UIStackView *)stackView;
+-(void)_layoutStackView;
 -(void)setStackView:(UIStackView *)arg1;
 @end
 
@@ -138,6 +139,7 @@ static void applyPrefs()
     isUpdating = YES;
 
     [[KAIBatteryStack sharedInstance] refreshForPrefs]; //so hard (not)
+    [(CSAdjunctListView *)([KAIBatteryStack sharedInstance].superview.superview) _layoutStackView];
 
     isUpdating = NO;
 

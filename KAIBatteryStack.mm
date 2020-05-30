@@ -13,7 +13,7 @@ NSTimer *queueTimer = nil;
         self.displayingDevices = [[NSMutableArray alloc] init];
         self.axis = 1;
         self.distribution = 0;
-        self.spacing = 0;
+        self.spacing = spacing;
         self.alignment = 0;
         self.oldCountOfDevices = -100;
         self.queued = NO;
@@ -99,6 +99,15 @@ long long lastPercentage;
 
         self.number = [self.subviews count];
 
+    if([self.superview.superview.superview respondsToSelector:@selector(fixComplicationsViewFrame)]) {
+        [(NCNotificationListView *)(self.superview.superview.superview) fixComplicationsViewFrame];
+    }
+    });
+
+}
+
+-(void)setNumber:(NSInteger)arg1 {
+    _number = arg1;
     [UIView animateWithDuration:0.3 animations:^{
 
 		if(!self.heightConstraint) {
@@ -107,7 +116,7 @@ long long lastPercentage;
 			self.heightConstraint.active = YES;
 
 		} else {
-		int height = (self.number * (bannerHeight + spacing));
+		int height = (arg1 * (bannerHeight + spacing)) - spacing;
 			self.heightConstraint.constant = height;
 
 			UIStackView *s = (UIStackView *)(self.superview);
@@ -116,11 +125,6 @@ long long lastPercentage;
 		}
 
         }];
-    if([self.superview.superview.superview respondsToSelector:@selector(fixComplicationsViewFrame)]) {
-        [(NCNotificationListView *)(self.superview.superview.superview) fixComplicationsViewFrame];
-    }
-    });
-
 }
 
 -(void)addArrangedSubview:(UIView *)view {
@@ -140,7 +144,7 @@ long long lastPercentage;
 			self.heightConstraint.active = YES;
 
 		} else {
-		int height = (self.number * (bannerHeight + spacing)); //big brain math
+		int height = (self.number * (bannerHeight + spacing)) - spacing; //big brain math
 			//self.heightConstraint.active = NO; //deactivation
 			self.heightConstraint.constant = height;
 			//self.heightConstraint.active = YES; //forcing reactivation
@@ -183,7 +187,7 @@ long long lastPercentage;
 			self.heightConstraint.active = YES;
 
 		} else {
-		int height = (self.number * (bannerHeight + spacing)); //big brain math
+		int height = (self.number * (bannerHeight + spacing)) - spacing; //big brain math
 			//self.heightConstraint.active = NO; //deactivation
 			self.heightConstraint.constant = height;
 			//self.heightConstraint.active = YES; //forcing reactivation
@@ -210,7 +214,7 @@ long long lastPercentage;
     for(BCBatteryDevice *device in devices) {
         [device resetKaiCellForNewPrefs];
     }
-
+    self.spacing = spacing;
     [self updateBattery];
 }
 

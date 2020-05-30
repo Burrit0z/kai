@@ -13,10 +13,6 @@ NSBundle *tweakBundle;
 }
 
 -(void)viewWillAppear:(BOOL)arg1 {
-	self.navigationController.navigationController.navigationBar.barTintColor = [UIColor colorWithRed: 0.00 green: 0.735 blue: 0.965 alpha: 1.00];
-    [self.navigationController.navigationController.navigationBar setShadowImage: [UIImage new]];
-    self.navigationController.navigationController.navigationBar.tintColor = [UIColor whiteColor];
-    self.navigationController.navigationController.navigationBar.translucent = NO;
 
 	[[UISegmentedControl appearanceWhenContainedInInstancesOfClasses:@[self.class]] setTintColor:[UIColor colorWithRed: 0.00 green: 0.82 blue: 1.00 alpha: 1.00]];
     [[UISwitch appearanceWhenContainedInInstancesOfClasses:@[self.class]] setOnTintColor:[UIColor colorWithRed: 0.00 green: 0.82 blue: 1.00 alpha: 1.00]];
@@ -24,12 +20,9 @@ NSBundle *tweakBundle;
 
 }
 
-- (void)viewWillDisappear:(BOOL)animated {
-
-    [super viewWillDisappear:animated];
-
-    [self.navigationController.navigationController.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor blackColor]}];
-
+-(void)viewWillDisappear:(BOOL)arg1 {
+    [super viewWillDisappear:arg1];
+    //[NSException raise:@"DE" format:@"DEU"];
 }
 
 -(void)viewDidLoad {
@@ -96,6 +89,10 @@ NSBundle *tweakBundle;
     }
 }
 
+-(void)followMeOnRedditBurritoz {
+	[[UIApplication sharedApplication]openURL:[NSURL URLWithString:@"https://reddit.com/user/Burrit0z_dev"]];
+}
+
 @end
 
 @implementation KaiHeaderCell // Header Cell
@@ -124,7 +121,7 @@ NSBundle *tweakBundle;
     [versionLabel setFont:[UIFont systemFontOfSize:22 weight: UIFontWeightMedium] ];
     versionLabel.textColor = [UIColor colorWithRed:1 green:1 blue:1 alpha:0.8];
 	versionLabel.alpha = 0.8;
-    versionLabel.text = @"alpha";
+    versionLabel.text = @"1.0.0";
 
 	NSBundle *bundle = [[NSBundle alloc]initWithPath:@"/Library/PreferenceBundles/kaiPrefs.bundle"];
 	UIImage *phone = [UIImage imageWithContentsOfFile:[bundle pathForResource:@"kai" ofType:@"png"]];
@@ -182,6 +179,41 @@ NSBundle *tweakBundle;
 
 - (CGFloat)preferredHeightForWidth:(CGFloat)width inTableView:(id)tableView {
 	return [self preferredHeightForWidth:width];
+}
+
+@end
+
+@implementation Thomz_TwitterCell // lil copy of HBTwitterCell from Cephei
+- (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier specifier:(PSSpecifier *)specifier  {
+
+	self = [super initWithStyle:style reuseIdentifier:reuseIdentifier specifier:specifier];
+
+	if (self)
+    {
+        UILabel *User = [[UILabel alloc] initWithFrame:CGRectMake(70,15,200,20)];
+        [User setText:specifier.properties[@"user"]];
+		[User setFont:[User.font fontWithSize:15]];
+
+		UILabel *Description = [[UILabel alloc]initWithFrame:CGRectMake(70,35,200,20)];
+		[Description setText:specifier.properties[@"description"]];
+		[Description setFont:[Description.font fontWithSize:10]];
+
+		NSBundle *bundle = [[NSBundle alloc]initWithPath:@"/Library/PreferenceBundles/MultiplaPrefs.bundle"];
+
+		UIImage *profilePicture;
+        profilePicture = [UIImage imageWithContentsOfFile:[bundle pathForResource:specifier.properties[@"image"] ofType:@"jpg"]];
+		UIImageView *profilePictureView = [[UIImageView alloc] initWithImage:profilePicture];
+		[profilePictureView.layer setMasksToBounds:YES];
+		[profilePictureView.layer setCornerRadius:20];
+		[profilePictureView setFrame:CGRectMake(15,15,40,40)];
+
+        [self addSubview:User];
+		[self addSubview:Description];
+		[self addSubview:profilePictureView];
+
+    }
+
+    return self;
 }
 
 @end
