@@ -61,6 +61,13 @@
 		dispatch_async(dispatch_get_main_queue(), ^{
 
 		[[KAIBatteryStack sharedInstance] updateBattery];
+		if([KAIBatteryStack sharedInstance].number == 0) {
+			[[KAIBatteryStack sharedInstance] removeFromSuperview];
+			[[self stackView] removeArrangedSubview:[KAIBatteryStack sharedInstance]];
+		} else if(![[self stackView].subviews containsObject:[KAIBatteryStack sharedInstance]]) {
+			[[self stackView] addSubview:[KAIBatteryStack sharedInstance]];
+			[[self stackView] addArrangedSubview:[KAIBatteryStack sharedInstance]];
+		}
 		if([KAISelf.superview respondsToSelector:@selector(fixComplicationsViewFrame)]) {
 		[KAISelf.superview performSelector:@selector(fixComplicationsViewFrame) withObject:KAISelf.superview afterDelay:0.35];
 		//[KAISelf.superview performSelector:@selector(fixComplicationsViewFrame) withObject:KAISelf.superview afterDelay:0.5];
