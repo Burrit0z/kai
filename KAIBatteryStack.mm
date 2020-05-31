@@ -114,6 +114,9 @@ long long lastPercentage;
 
 		} else {
 		    int height = (self.number * (bannerHeight + spacing));
+            if([self.superview.subviews count]>1) {
+                height = (self.number * (bannerHeight + spacing)) - spacing;
+            }
 			self.heightConstraint.constant = height;
 
 			UIStackView *s = (UIStackView *)(self.superview);
