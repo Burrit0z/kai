@@ -113,7 +113,7 @@ long long lastPercentage;
 			self.heightConstraint.active = YES;
 
 		} else {
-		    int height = (self.number * (bannerHeight + spacing)) - spacing;
+		    int height = (self.number * (bannerHeight + spacing));
 			self.heightConstraint.constant = height;
 
 			UIStackView *s = (UIStackView *)(self.superview);
