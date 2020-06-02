@@ -135,7 +135,11 @@
         }
 
         [self.heightAnchor constraintEqualToConstant:(bannerHeight + spacing)].active = YES;
-        [self.widthAnchor constraintEqualToConstant:(self.frame.size.width)].active = YES;
+        if(kaiAlign==0) {
+            [self.widthAnchor constraintEqualToConstant:(self.frame.size.width)].active = YES;
+        } else {
+            [self.widthAnchor constraintEqualToAnchor:blurPlatter.widthAnchor].active = YES;
+        }
 
     }
 
