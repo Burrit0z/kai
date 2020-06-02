@@ -106,6 +106,32 @@
 			<key>cell</key>
 			<string>PSGroupCell</string>
 			<key>label</key>
+			<string>Alignemnt Axis (Respring Required)</string>
+		</dict>
+		<dict>
+            <key>cell</key>
+            <string>PSSegmentCell</string>
+            <key>defaults</key>
+            <string>com.burritoz.kaiprefs</string>
+            <key>default</key>
+            <string>0</string>
+            <key>key</key>
+            <string>kaiAlign</string>
+            <key>validValues</key>
+            <array>
+                <string>0</string>
+                <string>1</string>
+            </array>
+            <key>validTitles</key>
+            <array>
+            	<string>Vertical</string>
+                <string>Horizontal</string>
+            </array>
+        </dict>
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+			<key>label</key>
 			<string>Banner Style</string>
 		</dict>
 		<dict>

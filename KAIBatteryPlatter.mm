@@ -10,9 +10,9 @@ NSTimer *queueTimer = nil;
     instance = self;
     if (self) {
         self.stack = [[KAIStackView alloc] init];
-        self.stack.axis = 1;
+        self.stack.axis = kaiAlign==0 ? 1 : 0;
         self.stack.distribution = 0;
-        self.stack.spacing = 0;
+        self.stack.spacing = kaiAlign==0 ? 0 : spacing;
         self.stack.alignment = 0;
         self.oldCountOfDevices = -100;
         self.queued = NO;

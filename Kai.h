@@ -57,6 +57,7 @@ double cornerRadius;
 double bannerWidthFactor;
 double horizontalOffset;
 double bannerAlpha;
+double kaiAlign;
 
 //by importing here, I can use vars in the .mm files
 #import "KAIBatteryCell.mm"
@@ -127,6 +128,7 @@ static void preferencesChanged()
     textColor = numberForValue(@"textColor", 0);
     bannerAlpha = numberForValue(@"bannerAlpha", 1);
     showAllMinusInternal = boolValueForKey(@"showAllMinusInternal", NO);
+    kaiAlign = numberForValue(@"kaiAlign", 0);
 
     if(disableGlyphs) {
         glyphSize = 0;
