@@ -7,7 +7,7 @@
 #import "NSTask.h"
 
 #define KAISelf ((CSAdjunctListView *)self) //for use when calling self in KAITarget
-//#define KAIBatteryStack UHDUEIHGCEBCHYDEICVKEVSAGJKBCXAHJGKVXHAS //lmao
+//#define KAIBatteryPlatter UHDUEIHGCEBCHYDEICVKEVSAGJKBCXAHJGKVXHAS //lmao
 //#define KAIBatteryCell HDEIUOGEUBGUYOEXHNOPUSZIOJIGECEXIUSHXJXBE //very good
 
 @interface CSAdjunctListView : UIView
@@ -60,7 +60,8 @@ double bannerAlpha;
 
 //by importing here, I can use vars in the .mm files
 #import "KAIBatteryCell.mm"
-#import "KAIBatteryStack.mm"
+#import "KAIStackView.mm"
+#import "KAIBatteryPlatter.mm"
 
 #define PLIST_PATH @"/User/Library/Preferences/com.burritoz.kaiprefs.plist"
 #define kIdentifier @"com.burritoz.kaiprefs"
@@ -138,8 +139,8 @@ static void applyPrefs()
 
     isUpdating = YES;
 
-    [[KAIBatteryStack sharedInstance] refreshForPrefs]; //so hard (not)
-    [(CSAdjunctListView *)([KAIBatteryStack sharedInstance].superview.superview) _layoutStackView];
+    [[KAIBatteryPlatter sharedInstance] refreshForPrefs]; //so hard (not)
+    [(CSAdjunctListView *)([KAIBatteryPlatter sharedInstance].superview.superview) _layoutStackView];
 
     isUpdating = NO;
 

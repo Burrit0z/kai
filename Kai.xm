@@ -10,18 +10,18 @@
 
 	NSInteger lastSlot = [[self stackView].subviews count] -1;
 	//this code is used to determine if kai is at the bottom of the stack view
-	if([[self stackView].subviews objectAtIndex:lastSlot] != [KAIBatteryStack sharedInstance] && belowMusic) {
+	if([[self stackView].subviews objectAtIndex:lastSlot] != [KAIBatteryPlatter sharedInstance] && belowMusic) {
 		//if it is not, but the option to have kai below music is on, i simply remove from it's current pos. 
 		//and insert into last slot.
-		[[self stackView] removeArrangedSubview:[KAIBatteryStack sharedInstance]];
-		[[self stackView] insertArrangedSubview:[KAIBatteryStack sharedInstance] atIndex:lastSlot];
+		[[self stackView] removeArrangedSubview:[KAIBatteryPlatter sharedInstance]];
+		[[self stackView] insertArrangedSubview:[KAIBatteryPlatter sharedInstance] atIndex:lastSlot];
 	}
 
 	if([KAISelf.superview respondsToSelector:@selector(fixComplicationsViewFrame)]) {
         [(NCNotificationListView *)(KAISelf.superview) fixComplicationsViewFrame];
     }
 
-	[[KAIBatteryStack sharedInstance] setNumber:[KAIBatteryStack sharedInstance].number];
+	[[KAIBatteryPlatter sharedInstance] setNumber:[KAIBatteryPlatter sharedInstance].number];
 
 	%orig;
 }
@@ -29,7 +29,7 @@
 -(void)setStackView:(UIStackView *)arg1 {
 
 	if(!KAISelf.hasKai) {
-		KAIBatteryStack *battery = [[KAIBatteryStack alloc] init];
+		KAIBatteryPlatter *battery = [[KAIBatteryPlatter alloc] init];
 
 		//Add noti observer
 		[[NSNotificationCenter defaultCenter] addObserver:self
@@ -60,13 +60,13 @@
 		//NSLog(@"kai: kai info will update");
 		dispatch_async(dispatch_get_main_queue(), ^{
 
-		[[KAIBatteryStack sharedInstance] updateBattery];
-		if([KAIBatteryStack sharedInstance].number == 0) {
-			[[KAIBatteryStack sharedInstance] removeFromSuperview];
-			[[self stackView] removeArrangedSubview:[KAIBatteryStack sharedInstance]];
-		} else if(![[self stackView].subviews containsObject:[KAIBatteryStack sharedInstance]]) {
-			[[self stackView] addSubview:[KAIBatteryStack sharedInstance]];
-			[[self stackView] addArrangedSubview:[KAIBatteryStack sharedInstance]];
+		[[KAIBatteryPlatter sharedInstance] updateBattery];
+		if([KAIBatteryPlatter sharedInstance].number == 0) {
+			[[KAIBatteryPlatter sharedInstance] removeFromSuperview];
+			[[self stackView] removeArrangedSubview:[KAIBatteryPlatter sharedInstance]];
+		} else if(![[self stackView].subviews containsObject:[KAIBatteryPlatter sharedInstance]]) {
+			[[self stackView] addSubview:[KAIBatteryPlatter sharedInstance]];
+			[[self stackView] addArrangedSubview:[KAIBatteryPlatter sharedInstance]];
 		}
 		if([KAISelf.superview respondsToSelector:@selector(fixComplicationsViewFrame)]) {
 		[KAISelf.superview performSelector:@selector(fixComplicationsViewFrame) withObject:KAISelf.superview afterDelay:0.35];
@@ -107,7 +107,7 @@
 %new
 -(id)kaiCellForDevice {
 	if(self && self.kaiCell == nil) {
-		self.kaiCell = [[KAIBatteryCell alloc] initWithFrame:CGRectMake(0,0,[KAIBatteryStack sharedInstance].frame.size.width,0) device:self]; }
+		self.kaiCell = [[KAIBatteryCell alloc] initWithFrame:CGRectMake(0,0,[KAIBatteryPlatter sharedInstance].frame.size.width,0) device:self]; }
 		((KAIBatteryCell *)self.kaiCell).translatesAutoresizingMaskIntoConstraints = NO;
 		[(KAIBatteryCell *)self.kaiCell updateInfo];
 
@@ -116,7 +116,7 @@
 
 %new
 -(void)resetKaiCellForNewPrefs {
-	self.kaiCell = [[KAIBatteryCell alloc] initWithFrame:CGRectMake(0,0,[KAIBatteryStack sharedInstance].frame.size.width,0) device:self]; 
+	self.kaiCell = [[KAIBatteryCell alloc] initWithFrame:CGRectMake(0,0,[KAIBatteryPlatter sharedInstance].frame.size.width,0) device:self]; 
 		((KAIBatteryCell *)self.kaiCell).translatesAutoresizingMaskIntoConstraints = NO;
 		[(KAIBatteryCell *)self.kaiCell updateInfo];
 }

@@ -1,22 +1,23 @@
-#import "KAIBatteryStack.h"
+#import "KAIBatteryPlatter.h"
 
-KAIBatteryStack *instance;
+KAIBatteryPlatter *instance;
 NSTimer *queueTimer = nil;
 
-@implementation KAIBatteryStack
+@implementation KAIBatteryPlatter
 
 -(instancetype)init {
     self = [super init];
     instance = self;
     if (self) {
-        self.axis = 1;
-        self.distribution = 0;
-        self.spacing = 0;
-        self.alignment = 0;
+        self.stack = [[KAIStackView alloc] init];
+        self.stack.axis = 1;
+        self.stack.distribution = 0;
+        self.stack.spacing = 0;
+        self.stack.alignment = 0;
         self.oldCountOfDevices = -100;
         self.queued = NO;
+        [self addSubview:self.stack];
         [self updateBattery];
-        self.userInteractionEnabled = NO;
     }
     return self;
 }
@@ -25,6 +26,9 @@ long long batteryPercentage;
 long long lastPercentage;
 
 -(void)updateBattery {
+    if(!self.stack.widthAnchor) {
+        [self.stack.widthAnchor constraintEqualToAnchor:self.widthAnchor].active = YES;
+    }
     dispatch_async(dispatch_get_main_queue(), ^{
         BCBatteryDeviceController *bcb = [BCBatteryDeviceController sharedInstance];
         NSArray *devices = MSHookIvar<NSArray *>(bcb, "_sortedDevices");
@@ -53,33 +57,33 @@ long long lastPercentage;
                 shouldAdd = YES;
             }
 
-            if(![self.subviews containsObject:cell] && shouldAdd && [devices containsObject:device]) {
+            if(![self.stack.subviews containsObject:cell] && shouldAdd && [devices containsObject:device]) {
                 //[cell setFrame:CGRectMake(0,0,self.frame.size.width, bannerHeight)];
                 cell.alpha = 0;
-                [self addSubview:cell];
-                [self addArrangedSubview:cell];
+                [self.stack addSubview:cell];
+                [self.stack addArrangedSubview:cell];
                 [UIView animateWithDuration:0.3 animations:^{
                     cell.alpha = 1;
                 }];
-            } else if([self.subviews containsObject:cell] && !shouldAdd){
+            } else if([self.stack.subviews containsObject:cell] && !shouldAdd){
                 [UIView animateWithDuration:0.3 animations:^{
                     cell.alpha = 0;
                 } completion:^(BOOL finished) {
                     [cell removeFromSuperview];
-                    [self removeArrangedSubview:cell];
+                    [self.stack removeArrangedSubview:cell];
                     cell.alpha = 1;
                 }];
             }
 
         }
 
-        for(KAIBatteryCell *cell in self.subviews) {
+        for(KAIBatteryCell *cell in self.stack.subviews) {
             if(![devices containsObject:cell.device]) {
                 [UIView animateWithDuration:0.3 animations:^{
                     cell.alpha = 0;
                 } completion:^(BOOL finished) {
                     [cell removeFromSuperview];
-                    [self removeArrangedSubview:cell];
+                    [self.stack removeArrangedSubview:cell];
                     cell.alpha = 1;
                 }];
             }
@@ -94,7 +98,7 @@ long long lastPercentage;
 
         self.oldCountOfDevices = [devices count];
 
-        self.number = [self.subviews count];
+        self.number = [self.stack.subviews count];
 
     if([self.superview.superview.superview respondsToSelector:@selector(fixComplicationsViewFrame)]) {
         [(NCNotificationListView *)(self.superview.superview.superview) fixComplicationsViewFrame];
@@ -110,14 +114,17 @@ long long lastPercentage;
 		if(!self.heightConstraint) {
 
 			self.heightConstraint = [self.heightAnchor constraintEqualToConstant:(self.number * (bannerHeight + spacing))];
+            self.stack.heightConstraint = [self.heightAnchor constraintEqualToConstant:(self.number * (bannerHeight + spacing))];
 			self.heightConstraint.active = YES;
+            self.stack.heightConstraint.active = YES;
 
 		} else {
 		    int height = (self.number * (bannerHeight + spacing));
-            //if([self.superview.subviews count]>1) {
-            //    height = (self.number * (bannerHeight + spacing)) - spacing;
-            //}
+            if([self.superview.subviews count]>1) {
+                height = (self.number * (bannerHeight + spacing)) - spacing;
+            }
 			self.heightConstraint.constant = height;
+            self.stack.heightConstraint.constant = height;
 
 			UIStackView *s = (UIStackView *)(self.superview);
 			s.frame = CGRectMake(s.frame.origin.x, s.frame.origin.y, s.frame.size.width, (s.frame.size.height - 1));
@@ -129,7 +136,7 @@ long long lastPercentage;
 
 -(void)addArrangedSubview:(UIView *)view {
     [super addArrangedSubview:view];
-    self.number = [self.subviews count];
+    self.number = [self.stack.subviews count];
     if([self.superview.superview.superview respondsToSelector:@selector(fixComplicationsViewFrame)]) {
         [(NCNotificationListView *)(self.superview.superview.superview) fixComplicationsViewFrame];
     }
@@ -150,7 +157,7 @@ long long lastPercentage;
 
 -(void)removeArrangedSubview:(UIView *)view {
     [super removeArrangedSubview:view];
-    self.number = [self.subviews count];
+    self.number = [self.stack.subviews count];
     if([self.superview.superview.superview respondsToSelector:@selector(fixComplicationsViewFrame)]) {
         [(NCNotificationListView *)(self.superview.superview.superview) fixComplicationsViewFrame];
     }
@@ -158,7 +165,7 @@ long long lastPercentage;
 }
 
 -(void)refreshForPrefs {
-    for( UIView *view in self.subviews ) {
+    for( UIView *view in self.stack.subviews ) {
         @try {
             [view removeFromSuperview];
         } @catch (NSException *exception) {
@@ -188,7 +195,7 @@ long long lastPercentage;
     queueTimer = nil;
 }
 
-+(KAIBatteryStack *)sharedInstance {
++(KAIBatteryPlatter *)sharedInstance {
     return instance;
 }
 
