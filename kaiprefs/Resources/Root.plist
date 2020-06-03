@@ -188,7 +188,7 @@
 			<key>cell</key>
 			<string>PSGroupCell</string>
 			<key>label</key>
-			<string>Banner Alignment</string>
+			<string>Banner Alignment (Vertical mode)</string>
 		</dict>
 		<dict>
             <key>cell</key>

@@ -16,7 +16,6 @@ NSTimer *queueTimer = nil;
         self.stack.alignment = 0;
         self.oldCountOfDevices = -100;
         self.queued = NO;
-        self.clipsToBounds = NO;
 
         [self setMinimumZoomScale:1];
         [self setMaximumZoomScale:1];
@@ -43,6 +42,9 @@ long long lastPercentage;
     
     if(self.oldCountOfDevices == -100) {
         self.oldCountOfDevices = [devices count] + 1;
+    }
+    for(KAIBatteryCell *cell in self.stack.subviews) {
+        [cell updateInfo];
     }
 
     if(!self.isUpdating && self.oldCountOfDevices != 0 && ([devices count] + 1 == self.oldCountOfDevices || [devices count] - 1 == self.oldCountOfDevices || [devices count] == self.oldCountOfDevices)) {
@@ -173,6 +175,8 @@ long long lastPercentage;
             }
         }
     }
+
+    [self setContentSize:self.stack.frame.size];
 }
 
 -(void)layoutSubviews {
