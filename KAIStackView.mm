@@ -8,4 +8,9 @@
     return self;
 }
 
+-(void)addSubview:(UIView *)arg1 {
+    [super addSubview:arg1];
+    [(UIScrollView *)self.superview setContentSize:self.frame.size];
+}
+
 @end

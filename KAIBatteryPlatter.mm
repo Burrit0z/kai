@@ -16,6 +16,7 @@ NSTimer *queueTimer = nil;
         self.stack.alignment = 0;
         self.oldCountOfDevices = -100;
         self.queued = NO;
+        self.clipsToBounds = NO;
 
         [self setMinimumZoomScale:1];
         [self setMaximumZoomScale:1];
@@ -115,6 +116,7 @@ long long lastPercentage;
 }
 
 -(void)setContentOffset:(CGPoint)arg1 {
+    [self setContentSize:self.stack.frame.size];
     [super setContentOffset:CGPointMake(arg1.x, 0)];
 }
 
@@ -143,7 +145,6 @@ long long lastPercentage;
 			UIStackView *s = (UIStackView *)(self.superview);
 			s.frame = CGRectMake(s.frame.origin.x, s.frame.origin.y, s.frame.size.width, (s.frame.size.height - 1));
 			//literally does nothing but makes the stack view lay itself out (doesnt adjust frame because translatesAutoreszingMaskIntoConstraints = NO on stack views)
-            [self setContentSize:self.stack.frame.size];
 		}
 
         }];
