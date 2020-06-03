@@ -159,11 +159,18 @@ long long lastPercentage;
 			self.heightConstraint.active = YES;
             self.stack.heightConstraint.active = YES;
             [self setContentSize:self.stack.frame.size];
+            if(kaiAlign==0) {
+                [self.stack.widthAnchor constraintEqualToAnchor:self.widthAnchor].active = YES;
+            } else {
+                self.widthConstraint = [self.widthAnchor constraintEqualToConstant:(self.number * (self.frame.size.width + bannerWidthFactor))];
+			    self.widthConstraint.active = YES;
+            }
 
 		} else {
             int height = (self.number * (bannerHeight + spacing));
             if(kaiAlign!=0) {
                 height = bannerHeight + spacing;
+                self.widthConstraint.constant = (self.number * (self.frame.size.width + bannerWidthFactor));
             }
 
             if([self.superview.subviews count]>1) {

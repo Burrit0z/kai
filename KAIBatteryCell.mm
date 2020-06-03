@@ -126,23 +126,23 @@
         [self.glyphView.heightAnchor constraintEqualToConstant:glyphSize].active = YES;
 
         self.battery.translatesAutoresizingMaskIntoConstraints = NO;
-        [self.battery.leftAnchor constraintEqualToAnchor:blurPlatter.rightAnchor constant:(- 49)].active = YES;
+        [self.battery.rightAnchor constraintEqualToAnchor:blurPlatter.rightAnchor constant:- 20.5].active = YES;
         [self.battery.centerYAnchor constraintEqualToAnchor:blurPlatter.centerYAnchor].active = YES;
         [self.battery.widthAnchor constraintEqualToConstant:20].active = YES;
         [self.battery.heightAnchor constraintEqualToConstant:10].active = YES;
 
-        [self.percentLabel.rightAnchor constraintEqualToAnchor:self.battery.leftAnchor constant:-4.5].active = YES;
+        if(!hideDeviceLabel) {
+            [self.percentLabel.rightAnchor constraintEqualToAnchor:self.battery.leftAnchor constant:-4.5].active = YES;
+        } else if(hideDeviceLabel) {
+            [self.percentLabel.centerXAnchor constraintEqualToAnchor:blurPlatter.centerXAnchor].active = YES;
+        }
 
         if(hidePercent) {
             [self.label.rightAnchor constraintEqualToAnchor:self.battery.leftAnchor constant:-4.5].active = YES;
         }
 
         [self.heightAnchor constraintEqualToConstant:(bannerHeight + spacing)].active = YES;
-        if(kaiAlign==0) {
-            [self.widthAnchor constraintEqualToConstant:(self.frame.size.width)].active = YES;
-        } else {
-            [self.widthAnchor constraintEqualToAnchor:blurPlatter.widthAnchor].active = YES;
-        }
+        [self.widthAnchor constraintEqualToAnchor:blurPlatter.widthAnchor].active = YES;
 
     }
 
