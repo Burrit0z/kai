@@ -31,16 +31,6 @@ CSAdjunctListView *list;
 	%orig;
 }
 
--(void)removeArrangedSubview:(id)arg1 {
-	%orig;
-	[[KAIBatteryPlatter sharedInstance] calculateHeight];
-}
-
--(void)addArrangedSubview:(id)arg1 {
-	%orig;
-	[[KAIBatteryPlatter sharedInstance] calculateHeight];
-}
-
 -(void)setStackView:(UIStackView *)arg1 {
 
 	if(!KAISelf.hasKai) {

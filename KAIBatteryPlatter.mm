@@ -1,4 +1,3 @@
-#import "KAIBatteryPlatter.h"
 
 KAIBatteryPlatter *instance;
 NSTimer *queueTimer = nil;
@@ -192,7 +191,8 @@ long long lastPercentage;
         if(self.number==0) {
             [(UIStackView *)(self.superview) removeArrangedSubview:self];
         } else if(self.number!=0 && !self.superview) {
-            [[[objc_getClass("CSAdjunctListView") class] sharedListViewForKai] addArrangedSubview:self];
+            [[[[objc_getClass("CSAdjunctListView") class] sharedListViewForKai] stackView] addArrangedSubview:self];
+            [self performSelector:@selector(calculateHeight) withObject:self afterDelay:0.1];
         }
 }
 

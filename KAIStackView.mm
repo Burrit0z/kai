@@ -13,4 +13,9 @@
     [(UIScrollView *)self.superview setContentSize:self.frame.size];
 }
 
+-(void)layoutSubviews {
+    [super layoutSubviews];
+    [(KAIBatteryPlatter *)(self.superview) calculateHeight];
+}
+
 @end
