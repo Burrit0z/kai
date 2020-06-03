@@ -106,7 +106,7 @@
 
         self.percentLabel.translatesAutoresizingMaskIntoConstraints = NO;
         [self.percentLabel.centerYAnchor constraintEqualToAnchor:blurPlatter.centerYAnchor].active = YES;
-        [self.percentLabel.widthAnchor constraintEqualToConstant:32].active = YES;
+        [self.percentLabel.widthAnchor constraintEqualToConstant:36].active = YES;
         [self.percentLabel.heightAnchor constraintEqualToConstant:12].active = YES;
 
         self.label.translatesAutoresizingMaskIntoConstraints = NO;
