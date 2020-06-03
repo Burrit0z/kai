@@ -124,36 +124,7 @@ long long lastPercentage;
 
 -(void)setNumber:(NSInteger)arg1 {
     _number = arg1;
-    [UIView animateWithDuration:0.3 animations:^{
-
-		if(!self.heightConstraint) {
-
-			self.heightConstraint = [self.heightAnchor constraintEqualToConstant:(self.number * (bannerHeight + spacing))];
-            self.stack.heightConstraint = [self.heightAnchor constraintEqualToConstant:(self.number * (bannerHeight + spacing))];
-			self.heightConstraint.active = YES;
-            self.stack.heightConstraint.active = YES;
-            [self setContentSize:self.stack.frame.size];
-
-		} else {
-            int height = (self.number * (bannerHeight + spacing));
-            if(kaiAlign==0) {
-                height = (self.number * (bannerHeight + spacing));
-            } else {
-                height = bannerHeight + spacing;
-            }
-
-            if([self.superview.subviews count]>1) {
-                height = height - spacing;
-            }
-			self.heightConstraint.constant = height;
-            self.stack.heightConstraint.constant = height;
-
-			UIStackView *s = (UIStackView *)(self.superview);
-			s.frame = CGRectMake(s.frame.origin.x, s.frame.origin.y, s.frame.size.width, (s.frame.size.height - 1));
-			//literally does nothing but makes the stack view lay itself out (doesnt adjust frame because translatesAutoreszingMaskIntoConstraints = NO on stack views)
-		}
-
-        }];
+    [self calculateHeight];
 }
 
 -(void)addSubview:(UIView *)view {
@@ -184,6 +155,39 @@ long long lastPercentage;
         [(NCNotificationListView *)(self.superview.superview.superview) fixComplicationsViewFrame];
     }
 
+}
+
+-(void)calculateHeight {
+    [UIView animateWithDuration:0.3 animations:^{
+
+		if(!self.heightConstraint) {
+
+			self.heightConstraint = [self.heightAnchor constraintEqualToConstant:(self.number * (bannerHeight + spacing))];
+            self.stack.heightConstraint = [self.heightAnchor constraintEqualToConstant:(self.number * (bannerHeight + spacing))];
+			self.heightConstraint.active = YES;
+            self.stack.heightConstraint.active = YES;
+            [self setContentSize:self.stack.frame.size];
+
+		} else {
+            int height = (self.number * (bannerHeight + spacing));
+            if(kaiAlign==0) {
+                height = (self.number * (bannerHeight + spacing));
+            } else {
+                height = bannerHeight + spacing;
+            }
+
+            if([self.superview.subviews count]>1) {
+                height = height - spacing;
+            }
+			self.heightConstraint.constant = height;
+            self.stack.heightConstraint.constant = height;
+
+			UIStackView *s = (UIStackView *)(self.superview);
+			s.frame = CGRectMake(s.frame.origin.x, s.frame.origin.y, s.frame.size.width, (s.frame.size.height - 1));
+			//literally does nothing but makes the stack view lay itself out (doesnt adjust frame because translatesAutoreszingMaskIntoConstraints = NO on stack views)
+		}
+
+        }];
 }
 
 -(void)refreshForPrefs {

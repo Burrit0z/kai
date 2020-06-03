@@ -9,4 +9,5 @@
 -(instancetype)initWithFrame:(CGRect)arg1;
 -(void)refreshForPrefs;
 -(void)updateBattery;
+-(void)calculateHeight;
 @end
