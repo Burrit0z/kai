@@ -105,9 +105,8 @@
         [blur.heightAnchor constraintEqualToAnchor:blurPlatter.heightAnchor].active = YES;
 
         self.percentLabel.translatesAutoresizingMaskIntoConstraints = NO;
-        [self.percentLabel.leftAnchor constraintEqualToAnchor:blurPlatter.rightAnchor constant:(- 96)].active = YES;
         [self.percentLabel.centerYAnchor constraintEqualToAnchor:blurPlatter.centerYAnchor].active = YES;
-        [self.percentLabel.widthAnchor constraintEqualToConstant:37].active = YES;
+        [self.percentLabel.widthAnchor constraintEqualToConstant:32].active = YES;
         [self.percentLabel.heightAnchor constraintEqualToConstant:12].active = YES;
 
         self.label.translatesAutoresizingMaskIntoConstraints = NO;
@@ -115,6 +114,8 @@
         [self.label.centerYAnchor constraintEqualToAnchor:blurPlatter.centerYAnchor].active = YES;
         if(!hidePercent) {
             [self.label.rightAnchor constraintEqualToAnchor:self.percentLabel.leftAnchor constant:-4.5].active = YES;
+        } else {
+            [self.label.rightAnchor constraintEqualToAnchor:self.label.leftAnchor].active = YES;
         }
         [self.label.heightAnchor constraintEqualToConstant:25].active = YES;
 
@@ -129,6 +130,8 @@
         [self.battery.centerYAnchor constraintEqualToAnchor:blurPlatter.centerYAnchor].active = YES;
         [self.battery.widthAnchor constraintEqualToConstant:20].active = YES;
         [self.battery.heightAnchor constraintEqualToConstant:10].active = YES;
+
+        [self.percentLabel.rightAnchor constraintEqualToAnchor:self.battery.leftAnchor constant:-4.5].active = YES;
 
         if(hidePercent) {
             [self.label.rightAnchor constraintEqualToAnchor:self.battery.leftAnchor constant:-4.5].active = YES;
