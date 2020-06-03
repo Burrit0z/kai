@@ -188,6 +188,10 @@ long long lastPercentage;
 		}
 
         }];
+
+        if(self.number==0) {
+            [(UIStackView *)(self.superview) removeArrangedSubview:self];
+        }
 }
 
 -(void)refreshForPrefs {
