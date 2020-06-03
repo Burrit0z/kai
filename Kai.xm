@@ -10,16 +10,12 @@ CSAdjunctListView *list;
 
 -(void)_layoutStackView {
 
-	NSInteger lastSlot = [[self stackView].subviews count] -1;
 	//this code is used to determine if kai is at the bottom of the stack view
-	if([[self stackView].subviews objectAtIndex:lastSlot] != [KAIBatteryPlatter sharedInstance] && belowMusic) {
+	if([[self stackView].subviews objectAtIndex:([[self stackView].subviews count] -1)] != [KAIBatteryPlatter sharedInstance] && belowMusic) {
 		//if it is not, but the option to have kai below music is on, i simply remove from it's current pos. 
 		//and insert into last slot.
 		[[self stackView] removeArrangedSubview:[KAIBatteryPlatter sharedInstance]];
-		[[self stackView] insertArrangedSubview:[KAIBatteryPlatter sharedInstance] atIndex:lastSlot];
-	} else if(!belowMusic && ![[self stackView].subviews containsObject:[KAIBatteryPlatter sharedInstance]]) {
-		[[self stackView] removeArrangedSubview:[KAIBatteryPlatter sharedInstance]];
-		[[self stackView] insertArrangedSubview:[KAIBatteryPlatter sharedInstance] atIndex:0];
+		[[self stackView] insertArrangedSubview:[KAIBatteryPlatter sharedInstance] atIndex:([[self stackView].subviews count] -1)];
 	}
 
 	if([KAISelf.superview respondsToSelector:@selector(fixComplicationsViewFrame)]) {

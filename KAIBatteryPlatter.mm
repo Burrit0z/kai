@@ -107,7 +107,7 @@ long long lastPercentage;
 
         self.oldCountOfDevices = [devices count];
 
-        self.number = [self.stack.subviews count];
+        [self calculateHeight];
 
     if([self.superview.superview.superview respondsToSelector:@selector(fixComplicationsViewFrame)]) {
         [(NCNotificationListView *)(self.superview.superview.superview) fixComplicationsViewFrame];
@@ -121,29 +121,6 @@ long long lastPercentage;
     [super setContentOffset:CGPointMake(arg1.x, 0)];
 }
 
--(void)addSubview:(UIView *)view {
-    [super addSubview:view];
-    self.number = [self.stack.subviews count];
-    if([self.superview.superview.superview respondsToSelector:@selector(fixComplicationsViewFrame)]) {
-        [(NCNotificationListView *)(self.superview.superview.superview) fixComplicationsViewFrame];
-    }
-
-    if(textColor==0 && [view respondsToSelector:@selector(updateInfo)]) {
-        KAIBatteryCell *cell = (KAIBatteryCell *)view;
-        if(@available(iOS 12.0, *)) {
-			if(self.traitCollection.userInterfaceStyle == UIUserInterfaceStyleDark) {
-                [cell.label setTextColor:[UIColor whiteColor]];
-                [cell.percentLabel setTextColor:[UIColor whiteColor]];
-            } else if(self.traitCollection.userInterfaceStyle == UIUserInterfaceStyleLight) {
-                [cell.label setTextColor:[UIColor blackColor]];
-                [cell.percentLabel setTextColor:[UIColor blackColor]];   
-            }
-        }
-    }
-
-    [self setContentSize:self.stack.frame.size];
-}
-
 -(void)layoutSubviews {
     if([self.superview.superview.superview respondsToSelector:@selector(fixComplicationsViewFrame)]) {
         [(NCNotificationListView *)(self.superview.superview.superview) fixComplicationsViewFrame];
@@ -153,6 +130,14 @@ long long lastPercentage;
 
 -(void)calculateHeight {
     self.number = [self.stack.subviews count];
+
+    if(self.number==0) {
+        [(UIStackView *)(self.superview) removeArrangedSubview:self];
+    } else if(self.number!=0 && self.superview == nil) {
+        [[[[objc_getClass("CSAdjunctListView") class] sharedListViewForKai] stackView] addArrangedSubview:self];
+        //[self performSelector:@selector(calculateHeight) withObject:self afterDelay:0.1];
+    }
+
 
     [UIView animateWithDuration:0.3 animations:^{
 
@@ -182,13 +167,6 @@ long long lastPercentage;
 		}
 
         }];
-
-        if(self.number==0) {
-            [(UIStackView *)(self.superview) removeArrangedSubview:self];
-        } else if(self.number!=0 && !self.superview) {
-            [[[[objc_getClass("CSAdjunctListView") class] sharedListViewForKai] stackView] addArrangedSubview:self];
-            [self performSelector:@selector(calculateHeight) withObject:self afterDelay:0.1];
-        }
 }
 
 -(void)refreshForPrefs {
