@@ -134,10 +134,14 @@ long long lastPercentage;
 
 		} else {
             int height = (self.number * (bannerHeight + spacing));
-            if(kaiAlign==0 && [self.superview.subviews count]>1) {
-                height = (self.number * (bannerHeight + spacing)) - spacing;
+            if(kaiAlign==0) {
+                height = (self.number * (bannerHeight + spacing));
             } else {
                 height = bannerHeight + spacing;
+            }
+
+            if([self.superview.subviews count]>1) {
+                height = height - spacing;
             }
 			self.heightConstraint.constant = height;
             self.stack.heightConstraint.constant = height;
