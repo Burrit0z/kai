@@ -121,11 +121,6 @@ long long lastPercentage;
     [super setContentOffset:CGPointMake(arg1.x, 0)];
 }
 
--(void)setNumber:(NSInteger)arg1 {
-    _number = arg1;
-    [self calculateHeight];
-}
-
 -(void)addSubview:(UIView *)view {
     [super addSubview:view];
     self.number = [self.stack.subviews count];
@@ -157,6 +152,8 @@ long long lastPercentage;
 }
 
 -(void)calculateHeight {
+    self.number = [self.stack.subviews count];
+
     [UIView animateWithDuration:0.3 animations:^{
 
 		if(!self.heightConstraint) {
@@ -169,14 +166,12 @@ long long lastPercentage;
 
 		} else {
             int height = (self.number * (bannerHeight + spacing));
-            if(kaiAlign==0) {
-                height = (self.number * (bannerHeight + spacing));
-            } else {
+            if(kaiAlign!=0) {
                 height = bannerHeight + spacing;
             }
 
             if([self.superview.subviews count]>1) {
-                height = height - spacing;
+                height = (height - spacing) + 1;
             }
 			self.heightConstraint.constant = height;
             self.stack.heightConstraint.constant = height;
