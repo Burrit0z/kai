@@ -132,7 +132,10 @@ long long lastPercentage;
     self.number = [self.stack.subviews count];
 
     if(self.number==0) {
-        [(UIStackView *)(self.superview) removeArrangedSubview:self];
+        UIStackView *s = (UIStackView *)(self.superview);
+			s.frame = CGRectMake(s.frame.origin.x, s.frame.origin.y, s.frame.size.width, (s.frame.size.height - 1));
+        [s removeArrangedSubview:self];
+        [self removeFromSuperview];
     } else if(self.number!=0 && self.superview == nil) {
         [[[[objc_getClass("CSAdjunctListView") class] sharedListViewForKai] stackView] addArrangedSubview:self];
         //[self performSelector:@selector(calculateHeight) withObject:self afterDelay:0.1];
@@ -142,9 +145,17 @@ long long lastPercentage;
     [UIView animateWithDuration:0.3 animations:^{
 
 		if(!self.heightConstraint) {
+            int height = (self.number * (bannerHeight + spacing));
+            if(kaiAlign!=0) {
+                height = bannerHeight + spacing;
+            }
 
-			self.heightConstraint = [self.heightAnchor constraintEqualToConstant:(self.number * (bannerHeight + spacing))];
-            self.stack.heightConstraint = [self.heightAnchor constraintEqualToConstant:(self.number * (bannerHeight + spacing))];
+            if([self.superview.subviews count]>1) {
+                height = (height - spacing) + 1;
+            }
+
+			self.heightConstraint = [self.heightAnchor constraintEqualToConstant:height];
+            self.stack.heightConstraint = [self.heightAnchor constraintEqualToConstant:height];
 			self.heightConstraint.active = YES;
             self.stack.heightConstraint.active = YES;
             [self setContentSize:self.stack.frame.size];
@@ -166,7 +177,10 @@ long long lastPercentage;
 			//literally does nothing but makes the stack view lay itself out (doesnt adjust frame because translatesAutoreszingMaskIntoConstraints = NO on stack views)
 		}
 
+        [self setContentSize:self.stack.frame.size];
+
         }];
+
 }
 
 -(void)refreshForPrefs {

@@ -16,6 +16,9 @@ CSAdjunctListView *list;
 		//and insert into last slot.
 		[[self stackView] removeArrangedSubview:[KAIBatteryPlatter sharedInstance]];
 		[[self stackView] insertArrangedSubview:[KAIBatteryPlatter sharedInstance] atIndex:([[self stackView].subviews count] -1)];
+	} else if([[self stackView].subviews objectAtIndex:0] != [KAIBatteryPlatter sharedInstance] && !belowMusic) {
+		[[self stackView] removeArrangedSubview:[KAIBatteryPlatter sharedInstance]];
+		[[self stackView] insertArrangedSubview:[KAIBatteryPlatter sharedInstance] atIndex:0];
 	}
 
 	if([KAISelf.superview respondsToSelector:@selector(fixComplicationsViewFrame)]) {
@@ -74,7 +77,6 @@ CSAdjunctListView *list;
 		}
 		if([KAISelf.superview respondsToSelector:@selector(fixComplicationsViewFrame)]) {
 		[KAISelf.superview performSelector:@selector(fixComplicationsViewFrame) withObject:KAISelf.superview afterDelay:0.35];
-		//[KAISelf.superview performSelector:@selector(fixComplicationsViewFrame) withObject:KAISelf.superview afterDelay:0.5];
 		}
 
 		isUpdating = NO;
@@ -106,11 +108,9 @@ CSAdjunctListView *list;
 }
 
 -(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
-	//if([self isMemberOfClass:[objc_getClass("BCBatteryDevice") class]] && [self respondsToSelector:@selector(_kaiCell)] && object == self && ([keyPath isEqualToString:@"charging"] || [keyPath isEqualToString:@"percentCharge"] || [keyPath isEqualToString:@"batterySaverModeActive"])) {
 
 		//sends the noti to update battery info
 		[[NSNotificationCenter defaultCenter] postNotificationName:@"KaiInfoChanged" object:nil userInfo:nil];
-	//}
 	
 }
 
