@@ -29,7 +29,7 @@
 -(void)setStackView:(UIStackView *)arg1 {
 
 	if(!KAISelf.hasKai) {
-		KAIBatteryPlatter *battery = [[KAIBatteryPlatter alloc] init];
+		KAIBatteryPlatter *battery = [[KAIBatteryPlatter alloc] initWithFrame:[self stackView].frame];
 
 		//Add noti observer
 		[[NSNotificationCenter defaultCenter] addObserver:self

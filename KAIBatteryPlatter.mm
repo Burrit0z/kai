@@ -5,18 +5,25 @@ NSTimer *queueTimer = nil;
 
 @implementation KAIBatteryPlatter
 
--(instancetype)init {
-    self = [super init];
+-(instancetype)initWithFrame:(CGRect)arg1 {
+    self = [super initWithFrame:arg1];
     instance = self;
     if (self) {
         self.stack = [[KAIStackView alloc] init];
         self.stack.axis = kaiAlign==0 ? 1 : 0;
         self.stack.distribution = 0;
-        self.stack.spacing = kaiAlign==0 ? 0 : spacing;
+        self.stack.spacing = kaiAlign==0 ? 0 : spacingHorizontal;
         self.stack.alignment = 0;
         self.oldCountOfDevices = -100;
         self.queued = NO;
+
+        [self setMinimumZoomScale:1];
+        [self setMaximumZoomScale:1];
         [self addSubview:self.stack];
+        [self setContentSize:self.stack.frame.size];
+        [self setContentOffset:CGPointMake(0,0)];
+        //[self setDelegate:self];
+
         [self updateBattery];
     }
     return self;
@@ -107,6 +114,10 @@ long long lastPercentage;
 
 }
 
+-(void)setContentOffset:(CGPoint)arg1 {
+    [super setContentOffset:CGPointMake(arg1.x, 0)];
+}
+
 -(void)setNumber:(NSInteger)arg1 {
     _number = arg1;
     [UIView animateWithDuration:0.3 animations:^{
@@ -117,13 +128,14 @@ long long lastPercentage;
             self.stack.heightConstraint = [self.heightAnchor constraintEqualToConstant:(self.number * (bannerHeight + spacing))];
 			self.heightConstraint.active = YES;
             self.stack.heightConstraint.active = YES;
+            [self setContentSize:self.stack.frame.size];
 
 		} else {
             int height = (self.number * (bannerHeight + spacing));
             if(kaiAlign==0 && [self.superview.subviews count]>1) {
                 height = (self.number * (bannerHeight + spacing)) - spacing;
             } else {
-                height = bannerHeight;
+                height = bannerHeight + spacing;
             }
 			self.heightConstraint.constant = height;
             self.stack.heightConstraint.constant = height;
@@ -131,19 +143,20 @@ long long lastPercentage;
 			UIStackView *s = (UIStackView *)(self.superview);
 			s.frame = CGRectMake(s.frame.origin.x, s.frame.origin.y, s.frame.size.width, (s.frame.size.height - 1));
 			//literally does nothing but makes the stack view lay itself out (doesnt adjust frame because translatesAutoreszingMaskIntoConstraints = NO on stack views)
+            [self setContentSize:self.stack.frame.size];
 		}
 
         }];
 }
 
--(void)addArrangedSubview:(UIView *)view {
-    [super addArrangedSubview:view];
+-(void)addSubview:(UIView *)view {
+    [super addSubview:view];
     self.number = [self.stack.subviews count];
     if([self.superview.superview.superview respondsToSelector:@selector(fixComplicationsViewFrame)]) {
         [(NCNotificationListView *)(self.superview.superview.superview) fixComplicationsViewFrame];
     }
 
-    if(textColor==0) {
+    if(textColor==0 && [view respondsToSelector:@selector(updateInfo)]) {
         KAIBatteryCell *cell = (KAIBatteryCell *)view;
         if(@available(iOS 12.0, *)) {
 			if(self.traitCollection.userInterfaceStyle == UIUserInterfaceStyleDark) {
@@ -157,9 +170,7 @@ long long lastPercentage;
     }
 }
 
--(void)removeArrangedSubview:(UIView *)view {
-    [super removeArrangedSubview:view];
-    self.number = [self.stack.subviews count];
+-(void)layoutSubviews {
     if([self.superview.superview.superview respondsToSelector:@selector(fixComplicationsViewFrame)]) {
         [(NCNotificationListView *)(self.superview.superview.superview) fixComplicationsViewFrame];
     }
@@ -167,6 +178,8 @@ long long lastPercentage;
 }
 
 -(void)refreshForPrefs {
+    self.stack.spacing = kaiAlign==0 ? 0 : spacingHorizontal;
+    [self setContentSize:self.stack.frame.size];
     for( UIView *view in self.stack.subviews ) {
         @try {
             [view removeFromSuperview];

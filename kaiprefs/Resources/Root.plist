@@ -276,7 +276,9 @@
 			<key>cell</key>
 			<string>PSGroupCell</string>
 			<key>label</key>
-			<string>Banner Spacing (5)</string>
+			<string>Banner Spacing - Vertical (5)</string>
+			<key>footerText</key>
+			<string>This is the spacing between cells vertically, for kai's vertical mode.</string>
 		</dict>
 		<dict>
 			<key>default</key>
@@ -295,6 +297,32 @@
 			<string>com.burritoz.kaiprefs</string>
 			<key>key</key>
 			<string>spacing</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+			<key>label</key>
+			<string>Banner Spacing - Horizontal (8)</string>
+			<key>footerText</key>
+			<string>This is the spacing between cells horizontally, for kai's horizontal mode.</string>
+		</dict>
+		<dict>
+			<key>default</key>
+			<real>8</real>
+			<key>cell</key>
+			<string>PSSliderCell</string>
+			<key>min</key>
+			<real>-100.0</real>
+			<key>max</key>
+			<real>300</real>
+			<key>isSegmented</key>
+			<false/>
+			<key>showValue</key>
+			<true/>
+			<key>defaults</key>
+			<string>com.burritoz.kaiprefs</string>
+			<key>key</key>
+			<string>spacingHorizontal</string>
 		</dict>
 		<dict>
 			<key>cell</key>
