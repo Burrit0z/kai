@@ -15,6 +15,7 @@
 -(UIStackView *)stackView;
 -(void)_layoutStackView;
 -(void)setStackView:(UIStackView *)arg1;
++(id)sharedListViewForKai;
 @end
 
 @interface CALayer (kai)

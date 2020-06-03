@@ -191,6 +191,8 @@ long long lastPercentage;
 
         if(self.number==0) {
             [(UIStackView *)(self.superview) removeArrangedSubview:self];
+        } else if(self.number!=0 && !self.superview) {
+            [[[objc_getClass("CSAdjunctListView") class] sharedListViewForKai] addArrangedSubview:self];
         }
 }
 

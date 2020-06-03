@@ -1,5 +1,7 @@
 #import "Kai.h"
 
+CSAdjunctListView *list;
+
 %group main
 
 %hook KAITarget //This class is defined in %ctor, KAITarget is not a class name.
@@ -15,7 +17,7 @@
 		//and insert into last slot.
 		[[self stackView] removeArrangedSubview:[KAIBatteryPlatter sharedInstance]];
 		[[self stackView] insertArrangedSubview:[KAIBatteryPlatter sharedInstance] atIndex:lastSlot];
-	} else if([[self stackView].subviews objectAtIndex:0] != [KAIBatteryPlatter sharedInstance] && !belowMusic) {
+	} else if(!belowMusic && ![[self stackView].subviews containsObject:[KAIBatteryPlatter sharedInstance]]) {
 		[[self stackView] removeArrangedSubview:[KAIBatteryPlatter sharedInstance]];
 		[[self stackView] insertArrangedSubview:[KAIBatteryPlatter sharedInstance] atIndex:0];
 	}
@@ -42,6 +44,9 @@
 -(void)setStackView:(UIStackView *)arg1 {
 
 	if(!KAISelf.hasKai) {
+
+		list = self;
+
 		KAIBatteryPlatter *battery = [[KAIBatteryPlatter alloc] initWithFrame:[self stackView].frame];
 
 		//Add noti observer
@@ -92,6 +97,12 @@
 	}
 
 }
+
+%new
++(id)sharedListViewForKai {
+	return list;
+}
+
 %end
 
 
