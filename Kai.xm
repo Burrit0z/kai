@@ -15,6 +15,9 @@
 		//and insert into last slot.
 		[[self stackView] removeArrangedSubview:[KAIBatteryPlatter sharedInstance]];
 		[[self stackView] insertArrangedSubview:[KAIBatteryPlatter sharedInstance] atIndex:lastSlot];
+	} else if([[self stackView].subviews objectAtIndex:0] != [KAIBatteryPlatter sharedInstance] && !belowMusic) {
+		[[self stackView] removeArrangedSubview:[KAIBatteryPlatter sharedInstance]];
+		[[self stackView] insertArrangedSubview:[KAIBatteryPlatter sharedInstance] atIndex:0];
 	}
 
 	if([KAISelf.superview respondsToSelector:@selector(fixComplicationsViewFrame)]) {
