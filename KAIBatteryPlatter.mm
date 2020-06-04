@@ -8,6 +8,7 @@ NSTimer *queueTimer = nil;
     self = [super initWithFrame:arg1];
     instance = self;
     if (self) {
+        self.stackHolder = [[UIView alloc] initWithFrame:arg1];
         self.stack = [[KAIStackView alloc] init];
         self.stack.axis = kaiAlign==0 ? 1 : 0;
         self.stack.distribution = 0;
@@ -15,12 +16,32 @@ NSTimer *queueTimer = nil;
         self.stack.alignment = 0;
         self.oldCountOfDevices = -100;
         self.queued = NO;
-
+ 
         [self setMinimumZoomScale:1];
         [self setMaximumZoomScale:1];
-        [self addSubview:self.stack];
+        [self addSubview:self.stackHolder];
+        [self.stackHolder addSubview:self.stack];
         [self setContentSize:self.stack.frame.size];
         [self setContentOffset:CGPointMake(0,0)];
+
+        //Keeping this link here to leak...
+        //https://cdn.discordapp.com/attachments/683698397634756646/718122118990266518/unknown.png 
+
+        self.stackHolder.translatesAutoresizingMaskIntoConstraints = NO;
+
+        if(bannerAlign==2) { //center
+            self.subviewAligner = [self.stackHolder.centerXAnchor constraintEqualToAnchor:self.centerXAnchor];
+        } else if(bannerAlign==1) { //left
+            self.subviewAligner = [self.stackHolder.leftAnchor constraintEqualToAnchor:self.leftAnchor];
+        } else if(bannerAlign==3) { //right
+            self.subviewAligner = [self.stackHolder.rightAnchor constraintEqualToAnchor:self.rightAnchor];
+        }
+
+        [self.stackHolder.heightAnchor constraintEqualToAnchor:self.heightAnchor].active = YES;
+        [self.stackHolder.widthAnchor constraintEqualToAnchor:self.stack.widthAnchor].active = YES;
+        [self.stackHolder.centerYAnchor constraintEqualToAnchor:self.centerYAnchor].active = YES;
+
+        self.subviewAligner.active = YES;
 
         [self updateBattery];
     }
@@ -191,9 +212,12 @@ long long lastPercentage;
 
         }];
 
+        self.stackHolder.frame = self.frame;
+
 }
 
 -(void)refreshForPrefs {
+
     self.stack.spacing = kaiAlign==0 ? 0 : spacingHorizontal;
     [self setContentSize:self.stack.frame.size];
     for( UIView *view in self.stack.subviews ) {
@@ -209,6 +233,18 @@ long long lastPercentage;
     for(BCBatteryDevice *device in devices) {
         [device resetKaiCellForNewPrefs];
     }
+
+    self.subviewAligner.active = NO;
+    [self.stackHolder removeConstraint:self.subviewAligner];
+    if(bannerAlign==2) { //center
+        self.subviewAligner = [self.stackHolder.centerXAnchor constraintEqualToAnchor:self.centerXAnchor];
+    } else if(bannerAlign==1) { //left
+        self.subviewAligner = [self.stackHolder.leftAnchor constraintEqualToAnchor:self.leftAnchor];
+    } else if(bannerAlign==3) { //right
+        self.subviewAligner = [self.stackHolder.rightAnchor constraintEqualToAnchor:self.rightAnchor];
+    }
+
+    self.subviewAligner.active = YES;
 
     [self updateBattery];
 }

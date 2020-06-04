@@ -10,7 +10,7 @@
 
 -(void)addSubview:(UIView *)view {
     [super addSubview:view];
-    [(UIScrollView *)self.superview setContentSize:self.frame.size];
+    [(UIScrollView *)self.superview.superview setContentSize:self.frame.size];
 
     if(textColor==0 && [view respondsToSelector:@selector(updateInfo)]) {
         KAIBatteryCell *cell = (KAIBatteryCell *)view;
@@ -28,7 +28,7 @@
 
 -(void)layoutSubviews {
     [super layoutSubviews];
-    [(KAIBatteryPlatter *)(self.superview) calculateHeight];
+    [(KAIBatteryPlatter *)(self.superview.superview) calculateHeight];
 }
 
 @end

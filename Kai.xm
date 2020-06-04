@@ -9,6 +9,7 @@ CSAdjunctListView *list;
 %property (nonatomic, assign) BOOL hasKai;
 
 -(void)_layoutStackView {
+	%orig;
 
 	//this code is used to determine if kai is at the bottom of the stack view
 	@try {
@@ -17,10 +18,7 @@ CSAdjunctListView *list;
 			//and insert into last slot.
 			[[self stackView] removeArrangedSubview:[KAIBatteryPlatter sharedInstance]];
 			[[self stackView] insertArrangedSubview:[KAIBatteryPlatter sharedInstance] atIndex:([[self stackView].subviews count] -1)];
-		}/* else if([[self stackView].subviews objectAtIndex:0] != [KAIBatteryPlatter sharedInstance] && !belowMusic) {
-			[[self stackView] removeArrangedSubview:[KAIBatteryPlatter sharedInstance]];
-			[[self stackView] insertArrangedSubview:[KAIBatteryPlatter sharedInstance] atIndex:0];
-		}*/
+		}
 
 	} @catch (NSException *exc) {}
 
@@ -30,7 +28,6 @@ CSAdjunctListView *list;
 
 	[[KAIBatteryPlatter sharedInstance] calculateHeight];
 
-	%orig;
 }
 
 -(void)setStackView:(UIStackView *)arg1 {
