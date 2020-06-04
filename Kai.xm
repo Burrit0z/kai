@@ -104,6 +104,8 @@ CSAdjunctListView *list;
 	[self addObserver:self forKeyPath:@"batterySaverModeActive" options:NSKeyValueObservingOptionNew context:nil];
 	[self addObserver:self forKeyPath:@"percentCharge" options:NSKeyValueObservingOptionNew context:nil];
 
+	//[NSException raise:@"This is a message only I, the developer, would understand, so pls send to me." format:@"Hooked"];
+
 	return %orig;
 }
 

@@ -16,6 +16,14 @@ NSTimer *queueTimer = nil;
         self.stack.alignment = 0;
         self.oldCountOfDevices = -100;
         self.queued = NO;
+
+        if(bannerAlign==2) { //center
+            self.stack.alignment = UIStackViewAlignmentLeading;
+        } else if(bannerAlign==1) { //left
+            self.stack.alignment = UIStackViewAlignmentCenter;
+        } else if(bannerAlign==3) { //right
+            self.stack.alignment = UIStackViewAlignmentTrailing;
+        }
  
         [self setMinimumZoomScale:1];
         [self setMaximumZoomScale:1];
@@ -28,20 +36,9 @@ NSTimer *queueTimer = nil;
         //https://cdn.discordapp.com/attachments/683698397634756646/718122118990266518/unknown.png 
 
         self.stackHolder.translatesAutoresizingMaskIntoConstraints = NO;
-
-        if(bannerAlign==2) { //center
-            self.subviewAligner = [self.stackHolder.centerXAnchor constraintEqualToAnchor:self.centerXAnchor];
-        } else if(bannerAlign==1) { //left
-            self.subviewAligner = [self.stackHolder.leftAnchor constraintEqualToAnchor:self.leftAnchor];
-        } else if(bannerAlign==3) { //right
-            self.subviewAligner = [self.stackHolder.rightAnchor constraintEqualToAnchor:self.rightAnchor];
-        }
-
         [self.stackHolder.heightAnchor constraintEqualToAnchor:self.heightAnchor].active = YES;
-        [self.stackHolder.widthAnchor constraintEqualToAnchor:self.stack.widthAnchor].active = YES;
+        [self.stackHolder.widthAnchor constraintEqualToAnchor:self.widthAnchor].active = YES;
         [self.stackHolder.centerYAnchor constraintEqualToAnchor:self.centerYAnchor].active = YES;
-
-        self.subviewAligner.active = YES;
 
         [self updateBattery];
     }
@@ -54,6 +51,9 @@ long long lastPercentage;
 -(void)updateBattery {
     if(!self.stack.widthAnchor) {
         [self.stack.widthAnchor constraintEqualToAnchor:self.widthAnchor].active = YES;
+        [self.stack.heightAnchor constraintEqualToAnchor:self.heightAnchor].active = YES;
+        [self.stack.widthAnchor constraintEqualToAnchor:self.widthAnchor].active = YES;
+        [self.stack.centerYAnchor constraintEqualToAnchor:self.centerYAnchor].active = YES;
     }
     dispatch_async(dispatch_get_main_queue(), ^{
         BCBatteryDeviceController *bcb = [BCBatteryDeviceController sharedInstance];
@@ -234,18 +234,6 @@ long long lastPercentage;
         [device resetKaiCellForNewPrefs];
     }
 
-    self.subviewAligner.active = NO;
-    [self.stackHolder removeConstraint:self.subviewAligner];
-    if(bannerAlign==2) { //center
-        self.subviewAligner = [self.stackHolder.centerXAnchor constraintEqualToAnchor:self.centerXAnchor];
-    } else if(bannerAlign==1) { //left
-        self.subviewAligner = [self.stackHolder.leftAnchor constraintEqualToAnchor:self.leftAnchor];
-    } else if(bannerAlign==3) { //right
-        self.subviewAligner = [self.stackHolder.rightAnchor constraintEqualToAnchor:self.rightAnchor];
-    }
-
-    self.subviewAligner.active = YES;
-
     [self updateBattery];
 }
 
@@ -265,5 +253,9 @@ long long lastPercentage;
 +(KAIBatteryPlatter *)sharedInstance {
     return instance;
 }
+
+//This is for compatibility (did i spell that right?)
+
+-(void)setSizeToMimic:(CGSize)arg1 {}
 
 @end
