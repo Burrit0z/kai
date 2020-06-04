@@ -40,6 +40,11 @@ NSTimer *queueTimer = nil;
         [self.stackHolder.widthAnchor constraintEqualToAnchor:self.widthAnchor].active = YES;
         [self.stackHolder.centerYAnchor constraintEqualToAnchor:self.centerYAnchor].active = YES;
 
+        [self.stack.widthAnchor constraintEqualToAnchor:self.stackHolder.widthAnchor].active = YES;
+        [self.stack.heightAnchor constraintEqualToAnchor:self.stackHolder.heightAnchor].active = YES;
+        [self.stack.widthAnchor constraintEqualToAnchor:self.stackHolder.widthAnchor].active = YES;
+        [self.stack.centerYAnchor constraintEqualToAnchor:self.stackHolder.centerYAnchor].active = YES;
+
         [self updateBattery];
     }
     return self;
@@ -49,12 +54,6 @@ long long batteryPercentage;
 long long lastPercentage;
 
 -(void)updateBattery {
-    if(!self.stack.widthAnchor) {
-        [self.stack.widthAnchor constraintEqualToAnchor:self.widthAnchor].active = YES;
-        [self.stack.heightAnchor constraintEqualToAnchor:self.heightAnchor].active = YES;
-        [self.stack.widthAnchor constraintEqualToAnchor:self.widthAnchor].active = YES;
-        [self.stack.centerYAnchor constraintEqualToAnchor:self.centerYAnchor].active = YES;
-    }
     dispatch_async(dispatch_get_main_queue(), ^{
         BCBatteryDeviceController *bcb = [BCBatteryDeviceController sharedInstance];
         NSArray *devices = MSHookIvar<NSArray *>(bcb, "_sortedDevices");
