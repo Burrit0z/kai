@@ -88,15 +88,18 @@
 
         blurPlatter.translatesAutoresizingMaskIntoConstraints = NO;
         if(bannerAlign==2) { //center
-            [blurPlatter.centerXAnchor constraintEqualToAnchor:self.centerXAnchor constant:horizontalOffset].active = YES;
+            [blurPlatter.centerXAnchor constraintEqualToAnchor:self.centerXAnchor].active = YES;
         } else if(bannerAlign==1) { //left
-            [blurPlatter.leftAnchor constraintEqualToAnchor:self.leftAnchor constant:horizontalOffset].active = YES;
+            [blurPlatter.leftAnchor constraintEqualToAnchor:self.leftAnchor].active = YES;
         } else if(bannerAlign==3) { //right
-            [blurPlatter.rightAnchor constraintEqualToAnchor:self.rightAnchor constant:horizontalOffset].active = YES;
+            [blurPlatter.rightAnchor constraintEqualToAnchor:self.rightAnchor].active = YES;
         }
+        
         [blurPlatter.topAnchor constraintEqualToAnchor:self.topAnchor].active = YES;
-        [blurPlatter.widthAnchor constraintEqualToConstant:((self.frame.size.width) + bannerWidthFactor)].active = YES;
+        [blurPlatter.widthAnchor constraintEqualToConstant:(([[[objc_getClass("CSAdjunctListView") class] sharedListViewForKai] stackView].frame.size.width - 16) + bannerWidthFactor)].active = YES;
         [blurPlatter.heightAnchor constraintEqualToConstant:bannerHeight].active = YES;
+
+        [self.widthAnchor constraintEqualToAnchor:blurPlatter.widthAnchor].active = YES;
 
         blur.translatesAutoresizingMaskIntoConstraints = NO;
         [blur.centerXAnchor constraintEqualToAnchor:blurPlatter.centerXAnchor].active = YES;
@@ -142,7 +145,6 @@
         }
 
         [self.heightAnchor constraintEqualToConstant:(bannerHeight + spacing)].active = YES;
-        [self.widthAnchor constraintEqualToAnchor:blurPlatter.widthAnchor].active = YES;
 
     }
 

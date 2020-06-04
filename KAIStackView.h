@@ -1,5 +1,7 @@
 @interface KAIStackView : UIStackView
 @property (nonatomic, strong) NSLayoutConstraint *heightConstraint;
+@property (nonatomic, strong) NSLayoutConstraint *widthConstraint;
+@property (nonatomic, strong) NSLayoutConstraint *aligner;
 @end
 
 @interface KAIBatteryPlatter : UIScrollView <UIScrollViewDelegate>

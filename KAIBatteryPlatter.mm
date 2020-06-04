@@ -21,7 +21,6 @@ NSTimer *queueTimer = nil;
         [self addSubview:self.stack];
         [self setContentSize:self.stack.frame.size];
         [self setContentOffset:CGPointMake(0,0)];
-        //[self setDelegate:self];
 
         [self updateBattery];
     }
@@ -129,6 +128,7 @@ long long lastPercentage;
 }
 
 -(void)calculateHeight {
+
     self.number = [self.stack.subviews count];
 
     if(self.number==0) {
@@ -160,7 +160,8 @@ long long lastPercentage;
             self.stack.heightConstraint.active = YES;
             [self setContentSize:self.stack.frame.size];
             if(kaiAlign==0) {
-                [self.stack.widthAnchor constraintEqualToAnchor:self.widthAnchor].active = YES;
+                /*self.stack.widthConstraint = [self.stack.widthAnchor constraintEqualToAnchor:self.widthAnchor constant:bannerWidthFactor];
+			    self.stack.widthConstraint.active = YES;*/
             } else {
                 self.widthConstraint = [self.widthAnchor constraintEqualToConstant:(self.number * (self.frame.size.width + bannerWidthFactor))];
 			    self.widthConstraint.active = YES;
@@ -168,7 +169,9 @@ long long lastPercentage;
 
 		} else {
             int height = (self.number * (bannerHeight + spacing));
-            if(kaiAlign!=0) {
+            if(kaiAlign==0) {
+                //self.stack.widthConstraint.constant = bannerWidthFactor;
+            } else {
                 height = bannerHeight + spacing;
                 self.widthConstraint.constant = (self.number * (self.frame.size.width + bannerWidthFactor));
             }
@@ -206,7 +209,7 @@ long long lastPercentage;
     for(BCBatteryDevice *device in devices) {
         [device resetKaiCellForNewPrefs];
     }
-    //self.spacing = spacing;
+
     [self updateBattery];
 }
 
