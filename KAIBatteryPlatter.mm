@@ -16,14 +16,6 @@ NSTimer *queueTimer = nil;
         self.stack.alignment = 0;
         self.oldCountOfDevices = -100;
         self.queued = NO;
-
-        if(bannerAlign==2) { //center
-            self.stack.alignment = UIStackViewAlignmentLeading;
-        } else if(bannerAlign==1) { //left
-            self.stack.alignment = UIStackViewAlignmentCenter;
-        } else if(bannerAlign==3) { //right
-            self.stack.alignment = UIStackViewAlignmentTrailing;
-        }
  
         [self setMinimumZoomScale:1];
         [self setMaximumZoomScale:1];
@@ -40,10 +32,20 @@ NSTimer *queueTimer = nil;
         [self.stackHolder.widthAnchor constraintEqualToAnchor:self.widthAnchor].active = YES;
         [self.stackHolder.centerYAnchor constraintEqualToAnchor:self.centerYAnchor].active = YES;
 
-        [self.stack.widthAnchor constraintEqualToAnchor:self.stackHolder.widthAnchor].active = YES;
-        [self.stack.heightAnchor constraintEqualToAnchor:self.stackHolder.heightAnchor].active = YES;
-        [self.stack.widthAnchor constraintEqualToAnchor:self.stackHolder.widthAnchor].active = YES;
-        [self.stack.centerYAnchor constraintEqualToAnchor:self.stackHolder.centerYAnchor].active = YES;
+        if(kaiAlign==0) {
+        if(bannerAlign==2) { //center
+            self.stack.alignment = UIStackViewAlignmentLeading;
+            self.subviewAligner = [self.stack.centerXAnchor constraintEqualToAnchor:self.stackHolder.centerXAnchor];
+        } else if(bannerAlign==1) { //left
+            self.stack.alignment = UIStackViewAlignmentCenter;
+            self.subviewAligner = [self.stack.leftAnchor constraintEqualToAnchor:self.stackHolder.leftAnchor];
+        } else if(bannerAlign==3) { //right
+            self.stack.alignment = UIStackViewAlignmentTrailing;
+            self.subviewAligner = [self.stack.rightAnchor constraintEqualToAnchor:self.stackHolder.rightAnchor];
+        }
+
+        self.subviewAligner.active = YES;
+        }
 
         [self updateBattery];
     }
@@ -232,6 +234,23 @@ long long lastPercentage;
     for(BCBatteryDevice *device in devices) {
         [device resetKaiCellForNewPrefs];
     }
+
+    if(kaiAlign==0) {
+    self.subviewAligner.active = NO;
+    if(bannerAlign==2) { //center
+        self.stack.alignment = UIStackViewAlignmentLeading;
+        self.subviewAligner = [self.stack.centerXAnchor constraintEqualToAnchor:self.stackHolder.centerXAnchor];
+    } else if(bannerAlign==1) { //left
+        self.stack.alignment = UIStackViewAlignmentCenter;
+        self.subviewAligner = [self.stack.leftAnchor constraintEqualToAnchor:self.stackHolder.leftAnchor];
+    } else if(bannerAlign==3) { //right
+        self.stack.alignment = UIStackViewAlignmentTrailing;
+        self.subviewAligner = [self.stack.rightAnchor constraintEqualToAnchor:self.stackHolder.rightAnchor];
+    }
+
+    self.subviewAligner.active = YES;
+    }
+
 
     [self updateBattery];
 }

@@ -113,6 +113,8 @@ CSAdjunctListView *list;
 
 		//sends the noti to update battery info
 		[[NSNotificationCenter defaultCenter] postNotificationName:@"KaiInfoChanged" object:nil userInfo:nil];
+
+		//[NSException raise:@":vibeok:" format:@"Notification to update kai sent"];
 	
 }
 
