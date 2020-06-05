@@ -111,7 +111,9 @@ CSAdjunctListView *list;
 
 -(void)setPercentCharge:(NSInteger)arg1 {
 	//sends the noti to update battery info
+	if(arg1!=0) {
 	[[NSNotificationCenter defaultCenter] postNotificationName:@"KaiInfoChanged" object:nil userInfo:nil];
+	}
 	%orig;
 }
 

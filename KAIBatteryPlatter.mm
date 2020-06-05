@@ -213,8 +213,6 @@ long long lastPercentage;
 
         }];
 
-        self.stackHolder.frame = self.frame;
-
 }
 
 -(void)refreshForPrefs {
