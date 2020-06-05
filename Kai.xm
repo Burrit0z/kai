@@ -97,21 +97,22 @@ CSAdjunctListView *list;
 %hook BCBatteryDevice
 %property (nonatomic, strong) KAIBatteryCell *kaiCell;
 
-- (id)initWithIdentifier:(id)arg1 vendor:(long long)arg2 productIdentifier:(long long)arg3 parts:(unsigned long long)arg4 matchIdentifier:(id)arg5 {
-
-	//Posts a notification to self when these keys change
-	[self addObserver:self forKeyPath:@"charging" options:NSKeyValueObservingOptionNew context:nil];
-	[self addObserver:self forKeyPath:@"batterySaverModeActive" options:NSKeyValueObservingOptionNew context:nil];
-	[self addObserver:self forKeyPath:@"percentCharge" options:NSKeyValueObservingOptionNew context:nil];
-
-	return %orig;
+-(void)setCharging:(BOOL)arg1 {
+	//sends the noti to update battery info
+	[[NSNotificationCenter defaultCenter] postNotificationName:@"KaiInfoChanged" object:nil userInfo:nil];
+	%orig;
 }
 
--(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
+-(void)setBatterySaverModeActive:(BOOL)arg1 {
+	//sends the noti to update battery info
+	[[NSNotificationCenter defaultCenter] postNotificationName:@"KaiInfoChanged" object:nil userInfo:nil];
+	%orig;
+}
 
-		//sends the noti to update battery info
-		[[NSNotificationCenter defaultCenter] postNotificationName:@"KaiInfoChanged" object:nil userInfo:nil];
-	
+-(void)setPercentCharge:(NSInteger)arg1 {
+	//sends the noti to update battery info
+	[[NSNotificationCenter defaultCenter] postNotificationName:@"KaiInfoChanged" object:nil userInfo:nil];
+	%orig;
 }
 
 %new

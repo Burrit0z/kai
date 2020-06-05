@@ -1,6 +1,6 @@
 Package: com.burritoz.kai
 Name: Kai
-Version: 0.9.95
+Version: 0.9.96
 Architecture: iphoneos-arm
 Description: Device battery indicators on your lock screen!
 Maintainer: burrit0z
