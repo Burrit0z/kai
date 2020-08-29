@@ -1,0 +1,9 @@
+Package: com.burritoz.kai
+Name: Kai
+Version: 1.3.0
+Architecture: iphoneos-arm
+Description: Device battery indicators on your lock screen!
+Maintainer: burrit0z
+Author: burrit0z
+Section: Tweaks
+Depends: mobilesubstrate (>= 0.9.5000), preferenceloader, ws.hbang.common (>=1.14)

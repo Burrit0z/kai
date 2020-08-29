@@ -1,0 +1,48 @@
+1.0.1:
+- Added horizontal mode offset option for x axis
+- Added horizontal mode alignment with nice little slide animations when re-aligning
+- Added hide battery icon option
+- In horizontal mode, the "vertical spacing" option now adds padding after kai
+- Fixed an issue where cells would not be disposed of properly
+
+1.1.0:
+- Fixed cells overlapping in vertical mode
+- Added option to add vertical padding after kai
+- corrected issue where the "re-align after refreshing" option would be ignored and kai would always re-align
+- Renoved apply button, prefs now automatically apply (thanks to gilshahar7 for the idea :)
+- Added delete prefs button (again, thanks to gilshahar7 for the suggestions)
+- Horizontal scrolling indicator is now hidden
+- Added option to completely hide the phone battery in kai
+- Helped resolve issues with AirPod device grouping being buggy, and cells would jump around (WIP)
+
+1.1.1:
+- Added a label to make it clear when the tweak was not yet activated, and license needed to be downloaded.
+- Fixed issues with licenses not activating
+- Added @vanwijkdave to credits in prefs for the header cell (sorry for not adding you before, this was overlooked)
+- My credit cell now links my Twitter account
+- Under the hood optimizations for keeping track of connected devices
+
+1.1.2:
+- Fixed cells still showing after device was disconnected (they will now remove as soon as they disappear from stock battery widget)
+- Improve memory management within cells
+- Fixed issue where the tweak would not disable in 1.1.1 and would always be on
+
+1.1.3:
+- Fixed compatibility for my upcoming tweak, Aperio
+- Automatic alignment in horizontal mode should feel a lot snappier now
+
+1.1.3-1:
+- Compiled with latest DragonBuild
+- Removed armv7 slice to reduce binary size
+
+1.2.0:
+- Large improvements to kai's auto alignment
+- Fixes issues where kai would always re align when opening notification center
+
+1.2.1:
+- Add an option to hide kai when media player is showing on the lock screen (kai will be shown again once music player is removed from the lock screen)
+- Fixed issues with vertical mode alignment
+
+1.3.0:
+- kai is now free!
+- General improvements, new prefs banner
