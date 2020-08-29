@@ -46,3 +46,8 @@
 1.3.0:
 - kai is now free!
 - General improvements, new prefs banner
+
+1.3.1:
+- Fix very unoptimized code, made it more-ish optimized
+- Below music option now moves kai just below the media controls, and not to the very bottom.
+- Fixed kai going below Axon with below music player option on
