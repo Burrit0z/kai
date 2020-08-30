@@ -7,3 +7,6 @@ Maintainer: burrit0z
 Author: burrit0z
 Section: Tweaks
 Depends: mobilesubstrate (>= 0.9.5000), preferenceloader, ws.hbang.common (>=1.14)
+Icon: https://chariz.com/cdn/icon/kai/icon@3x.png
+Depiction: https://repo.chariz.com/package/com.burritoz.kai/
+SileoDepiction: https://repo.chariz.com/api/sileo/package/com.burritoz.kai/depiction.json
