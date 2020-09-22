@@ -20,6 +20,7 @@
 @interface BCBatteryDeviceController : NSObject
 @property (nonatomic, strong) NSArray *sortedDevices;
 - (id)_sortedDevices;
+- (id)connectedDevices; //ios 14
 + (id)sharedInstance;
 @end
 
@@ -27,12 +28,13 @@
 @property (nonatomic, strong) id kaiCell;
 @property (nonatomic, strong) NSString *name;
 @property (nonatomic, assign) long long percentCharge;
-@property (nonatomic, assign) BOOL charging;
-@property (nonatomic, assign) BOOL fake;
-@property (nonatomic, assign) BOOL internal;
-@property (nonatomic, assign) BOOL batterySaverModeActive;
+@property (nonatomic, assign, getter=isCharging) BOOL charging;
+@property (nonatomic, assign, getter=isFake) BOOL fake;
+@property (nonatomic, assign, getter=isInternal) BOOL internal;
+@property (nonatomic, assign, getter=isBatterySaverModeActive) BOOL batterySaverModeActive;
 @property (nonatomic, strong) NSString *identifier;
-- (id)glyph;
+- (id)glyph; //ios 13
+- (id)batteryWidgetGlyph; //ios 14
 - (id)kaiCellForDevice;
 - (void)resetKaiCellForNewPrefs;
 @end

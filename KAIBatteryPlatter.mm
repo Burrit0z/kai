@@ -100,7 +100,7 @@ NSMutableArray *cellsForDeviceNames = [[NSMutableArray alloc] init];
 - (void)updateBattery {
     dispatch_async(dispatch_get_main_queue(), ^{
       BCBatteryDeviceController *bcb = [BCBatteryDeviceController sharedInstance];
-      NSArray *devices = MSHookIvar<NSArray *>(bcb, "_sortedDevices");
+      NSArray *devices =  ios13 ? [bcb sortedDevices] : [bcb connectedDevices];
 
 	  if (self.oldCountOfDevices == -100) {
 	      self.oldCountOfDevices = [devices count] + 1;
@@ -119,11 +119,11 @@ NSMutableArray *cellsForDeviceNames = [[NSMutableArray alloc] init];
 
 		  for (BCBatteryDevice *device in devices) {
 		      KAIBatteryCell *cell = [device kaiCellForDevice];
-		      BOOL charging = MSHookIvar<long long>(device, "_charging");
-		      BOOL internal = MSHookIvar<BOOL>(device, "_internal");
+		      BOOL charging = [device isCharging];
+		      BOOL internal = [device isInternal];
 		      BOOL shouldAdd = NO;
-		      BOOL fake = MSHookIvar<BOOL>(device, "_fake");
-		      NSString *deviceName = MSHookIvar<NSString *>(device, "_name");
+		      BOOL fake = [device isFake];
+		      NSString *deviceName = [device name];
 
 			  if (!fake) {
 				  if (showAll) {
@@ -187,7 +187,7 @@ NSMutableArray *cellsForDeviceNames = [[NSMutableArray alloc] init];
 			    [self.stack removeArrangedSubview:cell];
 			    cell.alpha = 1;
 			  }];
-		      NSString *deviceName = MSHookIvar<NSString *>(cell.device, "_name");
+		      NSString *deviceName = [cell.device name];
 		      [deviceNames removeObject:deviceName];
 		      [cellsForDeviceNames removeObject:cell];
 		  }
@@ -311,7 +311,7 @@ NSMutableArray *cellsForDeviceNames = [[NSMutableArray alloc] init];
 	}
 
     BCBatteryDeviceController *bcb = [BCBatteryDeviceController sharedInstance];
-    NSArray *devices = MSHookIvar<NSArray *>(bcb, "_sortedDevices");
+    NSArray *devices = ios13 ? [bcb sortedDevices] : [bcb connectedDevices];
 	for (BCBatteryDevice *device in devices) {
 	    [device resetKaiCellForNewPrefs];
 	}

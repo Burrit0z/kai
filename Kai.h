@@ -30,6 +30,8 @@
 - (void)fixComplicationsViewFrame;
 @end
 
+BOOL ios13 = NO;
+
 BOOL isUpdating = NO;
 BOOL shouldBeAdded = YES;
 

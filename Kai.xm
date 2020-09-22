@@ -215,11 +215,15 @@ Class mediaClass;
 
 	//Bro Muirey helped me figure out a logical way to do this because iOS 12-13 classes have changed
 
-	mediaClass = kCFCoreFoundationVersionNumber > 1600 ? ([objc_getClass("CSAdjunctItemView") class]) : ([objc_getClass("SBDashBoardAdjunctItemView") class]);
+	mediaClass = kCFCoreFoundationVersionNumber > 1600 ? %c(CSAdjunctItemView) : %c(SBDashBoardAdjunctItemView);
 
-	Class cls = kCFCoreFoundationVersionNumber > 1600 ? ([objc_getClass("CSAdjunctListView") class]) : ([objc_getClass("SBDashBoardAdjunctListView") class]);
+	Class cls = kCFCoreFoundationVersionNumber > 1600 ? %c(CSAdjunctListView) : %c(SBDashBoardAdjunctListView);
 
-	Class CSCls = kCFCoreFoundationVersionNumber > 1600 ? ([objc_getClass("CSCoverSheetViewController") class]) : ([objc_getClass("SBDashBoardViewController") class]);
+	Class CSCls = kCFCoreFoundationVersionNumber > 1600 ? %c(CSCoverSheetViewController) : %c(SBDashBoardViewController);
+
+	if(kCFCoreFoundationVersionNumber < 1740) {
+		ios13 = YES; //wow very pog version you have
+	}
 
 	if(enabled) {
 		%init(main, Media = mediaClass, KAITarget = cls, KAICSTarget = CSCls); //BIG BRAIN BRO!!

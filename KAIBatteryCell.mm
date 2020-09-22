@@ -9,8 +9,8 @@
 
 	    NSString *deviceName = device.name;
 	    double batteryPercentage = device.percentCharge;
-	    BOOL charging = MSHookIvar<long long>(device, "_charging");
-	    BOOL LPM = MSHookIvar<BOOL>(device, "_batterySaverModeActive");
+	    BOOL charging = [device isCharging];
+	    BOOL LPM = [device isBatterySaverModeActive];
 
 	    UIView *blur;
 	    UIView *blurPlatter = [[UIView alloc] init];
@@ -75,7 +75,7 @@
 		    [self.battery setPinColorAlpha:1.0];
 	    }
 
-	    UIImage *glyph = [device glyph];
+	    UIImage *glyph = ios13 ? [device glyph] : [device batteryWidgetGlyph];
 	    self.glyphView = [[UIImageView alloc] init];
 	    self.glyphView.contentMode = UIViewContentModeScaleAspectFit;
 	    [self.glyphView setImage:glyph];
@@ -193,10 +193,10 @@
 
 - (void)updateInfo {
 	if (self.device != nil) {
-	    NSString *deviceName = MSHookIvar<NSString *>(self.device, "_name");
-	    double batteryPercentage = MSHookIvar<long long>(self.device, "_percentCharge");
-	    BOOL charging = MSHookIvar<long long>(self.device, "_charging");
-	    BOOL LPM = MSHookIvar<BOOL>(self.device, "_batterySaverModeActive");
+	    NSString *deviceName = [self.device name];
+	    double batteryPercentage = [self.device percentCharge];
+	    BOOL charging = [self.device isCharging];
+	    BOOL LPM = [self.device isBatterySaverModeActive];
 
 	    self.label.text = [NSString stringWithFormat:@"%@", deviceName];
 	    [self.percentLabel setText:[NSString stringWithFormat:@"%ld%%", (long)((NSInteger)batteryPercentage)]];
@@ -219,7 +219,7 @@
 	    [self.percentLabel setText:[NSString stringWithFormat:@"%ld%%", (long)((NSInteger)batteryPercentage)]];
 	    self.battery.chargePercent = (batteryPercentage * 0.01);
 
-	    [self.glyphView setImage:[self.device glyph]];
+	    [self.glyphView setImage:ios13 ? [self.device glyph] : [self.device batteryWidgetGlyph]];
 	} else {
 	}
 }
