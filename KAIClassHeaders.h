@@ -19,8 +19,7 @@
 
 @interface BCBatteryDeviceController : NSObject
 @property (nonatomic, strong) NSArray *sortedDevices;
-- (id)_sortedDevices;
-- (id)connectedDevices; //ios 14
+- (id)connectedDevices;
 + (id)sharedInstance;
 @end
 

@@ -76,9 +76,12 @@
 	    }
 
 	    UIImage *glyph = ios13 ? [device glyph] : [device batteryWidgetGlyph];
+
+		glyph= [glyph imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
 	    self.glyphView = [[UIImageView alloc] init];
 	    self.glyphView.contentMode = UIViewContentModeScaleAspectFit;
 	    [self.glyphView setImage:glyph];
+		self.glyphView.tintColor = [UIColor whiteColor];
 
 	    [self addSubview:blurPlatter];
 	    [blurPlatter addSubview:blur];
@@ -218,9 +221,6 @@
 	    }
 	    [self.percentLabel setText:[NSString stringWithFormat:@"%ld%%", (long)((NSInteger)batteryPercentage)]];
 	    self.battery.chargePercent = (batteryPercentage * 0.01);
-
-	    [self.glyphView setImage:ios13 ? [self.device glyph] : [self.device batteryWidgetGlyph]];
-	} else {
 	}
 }
 

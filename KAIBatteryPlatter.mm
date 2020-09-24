@@ -100,7 +100,7 @@ NSMutableArray *cellsForDeviceNames = [[NSMutableArray alloc] init];
 - (void)updateBattery {
     dispatch_async(dispatch_get_main_queue(), ^{
       BCBatteryDeviceController *bcb = [BCBatteryDeviceController sharedInstance];
-      NSArray *devices =  ios13 ? [bcb sortedDevices] : [bcb connectedDevices];
+      NSArray *devices =  [bcb connectedDevices];
 
 	  if (self.oldCountOfDevices == -100) {
 	      self.oldCountOfDevices = [devices count] + 1;
@@ -311,7 +311,7 @@ NSMutableArray *cellsForDeviceNames = [[NSMutableArray alloc] init];
 	}
 
     BCBatteryDeviceController *bcb = [BCBatteryDeviceController sharedInstance];
-    NSArray *devices = ios13 ? [bcb sortedDevices] : [bcb connectedDevices];
+    NSArray *devices = [bcb connectedDevices];
 	for (BCBatteryDevice *device in devices) {
 	    [device resetKaiCellForNewPrefs];
 	}
