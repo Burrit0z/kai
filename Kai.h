@@ -113,7 +113,7 @@ static void preferencesChanged() {
     disableGlyphs = boolValueForKey(@"disableGlyphs", NO);
     hidePercent = boolValueForKey(@"hidePercent", NO);
     bannerStyle = numberForValue(@"bannerStyle", 1);
-    showAll = boolValueForKey(@"showAll", NO);
+    showAll = boolValueForKey(@"showAll", YES);
     bannerWidthFactor = numberForValue(@"bannerWidthFactor", 0);
     hideDeviceLabel = boolValueForKey(@"hideDeviceLabel", NO);
     bannerAlign = numberForValue(@"bannerAlign", 2);

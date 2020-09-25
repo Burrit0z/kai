@@ -104,7 +104,7 @@
 			<key>cell</key>
 			<string>PSSwitchCell</string>
 			<key>default</key>
-			<false/>
+			<true/>
 			<key>defaults</key>
 			<string>com.burritoz.kaiprefs</string>
 			<key>key</key>

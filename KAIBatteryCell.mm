@@ -15,15 +15,13 @@
 	    UIView *blur;
 	    UIView *blurPlatter = [[UIView alloc] init];
 		if (bannerStyle == 1) {
-			if (kCFCoreFoundationVersionNumber > 1600) {
-				@try {
+			if (kCFCoreFoundationVersionNumber > 1600 && kCFCoreFoundationVersionNumber < 1740) {
 			    	blur = [[[objc_getClass("MTMaterialView") class] alloc] _initWithRecipe:1 configuration:1 initialWeighting:1 scaleAdjustment:nil];
-				} @catch (NSException *exc) {
-					blur = [[UIVisualEffectView alloc] initWithEffect:[UIBlurEffect effectWithStyle:UIBlurEffectStyleRegular]];
-				}
-			} else if (kCFCoreFoundationVersionNumber < 1600) {
+			} else if (kCFCoreFoundationVersionNumber < 1600) { //ios 12
 			    blur = [[UIVisualEffectView alloc] initWithEffect:[UIBlurEffect effectWithStyle:UIBlurEffectStyleLight]];
-		    }
+		    } else if(kCFCoreFoundationVersionNumber >= 1740) { //ios 14 :fr:
+				blur = [[UIVisualEffectView alloc] initWithEffect:[UIBlurEffect effectWithStyle:UIBlurEffectStyleRegular]];
+			}
 		} else if (bannerStyle == 2) {
 		    blur = [[UIVisualEffectView alloc] initWithEffect:[UIBlurEffect effectWithStyle:UIBlurEffectStyleDark]];
 		} else if (bannerStyle == 3) {
