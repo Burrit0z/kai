@@ -77,7 +77,7 @@
 
 	    UIImage *glyph = ios13 ? [device glyph] : [device batteryWidgetGlyph];
 
-		glyph= [glyph imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+		glyph = [glyph imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
 	    self.glyphView = [[UIImageView alloc] init];
 	    self.glyphView.contentMode = UIViewContentModeScaleAspectFit;
 	    [self.glyphView setImage:glyph];
