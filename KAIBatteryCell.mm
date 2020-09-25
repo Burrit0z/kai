@@ -16,7 +16,11 @@
 	    UIView *blurPlatter = [[UIView alloc] init];
 		if (bannerStyle == 1) {
 			if (kCFCoreFoundationVersionNumber > 1600) {
-			    blur = [[[objc_getClass("MTMaterialView") class] alloc] _initWithRecipe:1 configuration:1 initialWeighting:1 scaleAdjustment:nil];
+				@try {
+			    	blur = [[[objc_getClass("MTMaterialView") class] alloc] _initWithRecipe:1 configuration:1 initialWeighting:1 scaleAdjustment:nil];
+				} @catch (NSException *exc) {
+					blur = [[UIVisualEffectView alloc] initWithEffect:[UIBlurEffect effectWithStyle:UIBlurEffectStyleRegular]];
+				}
 			} else if (kCFCoreFoundationVersionNumber < 1600) {
 			    blur = [[UIVisualEffectView alloc] initWithEffect:[UIBlurEffect effectWithStyle:UIBlurEffectStyleLight]];
 		    }
