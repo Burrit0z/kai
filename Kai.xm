@@ -23,6 +23,8 @@ CSAdjunctListView *list;
 		[[KAIBatteryPlatter sharedInstance] removeFromSuperview];
 		[[[cls sharedListViewForKai] stackView] removeArrangedSubview:[KAIBatteryPlatter sharedInstance]];
 
+		[[cls sharedListViewForKai] _layoutStackView];
+
 		return playing;
 	} else if(!playing && self.nowPlayingApplication == nil) {
 		// not playing and the app is nil
@@ -139,6 +141,8 @@ CSAdjunctListView *list;
 		[stack removeArrangedSubview:[KAIBatteryPlatter sharedInstance]];
 		[stack addArrangedSubview:[KAIBatteryPlatter sharedInstance]];
 	}
+
+	[self _layoutStackView];
 }
 
 %new

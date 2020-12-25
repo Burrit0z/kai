@@ -33,6 +33,10 @@
 + (APEPlatter *)sharedInstance;
 @end
 
+@interface APEPlacceholder : UIView
++ (APEPlacceholder *)sharedInstance;
+@end
+
 @interface NCNotificationListView : UIView
 - (void)fixComplicationsViewFrame;
 @end
