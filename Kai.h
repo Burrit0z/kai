@@ -3,8 +3,7 @@
 #import <UIKit/UIKit.h>
 #import <objc/runtime.h>
 
-#define KAISelf ((CSAdjunctListView *)self) //for use when calling self in KAITarget
-#define afterMusicIndex(cls, obj) [[[cls sharedListViewForKai] stackView].subviews indexOfObject:obj]
+#define KAISelf ((CSAdjunctListView *)self) // for use when calling self in KAITarget
 
 @interface CSAdjunctListView : UIView
 @property (nonatomic, assign) BOOL hasKai;
@@ -12,6 +11,12 @@
 - (void)_layoutStackView;
 - (void)setStackView:(UIStackView *)arg1;
 + (id)sharedListViewForKai;
++ (void)reorderKai;
+@end
+
+@interface SBMediaController : NSObject
+@property (nonatomic, strong) id nowPlayingApplication;
+- (BOOL)isPlaying;
 @end
 
 @interface CALayer (kai)
@@ -35,7 +40,7 @@ BOOL ios13 = NO;
 BOOL isUpdating = NO;
 BOOL shouldBeAdded = YES;
 
-//prefs
+// prefs
 BOOL enabled;
 BOOL disableGlyphs;
 BOOL hidePercent;
@@ -62,7 +67,7 @@ double bannerAlpha;
 double kaiAlign;
 double spacingHorizontal;
 
-//by importing here, I can use vars in the .mm files
+// by importing here, I can use vars in the .mm files
 #import "KAIBatteryCell.mm"
 #import "KAIBatteryPlatter.mm"
 #import "KAIStackView.mm"
@@ -141,7 +146,7 @@ static void applyPrefs() {
 
     isUpdating = YES;
 
-    [[KAIBatteryPlatter sharedInstance] refreshForPrefs]; //so hard (not)
+    [[KAIBatteryPlatter sharedInstance] refreshForPrefs]; // so hard (not)
     [(CSAdjunctListView *)([KAIBatteryPlatter sharedInstance].superview.superview) _layoutStackView];
     [[NSNotificationCenter defaultCenter] postNotificationName:@"KaiResetOffset" object:nil userInfo:nil];
 

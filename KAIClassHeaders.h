@@ -32,8 +32,8 @@
 @property (nonatomic, assign, getter=isInternal) BOOL internal;
 @property (nonatomic, assign, getter=isBatterySaverModeActive) BOOL batterySaverModeActive;
 @property (nonatomic, strong) NSString *identifier;
-- (id)glyph; //ios 13
-- (id)batteryWidgetGlyph; //ios 14
+- (id)glyph; // ios 13
+- (id)batteryWidgetGlyph; // ios 14
 - (id)kaiCellForDevice;
 - (void)resetKaiCellForNewPrefs;
 @end

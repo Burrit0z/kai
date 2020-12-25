@@ -29,7 +29,7 @@ NSMutableArray *cellsForDeviceNames = [[NSMutableArray alloc] init];
 	    [self setContentSize:self.stack.frame.size];
 	    [self resetOffset];
 
-	    //Add noti observer
+	    // Add noti observer
 	    [[NSNotificationCenter defaultCenter] addObserver:self
 						     selector:@selector(resetOffset)
 							 name:@"KaiResetOffset"
@@ -41,11 +41,11 @@ NSMutableArray *cellsForDeviceNames = [[NSMutableArray alloc] init];
 	    [self.stackHolder.centerYAnchor constraintEqualToAnchor:self.centerYAnchor].active = YES;
 
 		if (kaiAlign == 0) {
-			if (bannerAlign == 2) { //center
+			if (bannerAlign == 2) { // center
 			    self.subviewAligner = [self.stack.centerXAnchor constraintEqualToAnchor:self.stackHolder.centerXAnchor constant:horizontalOffset];
-			} else if (bannerAlign == 1) { //left
+			} else if (bannerAlign == 1) { // left
 			    self.subviewAligner = [self.stack.leftAnchor constraintEqualToAnchor:self.stackHolder.leftAnchor constant:horizontalOffset];
-			} else if (bannerAlign == 3) { //right
+			} else if (bannerAlign == 3) { // right
 			    self.subviewAligner = [self.stack.rightAnchor constraintEqualToAnchor:self.stackHolder.rightAnchor constant:horizontalOffset];
 		    }
 
@@ -57,39 +57,33 @@ NSMutableArray *cellsForDeviceNames = [[NSMutableArray alloc] init];
     return self;
 }
 
-- (void)resetOffset {
+- (void)resetOffset { // holy fucking shit i just read this method, what is this garbage????
 	if (kaiAlign != 0 && reAlignSelf) {
-	    [UIView animateWithDuration:0.2
-			     animations:^{
-			       if (bannerAlign == 1) { //left
-				   [self setContentOffset:CGPointMake(0 + horizontalOffset, self.contentOffset.y)];
+	    [UIView animateWithDuration:0.2 animations:^{
+            if (bannerAlign == 1) { // left
 
-				   self.contentInset = UIEdgeInsetsMake(0, 0, 0, 0);
-			       } else if (bannerAlign == 2) { //center
-				   [self setContentOffset:CGPointMake(((-1 * self.stackHolder.frame.size.width) / 2) + (self.stack.frame.size.width / 2) + horizontalOffset, self.contentOffset.y)];
+                [self setContentOffset:CGPointMake(0 + horizontalOffset, self.contentOffset.y)];
+                self.contentInset = UIEdgeInsetsMake(0, 0, 0, 0);
 
-				   CGFloat top = 0, left = 0;
-				       if (self.contentSize.width < self.bounds.size.width) {
-					   left = (self.bounds.size.width - self.contentSize.width) * 0.5f;
-				   }
-				       if (self.contentSize.height < self.bounds.size.height) {
-					   top = (self.bounds.size.height - self.contentSize.height) * 0.5f;
-				   }
-				   self.contentInset = UIEdgeInsetsMake(top, left, top, left);
+            } else if (bannerAlign == 2) { // center
+                [self setContentOffset:CGPointMake(((-1 * self.stackHolder.frame.size.width) / 2) + (self.stack.frame.size.width / 2) + horizontalOffset, self.contentOffset.y)];
 
-			       } else if (bannerAlign == 3) { //right
-				   [self setContentOffset:CGPointMake((-1 * self.stackHolder.frame.size.width) + self.stack.frame.size.width + horizontalOffset, self.contentOffset.y)];
+                CGFloat top = 0, left = 0;
+                if (self.contentSize.width < self.bounds.size.width) left = (self.bounds.size.width - self.contentSize.width) * 0.5f;
+                if (self.contentSize.height < self.bounds.size.height) top = (self.bounds.size.height - self.contentSize.height) * 0.5f;
+                self.contentInset = UIEdgeInsetsMake(top, left, top, left);
 
-				   CGFloat top = 0, left = 0;
-				       if (self.contentSize.width < self.bounds.size.width) {
-					   left = (self.bounds.size.width - self.contentSize.width);
-				   }
-				       if (self.contentSize.height < self.bounds.size.height) {
-					   top = (self.bounds.size.height - self.contentSize.height);
-				   }
-				   self.contentInset = UIEdgeInsetsMake(top, left, top, left);
-			   }
-			     }];
+            } else if (bannerAlign == 3) { // right
+                [self setContentOffset:CGPointMake((-1 * self.stackHolder.frame.size.width) + self.stack.frame.size.width + horizontalOffset, self.contentOffset.y)];
+
+                CGFloat top = 0, left = 0;
+                if(self.contentSize.width < self.bounds.size.width) left = (self.bounds.size.width - self.contentSize.width);
+                if(self.contentSize.height < self.bounds.size.height) top = (self.bounds.size.height - self.contentSize.height);
+
+                self.contentInset = UIEdgeInsetsMake(top, left, top, left);
+            }
+
+        }];
     }
 }
 
@@ -98,6 +92,11 @@ NSMutableArray *cellsForDeviceNames = [[NSMutableArray alloc] init];
 }
 
 - (void)updateBattery {
+    if(self.isUpdating == YES) {
+        self.queued = YES;
+        return;
+    }
+
     dispatch_async(dispatch_get_main_queue(), ^{
       BCBatteryDeviceController *bcb = [BCBatteryDeviceController sharedInstance];
       NSArray *devices =  [bcb connectedDevices];
@@ -110,7 +109,6 @@ NSMutableArray *cellsForDeviceNames = [[NSMutableArray alloc] init];
 	  }
 
 	  if (!self.isUpdating && self.oldCountOfDevices != 0 && ([devices count] + 1 == self.oldCountOfDevices || [devices count] - 1 == self.oldCountOfDevices || [devices count] == self.oldCountOfDevices)) {
-	      //if(!self.isUpdating) {
 
 	      self.isUpdating = YES;
 
@@ -193,7 +191,7 @@ NSMutableArray *cellsForDeviceNames = [[NSMutableArray alloc] init];
 		  }
 
 		  for (KAIBatteryCell *cell in self.stack.subviews) {
-			  if (![devices containsObject:cell.device] || cell.device == nil) { //not existing, remove
+			  if (![devices containsObject:cell.device] || cell.device == nil) { // not existing, remove
 			      NSString *deviceName = cell.label.text;
 			      [UIView animateWithDuration:0.3
 				  animations:^{
@@ -209,12 +207,11 @@ NSMutableArray *cellsForDeviceNames = [[NSMutableArray alloc] init];
 		      }
 		  }
 
+          // isUpdating is set to NO in this block
+          // adds a cooldown, essentially
 	      queueTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(dispatchQueue) userInfo:nil repeats:NO];
-	      //self.isUpdating = NO;
 
-	  } else if (self.isUpdating) {
-	      self.queued = YES;
-      }
+	  }
 
       self.oldCountOfDevices = [devices count];
 
@@ -230,7 +227,7 @@ NSMutableArray *cellsForDeviceNames = [[NSMutableArray alloc] init];
 }
 
 - (void)setContentOffset:(CGPoint)arg1 {
-    [self setContentSize:self.stack.frame.size]; //sometimes the view gets "stuck", this fixes it
+    [self setContentSize:self.stack.frame.size]; // sometimes the view gets "stuck", this fixes it
     [super setContentOffset:CGPointMake(arg1.x, 0)];
 }
 
@@ -244,7 +241,7 @@ NSMutableArray *cellsForDeviceNames = [[NSMutableArray alloc] init];
 	    [self removeFromSuperview];
 	} else if (self.number != 0 && self.superview == nil && shouldBeAdded == YES) {
 	    [[[[objc_getClass("CSAdjunctListView") class] sharedListViewForKai] stackView] addArrangedSubview:self];
-	    //[self performSelector:@selector(calculateHeight) withObject:self afterDelay:0.1];
+	    // [self performSelector:@selector(calculateHeight) withObject:self afterDelay:0.1];
     }
 
     [UIView animateWithDuration:0.3
@@ -270,7 +267,7 @@ NSMutableArray *cellsForDeviceNames = [[NSMutableArray alloc] init];
 			   int height = (self.number * (bannerHeight + spacing));
 			   int extra = extraPaddingAfter ? spacing : 0;
 			       if (kaiAlign == 0) {
-				   //self.stack.widthConstraint.constant = bannerWidthFactor;
+				   // self.stack.widthConstraint.constant = bannerWidthFactor;
 			       } else {
 				   height = bannerHeight + spacing;
 			       }
@@ -282,11 +279,11 @@ NSMutableArray *cellsForDeviceNames = [[NSMutableArray alloc] init];
 			   }
 
 			   self.heightConstraint.constant = height;
-			   self.stack.heightConstraint.constant = height - extra; //minus extra because it will stretch cell spacing otherwise
+			   self.stack.heightConstraint.constant = height - extra; // minus extra because it will stretch cell spacing otherwise
 
 			   UIStackView *s = (UIStackView *)(self.superview);
 			   s.frame = CGRectMake(s.frame.origin.x, s.frame.origin.y, s.frame.size.width, (s.frame.size.height - 1));
-			   //literally does nothing but makes the stack view lay itself out (doesnt adjust frame because translatesAutoreszingMaskIntoConstraints = NO on stack views)
+			   // literally does nothing but makes the stack view lay itself out (doesnt adjust frame because translatesAutoreszingMaskIntoConstraints = NO on stack views)
 		       }
 
 		   [self setContentSize:self.stack.frame.size];
@@ -306,7 +303,7 @@ NSMutableArray *cellsForDeviceNames = [[NSMutableArray alloc] init];
 		@try {
 		    [view removeFromSuperview];
 		} @catch (NSException *exception) {
-		    //Panik
+		    // Panik
 	    }
 	}
 
@@ -318,11 +315,11 @@ NSMutableArray *cellsForDeviceNames = [[NSMutableArray alloc] init];
 
 	if (kaiAlign == 0) {
 	    self.subviewAligner.active = NO;
-		if (bannerAlign == 2) { //center
+		if (bannerAlign == 2) { // center
 		    self.subviewAligner = [self.stack.centerXAnchor constraintEqualToAnchor:self.stackHolder.centerXAnchor constant:horizontalOffset];
-		} else if (bannerAlign == 1) { //left
+		} else if (bannerAlign == 1) { // left
 		    self.subviewAligner = [self.stack.leftAnchor constraintEqualToAnchor:self.stackHolder.leftAnchor constant:horizontalOffset];
-		} else if (bannerAlign == 3) { //right
+		} else if (bannerAlign == 3) { // right
 		    self.subviewAligner = [self.stack.rightAnchor constraintEqualToAnchor:self.stackHolder.rightAnchor constant:horizontalOffset];
 	    }
 
@@ -336,24 +333,25 @@ NSMutableArray *cellsForDeviceNames = [[NSMutableArray alloc] init];
 }
 
 - (void)dispatchQueue {
+    [queueTimer invalidate];
+    queueTimer = nil;
+
     self.isUpdating = NO;
 	if (self.queued) {
+        self.queued = NO;
 	    [self updateBattery];
 		if ([self.superview.superview.superview respondsToSelector:@selector(fixComplicationsViewFrame)]) {
 		    [(NCNotificationListView *)(self.superview.superview.superview) fixComplicationsViewFrame];
 	    }
-	    self.queued = NO;
     }
-    [queueTimer invalidate];
-    queueTimer = nil;
 }
 
 + (KAIBatteryPlatter *)sharedInstance {
     return instance;
 }
 
-//This is for compatibility (did i spell that right?)
-//basically this fixes it crashing in landscape:
+// This is for compatibility (did i spell that right?)
+// basically this fixes it crashing in landscape:
 
 - (void)setSizeToMimic:(CGSize)arg1 {
 }

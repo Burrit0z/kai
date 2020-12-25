@@ -17,9 +17,9 @@
 		if (bannerStyle == 1) {
 			if (kCFCoreFoundationVersionNumber > 1600 && kCFCoreFoundationVersionNumber < 1740) {
 			    	blur = [[[objc_getClass("MTMaterialView") class] alloc] _initWithRecipe:1 configuration:1 initialWeighting:1 scaleAdjustment:nil];
-			} else if (kCFCoreFoundationVersionNumber < 1600) { //ios 12
+			} else if (kCFCoreFoundationVersionNumber < 1600) { // ios 12
 			    blur = [[UIVisualEffectView alloc] initWithEffect:[UIBlurEffect effectWithStyle:UIBlurEffectStyleLight]];
-		    } else if(kCFCoreFoundationVersionNumber >= 1740) { //ios 14 :fr:
+		    } else if(kCFCoreFoundationVersionNumber >= 1740) { // ios 14 :fr:
 				blur = [[UIVisualEffectView alloc] initWithEffect:[UIBlurEffect effectWithStyle:UIBlurEffectStyleRegular]];
 			}
 		} else if (bannerStyle == 2) {
@@ -92,13 +92,13 @@
 	    [self addSubview:self.battery];
 	    [self addSubview:self.glyphView];
 
-	    // Blur Platter
+	    //  Blur Platter
 	    blurPlatter.translatesAutoresizingMaskIntoConstraints = NO;
-		if (bannerAlign == 2) { //center
+		if (bannerAlign == 2) { // center
 		    [blurPlatter.centerXAnchor constraintEqualToAnchor:self.centerXAnchor].active = YES;
-		} else if (bannerAlign == 1) { //left
+		} else if (bannerAlign == 1) { // left
 		    [blurPlatter.leftAnchor constraintEqualToAnchor:self.leftAnchor].active = YES;
-		} else if (bannerAlign == 3) { //right
+		} else if (bannerAlign == 3) { // right
 		    [blurPlatter.rightAnchor constraintEqualToAnchor:self.rightAnchor].active = YES;
 	    }
 	    [NSLayoutConstraint activateConstraints:@[
@@ -109,7 +109,7 @@
 
 	    [self.widthAnchor constraintEqualToAnchor:blurPlatter.widthAnchor].active = YES;
 
-	    // Blur
+	    //  Blur
 	    blur.translatesAutoresizingMaskIntoConstraints = NO;
 	    [NSLayoutConstraint activateConstraints:@[
 		[blur.centerXAnchor constraintEqualToAnchor:blurPlatter.centerXAnchor],
@@ -118,7 +118,7 @@
 		[blur.heightAnchor constraintEqualToAnchor:blurPlatter.heightAnchor]
 	    ]];
 
-	    // Percent label
+	    //  Percent label
 	    self.percentLabel.translatesAutoresizingMaskIntoConstraints = NO;
 	    [NSLayoutConstraint activateConstraints:@[
 		[self.percentLabel.centerYAnchor constraintEqualToAnchor:blurPlatter.centerYAnchor],
@@ -126,7 +126,7 @@
 		[self.percentLabel.heightAnchor constraintEqualToConstant:12]
 	    ]];
 
-	    // Label
+	    //  Label
 	    self.label.translatesAutoresizingMaskIntoConstraints = NO;
 	    [NSLayoutConstraint activateConstraints:@[
 		[self.label.leftAnchor constraintEqualToAnchor:self.glyphView.rightAnchor
@@ -140,7 +140,7 @@
 		    [self.label.rightAnchor constraintEqualToAnchor:self.label.leftAnchor].active = YES;
 		}
 
-	    // Glyph View
+	    //  Glyph View
 	    self.glyphView.translatesAutoresizingMaskIntoConstraints = NO;
 	    [NSLayoutConstraint activateConstraints:@[
 		[self.glyphView.leftAnchor constraintEqualToAnchor:blurPlatter.leftAnchor
@@ -150,7 +150,7 @@
 		[self.glyphView.heightAnchor constraintEqualToConstant:glyphSize]
 	    ]];
 
-	    // Battery
+	    //  Battery
 	    self.battery.translatesAutoresizingMaskIntoConstraints = NO;
 		if (!hideBatteryIcon) {
 		    [self.battery.widthAnchor constraintEqualToConstant:20].active = YES;
