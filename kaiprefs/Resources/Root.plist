@@ -332,18 +332,34 @@
 		</dict>
 		<dict>
 			<key>cell</key>
-			<string>PSSwitchCell</string>
-			<key>default</key>
-			<false/>
-			<key>defaults</key>
-			<string>com.burritoz.kaiprefs</string>
-			<key>key</key>
-			<string>belowMusic</string>
+			<string>PSGroupCell</string>
 			<key>label</key>
-			<string>Show kai Below Music</string>
+			<string>Vertical Placement</string>
+		</dict>
+		<dict>
+            <key>cell</key>
+            <string>PSSegmentCell</string>
+            <key>defaults</key>
+            <string>com.burritoz.kaiprefs</string>
+            <key>default</key>
+            <string>1</string>
+            <key>key</key>
+            <string>placement</string>
+            <key>validValues</key>
+            <array>
+                <string>1</string>
+                <string>2</string>
+                <string>3</string>
+            </array>
+            <key>validTitles</key>
+            <array>
+            	<string>Top</string>
+                <string>Below Media Player</string>
+                <string>Bottom</string>
+            </array>
 			<key>PostNotification</key>
 			<string>com.burritoz.kaiprefs.apply</string>
-		</dict>
+        </dict>
 		<dict>
 			<key>cell</key>
 			<string>PSGroupCell</string>

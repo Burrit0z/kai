@@ -10,6 +10,8 @@
 - (UIStackView *)stackView;
 - (void)_layoutStackView;
 - (void)setStackView:(UIStackView *)arg1;
+- (NSInteger)getMediaIndexForClass:(Class)cls;
+- (void)performReorder;
 + (id)sharedListViewForKai;
 + (void)reorderKai;
 @end
@@ -45,7 +47,6 @@ BOOL enabled;
 BOOL disableGlyphs;
 BOOL hidePercent;
 BOOL showAll;
-BOOL belowMusic;
 BOOL hideDeviceLabel;
 BOOL hideChargingAnimation;
 BOOL showAllMinusInternal;
@@ -57,6 +58,7 @@ BOOL extraPaddingAfter;
 NSInteger bannerStyle;
 NSInteger bannerAlign;
 NSInteger textColor;
+NSInteger placement;
 double spacing;
 double glyphSize;
 double bannerHeight;
@@ -123,7 +125,7 @@ static void preferencesChanged() {
     hideDeviceLabel = boolValueForKey(@"hideDeviceLabel", NO);
     bannerAlign = numberForValue(@"bannerAlign", 2);
     horizontalOffset = numberForValue(@"horizontalOffset", 0);
-    belowMusic = boolValueForKey(@"belowMusic", NO);
+    placement = numberForValue(@"placement", 1);
     hideChargingAnimation = boolValueForKey(@"hideChargingAnimation", YES);
     textColor = numberForValue(@"textColor", 0);
     bannerAlpha = numberForValue(@"bannerAlpha", 1);

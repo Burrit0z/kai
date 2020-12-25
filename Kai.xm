@@ -63,7 +63,7 @@ CSAdjunctListView *list;
 
 	if(![arg1.subviews containsObject:battery]) { //  if not added
 		// add kai to the stack view
-		[arg1 addArrangedSubview:battery];
+		[self performReorder];
 	}
 	[battery updateBattery];
 
@@ -102,6 +102,46 @@ CSAdjunctListView *list;
 }
 
 %new
+- (NSInteger)getMediaIndexForClass:(Class)cls {
+	UIView *mediaPlayer;
+	int index = 0;
+	for(UIView *subview in [self stackView].subviews) {
+		if([subview isKindOfClass:cls]) {
+			return index;
+		}
+		index++;
+	}
+	return NSNotFound;
+}
+
+%new
+- (void)performReorder {
+	UIStackView *stack = [self stackView];
+	if(placement == 1) { //top
+		BOOL isAperio = NO;
+
+		@try {
+			isAperio = [stack.subviews[0] isKindOfClass:%c(APEPlatter)];
+			// index 0 would be the platter, 1 would be placeholder
+		} @catch(NSException *exc) {}
+
+		[stack removeArrangedSubview:[KAIBatteryPlatter sharedInstance]];
+		[stack insertArrangedSubview:[KAIBatteryPlatter sharedInstance] atIndex:isAperio];
+		// so, 0 if not aperio, 1 if aperio
+	} else if(placement == 2) { //after media
+		Class mediaClass = kCFCoreFoundationVersionNumber > 1600 ? %c(CSAdjunctItemView) : %c(SBDashBoardAdjunctItemView);
+		NSInteger mediaIndex = [self getMediaIndexForClass:mediaClass];
+		if(mediaIndex == NSNotFound) mediaIndex = 0;
+
+		[stack removeArrangedSubview:[KAIBatteryPlatter sharedInstance]];
+		[stack insertArrangedSubview:[KAIBatteryPlatter sharedInstance] atIndex:mediaIndex];
+	} else if(placement == 3) { // bottom
+		[stack removeArrangedSubview:[KAIBatteryPlatter sharedInstance]];
+		[stack addArrangedSubview:[KAIBatteryPlatter sharedInstance]];
+	}
+}
+
+%new
 + (id)sharedListViewForKai {
 	return list;
 }
@@ -109,14 +149,7 @@ CSAdjunctListView *list;
 %new
 + (void)reorderKai {
 	NSLog(@"[Kai]: Reordering kai");
-	UIStackView *stack = [[self sharedListViewForKai] stackView];
-	if(belowMusic) { // cursed
-		[stack removeArrangedSubview:[KAIBatteryPlatter sharedInstance]];
-		[stack addArrangedSubview:[KAIBatteryPlatter sharedInstance]];
-	} else {
-		[stack removeArrangedSubview:[KAIBatteryPlatter sharedInstance]];
-		[stack insertArrangedSubview:[KAIBatteryPlatter sharedInstance] atIndex:0];
-	}
+	[[self sharedListViewForKai] performReorder];
 }
 
 %end

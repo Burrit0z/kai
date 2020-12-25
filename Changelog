@@ -58,3 +58,4 @@
 1.5.0:
 - Replace the code that handles hiding kai when media plays
 - Fix edge cases where battery info would not update completely until an update was called for again
+- There are now 3 placement options: Top, Below Media Player, and Bottom

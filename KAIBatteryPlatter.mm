@@ -240,8 +240,8 @@ NSMutableArray *cellsForDeviceNames = [[NSMutableArray alloc] init];
 	    [s removeArrangedSubview:self];
 	    [self removeFromSuperview];
 	} else if (self.number != 0 && self.superview == nil && shouldBeAdded == YES) {
-	    [[[[objc_getClass("CSAdjunctListView") class] sharedListViewForKai] stackView] addArrangedSubview:self];
-	    // [self performSelector:@selector(calculateHeight) withObject:self afterDelay:0.1];
+        Class cls = kCFCoreFoundationVersionNumber > 1600 ? ([objc_getClass("CSAdjunctListView") class]) : ([objc_getClass("SBDashBoardAdjunctListView") class]);
+	    [cls reorderKai];
     }
 
     [UIView animateWithDuration:0.3
