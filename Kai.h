@@ -149,11 +149,12 @@ static void preferencesChanged() {
 
 static void applyPrefs() {
     preferencesChanged();
+	Class cls = kCFCoreFoundationVersionNumber > 1600 ? ([objc_getClass("CSAdjunctListView") class]) : ([objc_getClass("SBDashBoardAdjunctListView") class]);
 
     isUpdating = YES;
 
     [[KAIBatteryPlatter sharedInstance] refreshForPrefs]; // so hard (not)
-    [(CSAdjunctListView *)([KAIBatteryPlatter sharedInstance].superview.superview) _layoutStackView];
+    [cls reorderKai];
     [[NSNotificationCenter defaultCenter] postNotificationName:@"KaiResetOffset" object:nil userInfo:nil];
 
     isUpdating = NO;
