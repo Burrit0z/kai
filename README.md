@@ -1,25 +1,35 @@
 # kai
 
-## All your batteries, at a glance
-kai will show any Bluetooth device that provides battery information, meaning you can check the battery of your phone, your watch, your AirPods, and your AirPods case, all from the lock screen. Quickly and easily.
+## All Your Batteries, at a Glance
+kai will show any Bluetooth device that provides battery information, meaning you can check the battery of your iPhone, your Apple Watch, your AirPods, and your AirPods case, all from the lockscreen. Quickly and easily.
 
 ## Compatibility
-kai works with many, many lock screen tweaks, such as Kalm, Grupi, Axon, Quart, Complications, Watermelon, Veza, QuickLS, Jellyfish, and way more!
+kai works with many, many lockscreen tweak:
+- Kalm
+- Grupi
+- Axon
+- Quart
+- Complications
+- Watermelon
+- Veza
+- QuickLS
+- Jellyfish
+- And more!
 
-## Make it yours
+## Make it Yours
 kai comes with a multitude of customization options, so you can fine-tune your settings to fit you and your setup.
 
-## Big and Bold, or small and simple
+## Big and Bold, or Small and Simple
 kai offers two main options for displaying battery information. (a) Vertical mode, to make kai fit in with your notifications, and (b) horizontal mode, an unobtrusive, scrollable, and tiny mode that doesn't take up any more space on your lock screen than it needs to.
 
-## Full feature/option list
+## Full Feature/Option List
 - Option to hide the large battery view coversheet charging animations on the lock screen
 - Show all or just charging devices on kai
-- Option to show Bluetooth devices always, and the phone just when charging
+- Option to show Bluetooth devices always, and the phone only when charging
 - Option to hide device glyphs on kai cells
 - Option to hide percent label on kai cells
 - Option to hide the device name label on kai cells
-- Two-axis options, a vertical mode, or horizontal mode
+- Two-axis options: vertical mode, or horizontal mode
 - Choose between adaptive, light, or dark mode for kai's cells
 - Choose between adaptive, white, or black text for labels on kai's cells
 - Choose to align kai to the left, right, or center for vertical mode
