@@ -1,4 +1,5 @@
 # kai
+Oh my gosh this code is so bad
 
 ## All Your Batteries, at a Glance
 kai will show any Bluetooth device that provides battery information, meaning you can check the battery of your iPhone, your Apple Watch, your AirPods, and your AirPods case, all from the lockscreen. Quickly and easily.
@@ -47,4 +48,4 @@ kai offers two main options for displaying battery information. (a) Vertical mod
 Special thanks to my amazing beta testers in the server I co-own with Thomz. I could not have tested kai so extensively and brought it to where it is today without them. Thanks to Thomz (@Thomzi07 on Twitter) for making kai's icon, and depiction screenshots, and Thenatis (@thenatis1 on Twitter) for helping with design, and for making the banner for kai. Additionally, kai is inspired by LaughingQuoll's Maple tweak series and Apple's AirPower design. kai was built with inspiration from this. However, the main reason I made kai is because the Maple series does not work with notification grouping tweaks like Axon and Grupi. Additionally, kai features a wider range of customization options.
 
 ## Socials and Support
-If you are encountering issues, or simply wish to reach out, you can contact me at my email (burrit0ztweaks@gmail.com) or join the discord server I co-own with Thomz to get support. Discord server invite link: https://discord.gg/NQ3uXtJ
+If you are encountering issues, or simply wish to reach out, you can contact me at my email (lau7995ren@gmail.com) or join the discord server I co-own with Thomz to get support. Discord server invite link: https://discord.gg/NQ3uXtJ

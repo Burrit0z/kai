@@ -18,15 +18,15 @@
 			<key>cellClass</key>
 			<string>Thomz_TwitterCell</string>
 			<key>user</key>
-			<string>Burrit0z</string>
+			<string>ren7995</string>
 			<key>description</key>
 			<string>Developer</string>
 			<key>height</key>
 			<integer>70</integer>
 			<key>image</key>
-			<string>burritoz</string>
+			<string>ren7995</string>
 			<key>action</key>
-			<string>followMeBurritoz</string>
+			<string>followMeRen</string>
 		</dict>
 		<dict>
 			<key>cell</key>
